@@ -593,7 +593,7 @@
         
         <!-- Menu 2: Daftar Customer -->
         <div id="daftar" class="content">
-            <h2>👥 Daftar Customer</h2>
+            <h2>👥 Data Customer</h2>
             <div class="search-container">
                 <input type="text" id="searchCustomer" placeholder="🔍 Cari nama, alamat, atau kontak..." onkeyup="searchCustomers()">
                 <span id="customerCount" class="badge">0 customer</span>
@@ -978,9 +978,10 @@
             
             let totalTagihan = 0;
             
-            // Sort customers by name
-            customers.sort((a, b) => a.nama.localeCompare(b.nama));
-            
+          
+           // Sort customers by jatuhTempo (ascending)
+customers.sort((a, b) => a.jatuhTempo - b.jatuhTempo);
+
             customers.forEach((customer, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
@@ -1078,59 +1079,66 @@
 
         // Filter bills by month
         function filterTagihan() {
-            const month = parseInt(document.getElementById('bulanTagihan').value);
-            const currentYear = new Date().getFullYear();
-            
-            const tagihanList = document.getElementById('tagihanList');
-            tagihanList.innerHTML = '';
-            
-            let totalTagihan = 0;
-            let totalSudahBayar = 0;
-            let totalBelumBayar = 0;
-            let paidCount = 0;
-            let unpaidCount = 0;
-            
-            const filteredBills = bills.filter(bill => bill.month === month && bill.year === currentYear);
-            
-            filteredBills.forEach((bill, index) => {
-                const customer = customers.find(c => c.id === bill.customerId);
-                if (!customer) return;
-                
-                const payment = payments.find(p => p.billId === bill.id);
-                const status = payment ? 'Lunas' : 'Belum Bayar';
-                
-                totalTagihan += bill.amount;
-                
-                if (payment) {
-                    totalSudahBayar += bill.amount;
-                    paidCount++;
-                } else {
-                    totalBelumBayar += bill.amount;
-                    unpaidCount++;
-                }
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${customer.nama}</td>
-                    <td>Rp ${bill.amount.toLocaleString('id-ID')}</td>
-                    <td>Tgl ${bill.jatuhTempo}/${month}/${bill.year}</td>
-                    <td><span class="badge ${status === 'Lunas' ? 'badge-success' : 'badge-danger'}">${status}</span></td>
-                    <td class="action-buttons">
-                        ${status === 'Belum Bayar' ? 
-                            `<button onclick="showPaymentModal(${bill.id})" class="btn-success">💵 Bayar</button>` : 
-                            `<button onclick="showPaymentDetail(${bill.id})" class="btn-primary">👁 Detail</button>`}
-                    </td>
-                `;
-                tagihanList.appendChild(row);
-            });
-            
-            // Update totals
-            document.getElementById('totalTagihanBulan').textContent = `Rp ${totalTagihan.toLocaleString('id-ID')}`;
-            document.getElementById('totalSudahBayar').textContent = `Rp ${totalSudahBayar.toLocaleString('id-ID')}`;
-            document.getElementById('totalBelumBayar').textContent = `Rp ${totalBelumBayar.toLocaleString('id-ID')}`;
-            document.getElementById('billStatusCount').textContent = `${paidCount} lunas, ${unpaidCount} belum bayar`;
+    const month = parseInt(document.getElementById('bulanTagihan').value);
+    const currentYear = new Date().getFullYear();
+    
+    const tagihanList = document.getElementById('tagihanList');
+    tagihanList.innerHTML = '';
+    
+    let totalTagihan = 0;
+    let totalSudahBayar = 0;
+    let totalBelumBayar = 0;
+    let paidCount = 0;
+    let unpaidCount = 0;
+    
+    // Filter dan urutkan berdasarkan data customer 
+    const filteredBills = bills
+  .filter(bill => bill.month === month && bill.year === currentYear)
+  .sort((a, b) => {
+      const customerA = customers.find(c => c.id === a.customerId);
+      const customerB = customers.find(c => c.id === b.customerId);
+      return customers.indexOf(customerA) - customers.indexOf(customerB);
+  });
+    
+    filteredBills.forEach((bill, index) => {
+        const customer = customers.find(c => c.id === bill.customerId);
+        if (!customer) return;
+        
+        const payment = payments.find(p => p.billId === bill.id);
+        const status = payment ? 'Lunas' : 'Belum Bayar';
+        
+        totalTagihan += bill.amount;
+        
+        if (payment) {
+            totalSudahBayar += bill.amount;
+            paidCount++;
+        } else {
+            totalBelumBayar += bill.amount;
+            unpaidCount++;
         }
+        
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${customer.nama}</td>
+            <td>Rp ${bill.amount.toLocaleString('id-ID')}</td>
+            <td>Tgl ${bill.jatuhTempo}/${month}/${bill.year}</td>
+            <td><span class="badge ${status === 'Lunas' ? 'badge-success' : 'badge-danger'}">${status}</span></td>
+            <td class="action-buttons">
+                ${status === 'Belum Bayar' ? 
+                    `<button onclick="showPaymentModal(${bill.id})" class="btn-success">💵 Bayar</button>` : 
+                    `<button onclick="showPaymentDetail(${bill.id})" class="btn-primary">👁 Detail</button>`}
+            </td>
+        `;
+        tagihanList.appendChild(row);
+    });
+    
+    // Update totals
+    document.getElementById('totalTagihanBulan').textContent = `Rp ${totalTagihan.toLocaleString('id-ID')}`;
+    document.getElementById('totalSudahBayar').textContent = `Rp ${totalSudahBayar.toLocaleString('id-ID')}`;
+    document.getElementById('totalBelumBayar').textContent = `Rp ${totalBelumBayar.toLocaleString('id-ID')}`;
+    document.getElementById('billStatusCount').textContent = `${paidCount} lunas, ${unpaidCount} belum bayar`;
+}
 
         // Show payment modal
         function showPaymentModal(billId) {
