@@ -1,1 +1,1508 @@
-index
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Pencatatan Tagihan Customer</title>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+            --white: #ffffff;
+            --gray: #95a5a6;
+            --border-radius: 6px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+        
+        h1, h2, h3 {
+            color: var(--dark-color);
+            margin-top: 0;
+        }
+        h5 {
+        text-align: center;
+        color: #0053;
+        font-size: 1em;
+           
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            color: var(--primary-color);
+        }
+        
+        h2 {
+            margin-bottom: 20px;
+            color: var(--secondary-color);
+        }
+        
+        .menu {
+            display: flex;
+            margin-bottom: 25px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            flex-wrap: wrap;
+        }
+        .menu2 {
+            display: flex;
+            margin-bottom: 25px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            flex-wrap: wrap;
+        }
+        
+        .menu button, .menu label {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            text-align: center;
+            min-width: 150px;
+        }
+        
+        .menu button:hover, .menu label:hover {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+        
+        .menu button.active {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        
+        .menu label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .menu label:hover {
+            background-color: var(--light-color);
+        }
+        
+        .content {
+            display: none;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            background-color: var(--white);
+            box-shadow: var(--box-shadow);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .content.active {
+            display: block;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: var(--primary-color);
+            color: var(--white);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        
+        tr:hover {
+            background-color: rgba(52, 152, 219, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: var(--white);
+        }
+        
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+            color: var(--white);
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: var(--white);
+        }
+        
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .paid {
+            color: var(--success-color);
+            font-weight: 600;
+        }
+        
+        .unpaid {
+            color: var(--danger-color);
+            font-weight: 600;
+        }
+        
+        .total {
+            font-weight: 600;
+            margin-top: 20px;
+            text-align: right;
+            font-size: 1.2em;
+            padding: 15px;
+            background-color: rgba(52, 152, 219, 0.1);
+            border-radius: var(--border-radius);
+            color: var(--dark-color);
+        }
+        
+        #nominalLainGroup {
+            display: none;
+            margin-top: 10px;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .search-container input {
+            flex: 1;
+            min-width: 250px;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+        }
+        
+        .totals-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .total-box {
+            background-color: var(--white);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            flex: 1;
+            min-width: 200px;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .total-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .total-box h3 {
+            margin-top: 0;
+            color: var(--dark-color);
+            font-size: 1.1em;
+        }
+        
+        .total-box p {
+            font-size: 1.3em;
+            font-weight: 700;
+            margin-bottom: 0;
+            color: var(--primary-color);
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        /* Payment Detail Modal */
+        .payment-detail-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .payment-detail-content {
+            background-color: var(--white);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .payment-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .payment-detail-header h2 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+        
+        .payment-detail-body {
+            margin-bottom: 20px;
+        }
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .detail-label {
+            flex: 1;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .detail-value {
+            flex: 2;
+            color: #555;
+        }
+        
+        .detail-value.amount {
+            font-weight: 700;
+            color: var(--success-color);
+            font-size: 1.1em;
+        }
+        
+        .payment-detail-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .menu button, .menu label {
+                min-width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .action-buttons button {
+                width: 100%;
+            }
+            
+            .total-box {
+                min-width: 100%;
+            }
+            
+            .detail-row {
+                flex-direction: column;
+            }
+            
+            .detail-label {
+                margin-bottom: 5px;
+            }
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        /* Badge for status */
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .badge-success {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: var(--success-color);
+        }
+        
+        .badge-danger {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: var(--danger-color);
+        }
+        
+        /* Input group */
+        .input-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .input-group input {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+            border-right: none;
+        }
+        
+        .input-group .input-group-append {
+            background-color: var(--light-color);
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-left: none;
+            border-top-right-radius: var(--border-radius);
+            border-bottom-right-radius: var(--border-radius);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Sistem Pencatatan Tagihan Customer</h1>
+     
+        
+  <div class="menu2">
+       <h2>
+            <button onclick="backupData()" class="btn-success"> <label>💽 SAVE DATA</label> </button>
+            
+           <button class="btn-success">
+            <label>📀 UPLOAD DATA
+                <input type="file" accept=".json" onchange="importData(event)" style="display: none;" >
+            </label> </button>
+             </h2>
+  </div>
+       
+           
+        <div class="menu">
+            <button onclick="showContent('input')" class="active">INPUT DATA</button>
+            <button onclick="showContent('daftar')">DATA CUSTOMER</button>
+            <button onclick="showContent('tagihan')">TAGIHAN CUSTOMER</button>
+            <button onclick="showContent('laporan')">LAPORAN</button>
+         </div>
+         
+         
+        
+        <!-- Menu 1: Input Data Customer -->
+        <div id="input" class="content active">
+            <h2>📝 Input Data Customer Baru</h2>
+            <form id="customerForm">
+                <div class="form-group">
+                    <label for="nama">Nama Customer:</label>
+                    <input type="text" id="nama" required placeholder="Masukkan nama customer">
+                </div>
+                <div class="form-group">
+                    <label for="alamat">Alamat Lengkap:</label>
+                    <input type="text" id="alamat" required placeholder="Masukkan alamat lengkap">
+                </div>
+                <div class="form-group">
+                    <label for="kontak">Nomor Kontak:</label>
+                    <input type="text" id="kontak" required placeholder="Masukkan nomor telepon/WA">
+                </div>
+                <div class="form-group">
+                    <label for="paket">Nominal Tagihan:</label>
+                    <select id="paket" required onchange="toggleNominalLain()">
+                        <option value="">-- Pilih Nominal --</option>
+                        <option value="100000">Rp 100.000</option>
+                        <option value="120000">Rp 120.000</option>
+                        <option value="150000">Rp 150.000</option>
+                        <option value="200000">Rp 200.000</option>
+                        <option value="lain">Nominal Lain</option>
+                    </select>
+                </div>
+                <div class="form-group" id="nominalLainGroup">
+                    <label for="nominalLain">Masukkan Nominal:</label>
+                    <div class="input-group">
+                        <input type="number" id="nominalLain" min="1000" placeholder="Masukkan nominal tagihan">
+                        <span class="input-group-append">Rp</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="ip">IP Internet:</label>
+                    <input type="text" id="ip" required placeholder="Masukkan alamat IP">
+                </div>
+                <div class="form-group">
+                    <label for="jatuhTempo">Tanggal Jatuh Tempo:</label>
+                    <input type="number" id="jatuhTempo" min="1" max="31" required placeholder="1-31">
+                </div>
+                <button type="submit" class="btn-primary">💾 Simpan Data</button>
+            </form>
+        </div>
+        
+        <!-- Menu 2: Daftar Customer -->
+        <div id="daftar" class="content">
+            <h2>👥 Daftar Customer</h2>
+            <div class="search-container">
+                <input type="text" id="searchCustomer" placeholder="🔍 Cari nama, alamat, atau kontak..." onkeyup="searchCustomers()">
+                <span id="customerCount" class="badge">0 customer</span>
+            </div>
+            <div style="overflow-x: auto;">
+                <table id="customerTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Alamat</th>
+                            <th>Kontak</th>
+                            <th>Tagihan</th>
+                            <th>IP Internet</th>
+                            <th>Jatuh Tempo</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customerList">
+                        <!-- Data customer akan dimasukkan di sini oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="total" id="totalTagihan">
+                <span>Total Tagihan per Bulan:</span>
+                <span id="totalTagihanAmount">Rp 0</span>
+            </div>
+        </div>
+        
+        <!-- Menu 3: Tagihan Customer -->
+        <div id="tagihan" class="content">
+            <h2>💰 Tagihan Customer</h2>
+            <div class="search-container">
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <div class="form-group" style="min-width: 200px;">
+                        <select id="bulanTagihan" onchange="filterTagihan()" class="btn-primary">
+                            <option value="6">Juni</option>
+                            <option value="7">Juli</option>
+                            <option value="8">Agustus</option>
+                            <option value="9">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                    </div>
+                    <input type="text" id="searchTagihan" placeholder="🔍 Cari nama customer..." onkeyup="searchTagihan()">
+                </div>
+                <span id="billStatusCount" class="badge">0 tagihan</span>
+            </div>
+            <div style="overflow-x: auto;">
+                <table id="tagihanTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Customer</th>
+                            <th>Nominal Tagihan</th>
+                            <th>Jatuh Tempo</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tagihanList">
+                        <!-- Data tagihan akan dimasukkan di sini oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="totals-container">
+                <div class="total-box">
+                    <h3>Total Tagihan Bulan Ini</h3>
+                    <p id="totalTagihanBulan">Rp 0</p>
+                </div>
+                <div class="total-box" style="background-color: rgba(46, 204, 113, 0.1);">
+                    <h3>Sudah Bayar</h3>
+                    <p id="totalSudahBayar" style="color: var(--success-color);">Rp 0</p>
+                </div>
+                <div class="total-box" style="background-color: rgba(231, 76, 60, 0.1);">
+                    <h3>Belum Bayar</h3>
+                    <p id="totalBelumBayar" style="color: var(--danger-color);">Rp 0</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Menu 4: Laporan -->
+        <div id="laporan" class="content">
+            <h2>📋 Laporan Pembayaran</h2>
+            <div class="search-container">
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <div class="form-group" style="min-width: 200px;">
+                        <select id="bulanLaporan" onchange="filterLaporan()" class="btn-primary">
+                            <option value="6">Juni</option>
+                            <option value="7">Juli</option>
+                            <option value="8">Agustus</option>
+                            <option value="9">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                    </div>
+                    <input type="text" id="searchLaporan" placeholder="🔍 Cari nama customer..." onkeyup="searchLaporan()">
+                </div>
+                <span id="paymentCount" class="badge">0 pembayaran</span>
+            </div>
+            <div style="overflow-x: auto;">
+                <table id="laporanTable">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Customer</th>
+                            <th>Nominal</th>
+                            <th>Tanggal Bayar</th>
+                            <th>Metode</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="laporanList">
+                        <!-- Data laporan akan dimasukkan di sini oleh JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="total" id="totalSaldo">
+                <span>Total Saldo Perusahaan:</span>
+                <span id="totalSaldoAmount">Rp 0</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk pembayaran -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>💳 Pembayaran Tagihan</h2>
+            </div>
+            <div class="form-group">
+                <label for="paymentMethod">Metode Pembayaran:</label>
+                <select id="paymentMethod" class="btn-primary">
+                    <option value="Transfer Bank">Transfer Bank</option>
+                    <option value="Tunai">Tunai</option>
+                    <option value="E-Wallet">E-Wallet</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="paymentDate">Tanggal Pembayaran:</label>
+                <input type="date" id="paymentDate" class="btn-primary">
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeModal()" class="btn-danger">✖ Batal</button>
+                <button onclick="processPayment()" class="btn-success">✔ Proses Pembayaran</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk detail pembayaran -->
+    <div id="paymentDetailModal" class="payment-detail-modal">
+        <div class="payment-detail-content">
+            <div class="payment-detail-header">
+                <h2>📋 Detail Pembayaran</h2>
+                <button onclick="closePaymentDetailModal()" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">✖</button>
+            </div>
+            <div class="payment-detail-body" id="paymentDetailBody">
+                <!-- Detail pembayaran akan dimasukkan di sini oleh JavaScript -->
+            </div>
+            <div class="payment-detail-footer">
+                <button onclick="closePaymentDetailModal()" class="btn-primary">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        let customers = JSON.parse(localStorage.getItem('customers')) || [];
+        let bills = JSON.parse(localStorage.getItem('bills')) || [];
+        let payments = JSON.parse(localStorage.getItem('payments')) || [];
+        let currentCustomerId = null;
+        let currentBillId = null;
+
+        // DOM Content Loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize form
+            document.getElementById('customerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addCustomer();
+            });
+            
+            // Load initial data
+            loadCustomers();
+            loadBills();
+            loadPayments();
+            
+            // Set current date for payment
+            document.getElementById('paymentDate').valueAsDate = new Date();
+            
+            // Set current month based on actual month
+            const currentMonth = new Date().getMonth() + 1;
+            if (currentMonth >= 6 && currentMonth <= 12) {
+                document.getElementById('bulanTagihan').value = currentMonth;
+                document.getElementById('bulanLaporan').value = currentMonth;
+            }
+            
+            // Initial filter
+            filterTagihan();
+            filterLaporan();
+        });
+
+        // Toggle nominal lain input
+        function toggleNominalLain() {
+            const nominalLainGroup = document.getElementById('nominalLainGroup');
+            if (document.getElementById('paket').value === 'lain') {
+                nominalLainGroup.style.display = 'block';
+                document.getElementById('nominalLain').required = true;
+            } else {
+                nominalLainGroup.style.display = 'none';
+                document.getElementById('nominalLain').required = false;
+            }
+        }
+
+        // Show content based on menu
+        function showContent(menu) {
+            document.querySelectorAll('.content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.querySelectorAll('.menu button').forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            document.getElementById(menu).classList.add('active');
+            const activeButton = document.querySelector(`.menu button[onclick="showContent('${menu}')"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+            
+            // Refresh data when switching tabs
+            if (menu === 'daftar') {
+                loadCustomers();
+            } else if (menu === 'tagihan') {
+                filterTagihan();
+            } else if (menu === 'laporan') {
+                filterLaporan();
+            }
+        }
+
+        // Search customers
+        function searchCustomers() {
+            const input = document.getElementById('searchCustomer').value.toLowerCase();
+            const rows = document.getElementById('customerList').getElementsByTagName('tr');
+            let visibleCount = 0;
+            
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let found = false;
+                
+                for (let j = 1; j < 4; j++) { // Cari di kolom Nama, Alamat, Kontak
+                    if (cells[j]) {
+                        const text = cells[j].textContent.toLowerCase();
+                        if (text.includes(input)) {
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                
+                if (found) visibleCount++;
+                rows[i].style.display = found ? '' : 'none';
+            }
+            
+            document.getElementById('customerCount').textContent = `${visibleCount} customer`;
+        }
+
+        // Search tagihan
+        function searchTagihan() {
+            const input = document.getElementById('searchTagihan').value.toLowerCase();
+            const rows = document.getElementById('tagihanList').getElementsByTagName('tr');
+            let visibleCount = 0;
+            
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                if (cells[1]) {
+                    const text = cells[1].textContent.toLowerCase();
+                    if (text.includes(input)) visibleCount++;
+                    rows[i].style.display = text.includes(input) ? '' : 'none';
+                }
+            }
+            
+            document.getElementById('billStatusCount').textContent = `${visibleCount} tagihan`;
+        }
+
+        // Search laporan
+        function searchLaporan() {
+            const input = document.getElementById('searchLaporan').value.toLowerCase();
+            const rows = document.getElementById('laporanList').getElementsByTagName('tr');
+            let visibleCount = 0;
+            
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                if (cells[1]) {
+                    const text = cells[1].textContent.toLowerCase();
+                    if (text.includes(input)) visibleCount++;
+                    rows[i].style.display = text.includes(input) ? '' : 'none';
+                }
+            }
+            
+            document.getElementById('paymentCount').textContent = `${visibleCount} pembayaran`;
+        }
+
+        // Add new customer
+        function addCustomer() {
+            const nama = document.getElementById('nama').value;
+            const alamat = document.getElementById('alamat').value;
+            const kontak = document.getElementById('kontak').value;
+            const paketSelect = document.getElementById('paket');
+            const paketValue = paketSelect.value;
+            let amount;
+            
+            if (paketValue === 'lain') {
+                amount = parseInt(document.getElementById('nominalLain').value);
+                if (isNaN(amount) || amount < 1000) {
+                    alert('Masukkan nominal yang valid (minimal Rp 1.000)');
+                    return;
+                }
+            } else {
+                amount = parseInt(paketValue);
+            }
+            
+            const ip = document.getElementById('ip').value;
+            const jatuhTempo = document.getElementById('jatuhTempo').value;
+            
+            if (!nama || !alamat || !kontak || !ip || !jatuhTempo) {
+                alert('Harap lengkapi semua data customer!');
+                return;
+            }
+            
+            const newCustomer = {
+                id: Date.now(),
+                nama,
+                alamat,
+                kontak,
+                amount,
+                ip,
+                jatuhTempo,
+                createdAt: new Date().toISOString()
+            };
+            
+            customers.push(newCustomer);
+            saveCustomers();
+            
+            // Create bills for this customer from June to December
+            const currentYear = new Date().getFullYear();
+            for (let month = 6; month <= 12; month++) {
+                const bill = {
+                    id: Date.now() + month,
+                    customerId: newCustomer.id,
+                    month,
+                    year: currentYear,
+                    jatuhTempo: jatuhTempo,
+                    status: 'Belum Bayar',
+                    amount: amount
+                };
+                bills.push(bill);
+            }
+            saveBills();
+            
+            // Reset form
+            document.getElementById('customerForm').reset();
+            document.getElementById('nominalLainGroup').style.display = 'none';
+            
+            // Show success message
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: 'Data customer berhasil ditambahkan',
+                timer: 2000,
+                showConfirmButton: false
+            });
+            
+            // Reload data
+            loadCustomers();
+        }
+
+        // Load customers to table
+        function loadCustomers() {
+            const customerList = document.getElementById('customerList');
+            customerList.innerHTML = '';
+            
+            let totalTagihan = 0;
+            
+            // Sort customers by name
+            customers.sort((a, b) => a.nama.localeCompare(b.nama));
+            
+            customers.forEach((customer, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${customer.nama}</td>
+                    <td>${customer.alamat}</td>
+                    <td>${customer.kontak}</td>
+                    <td>Rp ${customer.amount.toLocaleString('id-ID')}</td>
+                    <td>${customer.ip}</td>
+                    <td>Tgl ${customer.jatuhTempo}</td>
+                    <td class="action-buttons">
+                        <button onclick="editCustomer(${customer.id})" class="btn-warning">✏ Edit</button>
+                        <button onclick="deleteCustomer(${customer.id})" class="btn-danger">🗑 Hapus</button>
+                    </td>
+                `;
+                customerList.appendChild(row);
+                
+                totalTagihan += customer.amount;
+            });
+            
+            document.getElementById('totalTagihanAmount').textContent = `Rp ${totalTagihan.toLocaleString('id-ID')}`;
+            document.getElementById('customerCount').textContent = `${customers.length} customer`;
+        }
+
+        // Edit customer
+        function editCustomer(id) {
+            const customer = customers.find(c => c.id === id);
+            if (!customer) return;
+            
+            document.getElementById('nama').value = customer.nama;
+            document.getElementById('alamat').value = customer.alamat;
+            document.getElementById('kontak').value = customer.kontak;
+            
+            // Set nilai nominal tagihan
+            const paketSelect = document.getElementById('paket');
+            const nominalLainGroup = document.getElementById('nominalLainGroup');
+            
+            // Cek apakah nominal termasuk dalam pilihan standar
+            const standardAmounts = [100000, 120000, 150000, 200000];
+            if (standardAmounts.includes(customer.amount)) {
+                paketSelect.value = customer.amount.toString();
+                nominalLainGroup.style.display = 'none';
+            } else {
+                paketSelect.value = 'lain';
+                nominalLainGroup.style.display = 'block';
+                document.getElementById('nominalLain').value = customer.amount;
+            }
+            
+            document.getElementById('ip').value = customer.ip;
+            document.getElementById('jatuhTempo').value = customer.jatuhTempo;
+            
+            // Remove the customer (will be re-added with updated data)
+            customers = customers.filter(c => c.id !== id);
+            
+            // Update bills amount and jatuh tempo
+            bills.forEach(bill => {
+                if (bill.customerId === id) {
+                    bill.jatuhTempo = customer.jatuhTempo;
+                    bill.amount = customer.amount;
+                }
+            });
+            
+            saveBills();
+            saveCustomers();
+            
+            // Scroll to form
+            showContent('input');
+            
+            // Show notification
+            Swal.fire({
+                icon: 'info',
+                title: 'Edit Mode',
+                text: 'Data customer siap diedit. Silakan perbarui data dan klik Simpan.',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
+
+     // Delete customer
+        function deleteCustomer(id) {
+            if (confirm('Apakah Anda yakin ingin menghapus customer ini?')) {
+                customers = customers.filter(c => c.id !== id);
+                bills = bills.filter(bill => bill.customerId !== id);
+                payments = payments.filter(payment => {
+                    const bill = bills.find(b => b.id === payment.billId);
+                    return !bill || bill.customerId !== id;
+                });
+                
+                saveCustomers();
+                saveBills();
+                savePayments();
+                loadCustomers();
+            }
+        }
+
+        // Filter bills by month
+        function filterTagihan() {
+            const month = parseInt(document.getElementById('bulanTagihan').value);
+            const currentYear = new Date().getFullYear();
+            
+            const tagihanList = document.getElementById('tagihanList');
+            tagihanList.innerHTML = '';
+            
+            let totalTagihan = 0;
+            let totalSudahBayar = 0;
+            let totalBelumBayar = 0;
+            let paidCount = 0;
+            let unpaidCount = 0;
+            
+            const filteredBills = bills.filter(bill => bill.month === month && bill.year === currentYear);
+            
+            filteredBills.forEach((bill, index) => {
+                const customer = customers.find(c => c.id === bill.customerId);
+                if (!customer) return;
+                
+                const payment = payments.find(p => p.billId === bill.id);
+                const status = payment ? 'Lunas' : 'Belum Bayar';
+                
+                totalTagihan += bill.amount;
+                
+                if (payment) {
+                    totalSudahBayar += bill.amount;
+                    paidCount++;
+                } else {
+                    totalBelumBayar += bill.amount;
+                    unpaidCount++;
+                }
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${customer.nama}</td>
+                    <td>Rp ${bill.amount.toLocaleString('id-ID')}</td>
+                    <td>Tgl ${bill.jatuhTempo}/${month}/${bill.year}</td>
+                    <td><span class="badge ${status === 'Lunas' ? 'badge-success' : 'badge-danger'}">${status}</span></td>
+                    <td class="action-buttons">
+                        ${status === 'Belum Bayar' ? 
+                            `<button onclick="showPaymentModal(${bill.id})" class="btn-success">💵 Bayar</button>` : 
+                            `<button onclick="showPaymentDetail(${bill.id})" class="btn-primary">👁 Detail</button>`}
+                    </td>
+                `;
+                tagihanList.appendChild(row);
+            });
+            
+            // Update totals
+            document.getElementById('totalTagihanBulan').textContent = `Rp ${totalTagihan.toLocaleString('id-ID')}`;
+            document.getElementById('totalSudahBayar').textContent = `Rp ${totalSudahBayar.toLocaleString('id-ID')}`;
+            document.getElementById('totalBelumBayar').textContent = `Rp ${totalBelumBayar.toLocaleString('id-ID')}`;
+            document.getElementById('billStatusCount').textContent = `${paidCount} lunas, ${unpaidCount} belum bayar`;
+        }
+
+        // Show payment modal
+        function showPaymentModal(billId) {
+            currentBillId = billId;
+            document.getElementById('paymentModal').style.display = 'flex';
+            
+            // Set focus to payment method
+            document.getElementById('paymentMethod').focus();
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+        }
+
+        // Process payment
+        function processPayment() {
+            const method = document.getElementById('paymentMethod').value;
+            const date = document.getElementById('paymentDate').value;
+            
+            if (!date) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Silakan pilih tanggal pembayaran!'
+                });
+                return;
+            }
+            
+            const bill = bills.find(b => b.id === currentBillId);
+            if (bill) {
+                bill.status = 'Lunas';
+                saveBills();
+                
+                const payment = {
+                    id: Date.now(),
+                    billId: currentBillId,
+                    method,
+                    date,
+                    amount: bill.amount,
+                    processedAt: new Date().toISOString()
+                };
+                
+                payments.push(payment);
+                savePayments();
+                
+                closeModal();
+                filterTagihan();
+                filterLaporan();
+                
+                // Show success notification
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Pembayaran Berhasil!',
+                    text: `Tagihan sebesar Rp ${bill.amount.toLocaleString('id-ID')} telah dicatat.`,
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }
+        }
+
+        // Show payment detail
+        function showPaymentDetail(billId) {
+            const payment = payments.find(p => p.billId === billId);
+            if (!payment) return;
+            
+            const bill = bills.find(b => b.id === billId);
+            if (!bill) return;
+            
+            const customer = customers.find(c => c.id === bill.customerId);
+            if (!customer) return;
+            
+            const paymentDate = new Date(payment.date);
+            const formattedDate = paymentDate.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            
+            const processedDate = new Date(payment.processedAt);
+            const formattedProcessedDate = processedDate.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            const jatuhTempoDate = new Date(bill.year, bill.month - 1, bill.jatuhTempo);
+            const formattedJatuhTempo = jatuhTempoDate.toLocaleDateString('id-ID', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            
+            // Calculate payment status
+            const isOnTime = paymentDate <= jatuhTempoDate;
+            
+            const detailHTML = `
+                <div class="detail-row">
+                    <div class="detail-label">Nama Customer</div>
+                    <div class="detail-value">${customer.nama}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Alamat</div>
+                    <div class="detail-value">${customer.alamat}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Kontak</div>
+                    <div class="detail-value">${customer.kontak}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Periode Tagihan</div>
+                    <div class="detail-value">${getMonthName(bill.month)} ${bill.year}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Jatuh Tempo</div>
+                    <div class="detail-value">${formattedJatuhTempo}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Tanggal Bayar</div>
+                    <div class="detail-value">${formattedDate}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Status Pembayaran</div>
+                    <div class="detail-value">
+                        <span class="badge ${isOnTime ? 'badge-success' : 'badge-warning'}">
+                            ${isOnTime ? 'Tepat Waktu' : 'Terlambat'}
+                        </span>
+                    </div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Metode Pembayaran</div>
+                    <div class="detail-value">${payment.method}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Nominal Pembayaran</div>
+                    <div class="detail-value amount">Rp ${payment.amount.toLocaleString('id-ID')}</div>
+                </div>
+                <div class="detail-row">
+                    <div class="detail-label">Dicatat Pada</div>
+                    <div class="detail-value">${formattedProcessedDate}</div>
+                </div>
+            `;
+            
+            document.getElementById('paymentDetailBody').innerHTML = detailHTML;
+            document.getElementById('paymentDetailModal').style.display = 'flex';
+        }
+        
+        // Helper function to get month name
+        function getMonthName(monthNumber) {
+            const months = [
+                'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            ];
+            return months[monthNumber - 1];
+        }
+
+        // Close payment detail modal
+        function closePaymentDetailModal() {
+            document.getElementById('paymentDetailModal').style.display = 'none';
+        }
+
+        // Filter laporan by month
+        function filterLaporan() {
+            const month = parseInt(document.getElementById('bulanLaporan').value);
+            const currentYear = new Date().getFullYear();
+            
+            const laporanList = document.getElementById('laporanList');
+            laporanList.innerHTML = '';
+            
+            let totalSaldo = 0;
+            
+            // Sort payments by date (newest first)
+            const sortedPayments = [...payments].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            sortedPayments.forEach((payment, index) => {
+                const bill = bills.find(b => b.id === payment.billId);
+                if (!bill || bill.month !== month || bill.year !== currentYear) return;
+                
+                const customer = customers.find(c => c.id === bill.customerId);
+                if (!customer) return;
+                
+                totalSaldo += payment.amount;
+                
+                const paymentDate = new Date(payment.date);
+                const formattedDate = paymentDate.toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${customer.nama}</td>
+                    <td>Rp ${payment.amount.toLocaleString('id-ID')}</td>
+                    <td>${formattedDate}</td>
+                    <td>${payment.method}</td>
+                    <td class="action-buttons">
+                        <button onclick="showPaymentDetail(${bill.id})" class="btn-primary">👁 Detail</button>
+                    </td>
+                `;
+                laporanList.appendChild(row);
+            });
+            
+            document.getElementById('totalSaldoAmount').textContent = `Rp ${totalSaldo.toLocaleString('id-ID')}`;
+            document.getElementById('paymentCount').textContent = `${sortedPayments.filter(p => {
+                const bill = bills.find(b => b.id === p.billId);
+                return bill && bill.month === month && bill.year === currentYear;
+            }).length} pembayaran`;
+        }
+
+        // Load bills data
+        function loadBills() {
+            // Initialize bills for existing customers if not exists
+            const currentYear = new Date().getFullYear();
+            
+            customers.forEach(customer => {
+                for (let month = 6; month <= 12; month++) {
+                    const exists = bills.some(bill => 
+                        bill.customerId === customer.id && 
+                        bill.month === month && 
+                        bill.year === currentYear
+                    );
+                    
+                    if (!exists) {
+                        const bill = {
+                            id: Date.now() + month,
+                            customerId: customer.id,
+                            month,
+                            year: currentYear,
+                            jatuhTempo: customer.jatuhTempo,
+                            status: 'Belum Bayar',
+                            amount: customer.amount,
+                            createdAt: new Date().toISOString()
+                        };
+                        bills.push(bill);
+                    }
+                }
+            });
+            
+            saveBills();
+        }
+
+        // Load payments data
+        function loadPayments() {
+            // Nothing special to do here, just for consistency
+        }
+
+        // Save data to localStorage
+        function saveCustomers() {
+            localStorage.setItem('customers', JSON.stringify(customers));
+        }
+
+        function saveBills() {
+            localStorage.setItem('bills', JSON.stringify(bills));
+        }
+
+        function savePayments() {
+            localStorage.setItem('payments', JSON.stringify(payments));
+        }
+        
+        // Backup data sebagai file JSON
+        function backupData() {
+            const data = {
+                customers,
+                bills,
+                payments,
+                exportedAt: new Date().toISOString()
+            };
+            
+            const dataStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `backup_data_${new Date().toISOString().slice(0,10)}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Backup Berhasil!',
+                text: 'Data telah berhasil di-backup.',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
+        
+        // Import data dari file JSON
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.customers && data.bills && data.payments) {
+                        customers = data.customers;
+                        bills = data.bills;
+                        payments = data.payments;
+
+                        saveCustomers();
+                        saveBills();
+                        savePayments();
+
+                        alert("Data berhasil diimpor.");
+                        loadCustomers();
+                        filterTagihan();
+                        filterLaporan();
+                    } else {
+                        alert("Format file tidak valid.");
+                    }
+                } catch (err) {
+                    alert("Terjadi kesalahan saat membaca file.");
+                }
+            };
+            reader.readAsText(file);
+        }
+        
+        // Simple SweetAlert-like notification
+        window.Swal = {
+            fire: function({icon, title, text, timer, showConfirmButton}) {
+                const icons = {
+                    success: '✅',
+                    error: '❌',
+                    warning: '⚠️',
+                    info: 'ℹ️'
+                };
+                
+                const div = document.createElement('div');
+                div.style.position = 'fixed';
+                div.style.top = '20px';
+                div.style.right = '20px';
+                div.style.padding = '15px 20px';
+                div.style.background = '#fff';
+                div.style.borderRadius = '8px';
+                div.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                div.style.zIndex = '9999';
+                div.style.display = 'flex';
+                div.style.alignItems = 'center';
+                div.style.gap = '10px';
+                div.style.maxWidth = '400px';
+                div.innerHTML = `
+                    <span style="font-size: 24px;">${icons[icon] || 'ℹ️'}</span>
+                    <div>
+                        <h3 style="margin: 0 0 5px 0; font-size: 16px; color: #333;">${title}</h3>
+                        <p style="margin: 0; font-size: 14px; color: #666;">${text}</p>
+                    </div>
+                `;
+                
+                document.body.appendChild(div);
+                
+                if (timer) {
+                    setTimeout(() => {
+                        div.style.opacity = '0';
+                        div.style.transition = 'opacity 0.5s ease';
+                        setTimeout(() => div.remove(), 500);
+                    }, timer);
+                }
+            }
+        };
+    </script>
+</body>
+<h5><center>
+@2025 Pagar Bintang | KH1992 {KopiHati}
+</h5></center>
+</html>
