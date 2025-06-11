@@ -1419,7 +1419,7 @@ customers.sort((a, b) => a.jatuhTempo - b.jatuhTempo);
             
             const a = document.createElement("a");
             a.href = url;
-            a.download = `backup_data_${new Date().toISOString().slice(0,10)}.json`;
+            a.download = `data-kh1992-${new Date().toISOString().slice(0,10)}.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
