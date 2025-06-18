@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard Customer (Edit + Tambah Data)</title>
+  <title>Dashboard Customer</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://apis.google.com/js/api.js"></script>
@@ -189,6 +189,11 @@
       color: #b91c1c;
     }
     
+    .alert-info {
+      background-color: #dbeafe;
+      color: #1e40af;
+    }
+    
     @media (max-width: 768px) {
       .form-row {
         grid-template-columns: 1fr;
@@ -242,7 +247,8 @@
         <div class="form-row">
           <div class="form-group">
             <label for="tagihan">Tagihan (Rp)</label>
-            <input type="text" id="tagihan" placeholder="Jumlah Tagihan" required>
+            <input type="text" id="tagihan" placeholder="Contoh: 150000" required 
+                   oninput="formatCurrency(this)" pattern="[0-9]*">
           </div>
           <div class="form-group">
             <label for="tempo">Jatuh Tempo</label>
@@ -301,6 +307,23 @@
       tokenClient.requestAccessToken();
     }
 
+    function formatCurrency(input) {
+      // Hapus semua karakter non-digit
+      let value = input.value.replace(/\D/g, '');
+      
+      // Format dengan titik sebagai pemisah ribuan
+      if (value.length > 0) {
+        value = parseInt(value, 10).toLocaleString('id-ID');
+      }
+      
+      // Update nilai input
+      input.value = value;
+    }
+
+    function getRawNumber(currencyString) {
+      return currencyString.replace(/\D/g, '');
+    }
+
     function showAlert(message, type) {
       const alertDiv = document.createElement('div');
       alertDiv.className = `alert alert-${type}`;
@@ -320,7 +343,8 @@
     function loadSheetData() {
       gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEET_ID,
-        range: RANGE
+        range: RANGE,
+        valueRenderOption: 'FORMATTED_VALUE' // Ambil nilai yang sudah diformat
       }).then(response => {
         const data = response.result.values;
         if (!data || data.length === 0) {
@@ -340,8 +364,13 @@
 
         for (let i = 1; i < data.length; i++) {
           html += '<tr>';
-          data[i].forEach(cell => {
-            html += `<td>${cell}</td>`;
+          data[i].forEach((cell, index) => {
+            // Format khusus untuk kolom tagihan (asumsi kolom ke-4)
+            if (index === 4 && cell && !isNaN(cell)) {
+              html += `<td>Rp${parseInt(cell).toLocaleString('id-ID')}</td>`;
+            } else {
+              html += `<td>${cell || ''}</td>`;
+            }
           });
           html += '</tr>';
         }
@@ -357,13 +386,40 @@
       });
     }
 
+    function setCurrencyFormat() {
+      gapi.client.sheets.spreadsheets.batchUpdate({
+        spreadsheetId: SPREADSHEET_ID,
+        resource: {
+          requests: [{
+            repeatCell: {
+              range: {
+                sheetId: 0, // Ganti dengan ID sheet jika perlu
+                startRowIndex: 1, // Mulai dari baris kedua (setelah header)
+                startColumnIndex: 4, // Kolom E (indeks 4) untuk tagihan
+                endColumnIndex: 5
+              },
+              cell: {
+                userEnteredFormat: {
+                  numberFormat: {
+                    type: 'CURRENCY',
+                    pattern: '"Rp"#,##0'
+                  }
+                }
+              },
+              fields: "userEnteredFormat.numberFormat"
+            }
+          }]
+        }
+      }).then(() => console.log('Format mata uang diatur'));
+    }
+
     document.getElementById('form-tambah').addEventListener('submit', function(e) {
       e.preventDefault();
       const no = document.getElementById('no').value;
       const cust = document.getElementById('cust').value;
       const wa = document.getElementById('wa').value;
       const alamat = document.getElementById('alamat').value;
-      const tagihan = document.getElementById('tagihan').value;
+      const tagihan = getRawNumber(document.getElementById('tagihan').value);
       const tempo = document.getElementById('tempo').value;
       const ip = document.getElementById('ip').value;
       const ket = document.getElementById('ket').value;
@@ -378,6 +434,8 @@
         insertDataOption: 'INSERT_ROWS',
         resource: body
       }).then((response) => {
+        // Setelah data terkirim, atur format kolom tagihan
+        setCurrencyFormat();
         showAlert('Data berhasil ditambahkan!', 'success');
         loadSheetData();
         document.getElementById('form-tambah').reset();
