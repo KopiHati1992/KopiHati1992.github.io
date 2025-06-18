@@ -45,14 +45,16 @@
 </head>
 <body>
 
-  <h2>📋 Dashboard Customer</h2>
+  <h2>📋 Dashboard Customer.
+  </h2>
   <button onclick="handleAuthClick()">🔐 Login dengan Google</button>
 
   <div id="content"></div>
 
   <h3>➕ Tambah Data Customer Baru</h3>
 <form id="form-tambah">
-  <input type="text" id="nocust" placeholder="No. Customer" required>
+  <input type="text" id="no" placeholder="No" required>
+  <input type="text" id="cust" placeholder="Customer" required>
   <input type="text" id="wa" placeholder="Nomer WhatsApp" required>
   <input type="text" id="alamat" placeholder="Alamat" required>
   <input type="text" id="tagihan" placeholder="Tagihan (Rp)" required>
@@ -134,7 +136,8 @@
 
     document.getElementById('form-tambah').addEventListener('submit', function(e) {
   e.preventDefault();
-  const nocust = document.getElementById('nocust').value;
+  const no = document.getElementById('no').value;
+  const cust = document.getElementById('cust').value;
   const wa = document.getElementById('wa').value;
   const alamat = document.getElementById('alamat').value;
   const tagihan = document.getElementById('tagihan').value;
@@ -142,7 +145,7 @@
   const ip = document.getElementById('ip').value;
   const ket = document.getElementById('ket').value;
 
-  const values = [[nocust, wa, alamat, tagihan, tempo, ip, ket]];
+  const values = [[no, cust, wa, alamat, tagihan, tempo, ip, ket]];
   const body = { values };
 
   gapi.client.sheets.spreadsheets.values.append({
