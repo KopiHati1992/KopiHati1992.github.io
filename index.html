@@ -1,30 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard Customer (Private Sheet)</title>
+  <title>Dashboard Customer (Edit + Tambah Data)</title>
   <meta charset="UTF-8">
   <script src="https://apis.google.com/js/api.js"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <style>
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 40px;
-      background-color: #f9f9f9;
+      background-color: #f0f0f0;
+    }
+    button, input {
+      padding: 10px;
+      margin: 5px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
     }
     button {
-      padding: 10px 20px;
-      margin: 20px;
-      font-size: 16px;
       background-color: #007bff;
       color: white;
       border: none;
-      border-radius: 6px;
       cursor: pointer;
     }
     table {
       margin: auto;
       border-collapse: collapse;
       margin-top: 30px;
+      background: white;
     }
     td, th {
       border: 1px solid #ccc;
@@ -33,90 +38,131 @@
     th {
       background-color: #eaeaea;
     }
+    form {
+      margin-top: 30px;
+    }
   </style>
 </head>
 <body>
 
-  <h2>📋 Data Customer (Login Dulu)...</h2>
-  <button onclick="handleAuthClick()">Login dengan Google</button>
+  <h2>📋 Dashboard Customer</h2>
+  <button onclick="handleAuthClick()">🔐 Login dengan Google</button>
 
   <div id="content"></div>
 
-    <script>
-  const CLIENT_ID = '805721921065-idl1i4jonepi7odtr4f7eiv1h4mbamk2.apps.googleusercontent.com';
-  const API_KEY = 'AIzaSyArISbb4W_mfRyZxJzi12Sm3eByi0jQCjM';
-  const SPREADSHEET_ID = '1AQx4YgRW9R-epO8BGlyFvN7CKIGyKgxmE1LgGqNpbs4';
-  const RANGE = 'DATA CUSTOMER!A1:H74';
-  const DISCOVERY_DOCS = ["https://sheets.googleapis.com/$discovery/rest?version=v4"];
-  const SCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly';
+  <h3>➕ Tambah Data Customer Baru</h3>
+<form id="form-tambah">
+  <input type="text" id="nocust" placeholder="No. Customer" required>
+  <input type="text" id="wa" placeholder="Nomer WhatsApp" required>
+  <input type="text" id="alamat" placeholder="Alamat" required>
+  <input type="text" id="tagihan" placeholder="Tagihan (Rp)" required>
+  <input type="date" id="tempo" placeholder="Jatuh Tempo" required>
+  <input type="text" id="ip" placeholder="IP Internet" required>
+  <input type="text" id="ket" placeholder="Keterangan">
+  <button type="submit">Tambah</button>
+</form>
 
-  let tokenClient;
+  <script>
+    const CLIENT_ID = '805721921065-idl1i4jonepi7odtr4f7eiv1h4mbamk2.apps.googleusercontent.com';
+    const API_KEY = 'AIzaSyArISbb4W_mfRyZxJzi12Sm3eByi0jQCjM';
+    const SPREADSHEET_ID = '1AQx4YgRW9R-epO8BGlyFvN7CKIGyKgxmE1LgGqNpbs4';
+    const RANGE = 'DATA CUSTOMER!A1:H74';
+    const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
 
-  function handleClientLoad() {
-    gapi.load('client', initClient);
-  }
+    let tokenClient;
 
-  async function initClient() {
-    await gapi.client.init({
-      apiKey: API_KEY,
-      discoveryDocs: DISCOVERY_DOCS
-    });
+    function handleClientLoad() {
+      gapi.load('client', initClient);
+    }
 
-    tokenClient = google.accounts.oauth2.initTokenClient({
-      client_id: CLIENT_ID,
-      scope: SCOPES,
-      callback: (tokenResponse) => {
-        if (tokenResponse.error) {
-          alert("Login gagal");
+    async function initClient() {
+      await gapi.client.init({
+        apiKey: API_KEY,
+        discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"]
+      });
+
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        callback: (tokenResponse) => {
+          if (tokenResponse.error) {
+            alert("Login gagal");
+            return;
+          }
+          loadSheetData();
+        },
+      });
+
+      document.querySelector('button').disabled = false;
+    }
+
+    function handleAuthClick() {
+      tokenClient.requestAccessToken();
+    }
+
+    function loadSheetData() {
+      gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: RANGE
+      }).then(response => {
+        const data = response.result.values;
+        if (!data || data.length === 0) {
+          document.getElementById('content').innerText = 'Tidak ada data ditemukan.';
           return;
         }
-        loadSheetData();
-      },
-    });
 
-    document.querySelector('button').disabled = false;
-  }
-
-  function handleAuthClick() {
-    tokenClient.requestAccessToken();
-  }
-
-  function loadSheetData() {
-    gapi.client.sheets.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEET_ID,
-      range: RANGE
-    }).then(response => {
-      const data = response.result.values;
-      if (!data || data.length === 0) {
-        document.getElementById('content').innerText = 'Tidak ada data ditemukan.';
-        return;
-      }
-
-      let html = '<table><thead><tr>';
-      data[0].forEach(header => {
-        html += `<th>${header}</th>`;
-      });
-      html += '</tr></thead><tbody>';
-
-      for (let i = 1; i < data.length; i++) {
-        html += '<tr>';
-        data[i].forEach(cell => {
-          html += `<td>${cell}</td>`;
+        let html = '<table><thead><tr>';
+        data[0].forEach(header => {
+          html += `<th>${header}</th>`;
         });
-        html += '</tr>';
-      }
+        html += '</tr></thead><tbody>';
 
-      html += '</tbody></table>';
-      document.getElementById('content').innerHTML = html;
-    }, error => {
-      document.getElementById('content').innerHTML = `<p style="color:red;">Gagal ambil data: ${error.result.error.message}</p>`;
-    });
-  }
+        for (let i = 1; i < data.length; i++) {
+          html += '<tr>';
+          data[i].forEach(cell => {
+            html += `<td>${cell}</td>`;
+          });
+          html += '</tr>';
+        }
 
-  window.onload = handleClientLoad;
-</script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<script src="https://apis.google.com/js/api.js"></script>
+        html += '</tbody></table>';
+        document.getElementById('content').innerHTML = html;
+      }, error => {
+        document.getElementById('content').innerHTML = `<p style="color:red;">Gagal ambil data: ${error.result.error.message}</p>`;
+      });
+    }
+
+    document.getElementById('form-tambah').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const nocust = document.getElementById('nocust').value;
+  const wa = document.getElementById('wa').value;
+  const alamat = document.getElementById('alamat').value;
+  const tagihan = document.getElementById('tagihan').value;
+  const tempo = document.getElementById('tempo').value;
+  const ip = document.getElementById('ip').value;
+  const ket = document.getElementById('ket').value;
+
+  const values = [[nocust, wa, alamat, tagihan, tempo, ip, ket]];
+  const body = { values };
+
+  gapi.client.sheets.spreadsheets.values.append({
+    spreadsheetId: SPREADSHEET_ID,
+    range: 'DATA CUSTOMER!A1', // Pastikan header sesuai
+    valueInputOption: 'RAW',
+    insertDataOption: 'INSERT_ROWS',
+    resource: body
+  }).then((response) => {
+    alert('✅ Data berhasil ditambahkan!');
+    loadSheetData();
+    document.getElementById('form-tambah').reset();
+  }, (error) => {
+    alert('❌ Gagal menambah data: ' + error.result.error.message);
+  });
+});
+   
+
+    window.onload = handleClientLoad;
+  </script>
 
 </body>
 </html>
