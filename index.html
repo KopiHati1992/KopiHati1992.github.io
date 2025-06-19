@@ -1,8 +1,9 @@
-<!DOCTYPE html><html lang="id">
+<!DOCTYPE html>
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manajemen Customer - Pagar Bintang</title>
+  <title>Manajemen Customer</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
@@ -10,108 +11,132 @@
     <h2 class="mb-4">Form Input Customer</h2>
     <form id="customer-form" class="row g-3 mb-5">
       <div class="col-md-6">
-        <input type="text" name="Customer" class="form-control" placeholder="Nama Customer" required>
+        <input type="text" name="customer" class="form-control" placeholder="Nama Customer" required>
       </div>
       <div class="col-md-6">
-        <input type="text" name="WhatsApp" class="form-control" placeholder="Nomor WhatsApp" required>
+        <input type="text" name="whatsapp" class="form-control" placeholder="Nomor WhatsApp" required>
       </div>
       <div class="col-md-6">
-        <input type="text" name="Alamat" class="form-control" placeholder="Alamat" required>
+        <input type="text" name="alamat" class="form-control" placeholder="Alamat" required>
       </div>
       <div class="col-md-3">
-        <input type="number" name="Tagihan" class="form-control" placeholder="Tagihan" required>
+        <input type="number" name="tagihan" class="form-control" placeholder="Tagihan" required>
       </div>
       <div class="col-md-3">
-        <input type="text" name="Jatuh Tempo" class="form-control" placeholder="Jatuh Tempo" required>
+        <input type="date" name="jatuh_tempo" class="form-control" placeholder="Jatuh Tempo" required>
       </div>
       <div class="col-md-6">
-        <input type="text" name="Ip internet" class="form-control" placeholder="IP Internet" required>
+        <input type="text" name="ip_internet" class="form-control" placeholder="IP Internet" required>
       </div>
       <div class="col-md-6">
-        <input type="text" name="Keterangan" class="form-control" placeholder="Keterangan">
+        <input type="text" name="keterangan" class="form-control" placeholder="Keterangan">
       </div>
       <div class="col-12">
         <button type="submit" class="btn btn-primary">Simpan</button>
       </div>
       <div class="col-12">
-        <div id="status-msg" class="text-danger mt-2"></div>
+        <div id="status-msg" class="alert mt-2 d-none"></div>
       </div>
-    </form><h2 class="mb-3">Daftar Customer</h2>
-<div class="table-responsive">
-  <table class="table table-bordered table-striped">
-    <thead class="table-dark">
-      <tr>
-        <th>No</th>
-        <th>Customer</th>
-        <th>WhatsApp</th>
-        <th>Alamat</th>
-        <th>Tagihan</th>
-        <th>Jatuh Tempo</th>
-        <th>IP Internet</th>
-        <th>Keterangan</th>
-      </tr>
-    </thead>
-    <tbody id="customer-table"></tbody>
-  </table>
-</div>
+    </form>
 
-  </div>  <script>
+    <h2 class="mb-3">Daftar Customer</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>No</th>
+            <th>Customer</th>
+            <th>WhatsApp</th>
+            <th>Alamat</th>
+            <th>Tagihan</th>
+            <th>Jatuh Tempo</th>
+            <th>IP Internet</th>
+            <th>Keterangan</th>
+          </tr>
+        </thead>
+        <tbody id="customer-table"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbz0zSh6dzFcMN1_I7n5SfTlmaG6JBJwZzU-xnmPkRFn5OBBva4Yy_d_45ksZtMRd5CxAA/exec";
 
+    // Fungsi untuk menampilkan pesan status
+    function showStatus(message, isSuccess) {
+      const statusEl = document.getElementById("status-msg");
+      statusEl.textContent = message;
+      statusEl.classList.remove("d-none", "alert-success", "alert-danger");
+      statusEl.classList.add(isSuccess ? "alert-success" : "alert-danger");
+    }
+
     // Simpan data
-    document.getElementById("customer-form").addEventListener("submit", function (e) {
+    document.getElementById("customer-form").addEventListener("submit", async function(e) {
       e.preventDefault();
       const form = e.target;
       const formData = new FormData(form);
       const data = {};
       formData.forEach((value, key) => data[key] = value);
 
-      fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-      })
-        .then(res => res.json())
-        .then(result => {
-          if (result.status === "success") {
-            document.getElementById("status-msg").textContent = "✅ Data berhasil disimpan.";
-            form.reset();
-            loadCustomer();
-          } else {
-            document.getElementById("status-msg").textContent = "❌ Gagal menyimpan data.";
-          }
-        })
-        .catch(() => {
-          document.getElementById("status-msg").textContent = "❌ Terjadi kesalahan.";
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
         });
+
+        const result = await response.json();
+        
+        if (result.status === "success") {
+          showStatus("✅ Data berhasil disimpan", true);
+          form.reset();
+          loadCustomer();
+        } else {
+          showStatus("❌ Gagal menyimpan data: " + (result.message || ""), false);
+        }
+      } catch (error) {
+        showStatus("❌ Terjadi kesalahan: " + error.message, false);
+        console.error("Error:", error);
+      }
     });
 
     // Load data customer
-    function loadCustomer() {
-      fetch(API_URL)
-        .then(res => res.json())
-        .then(data => {
-          const tbody = document.getElementById("customer-table");
-          tbody.innerHTML = "";
-          data.forEach(row => {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-              <td>${row[0]}</td>
-              <td>${row[1]}</td>
-              <td>${row[2]}</td>
-              <td>${row[3]}</td>
-              <td>Rp ${parseInt(row[4]).toLocaleString("id-ID")}</td>
-              <td>${row[5]}</td>
-              <td>${row[6]}</td>
-              <td>${row[7]}</td>
-            `;
-            tbody.appendChild(tr);
-          });
+    async function loadCustomer() {
+      try {
+        const response = await fetch(API_URL);
+        const data = await response.json();
+        
+        const tbody = document.getElementById("customer-table");
+        tbody.innerHTML = "";
+        
+        if (!Array.isArray(data)) {
+          throw new Error("Format data tidak valid");
+        }
+        
+        data.forEach((row, index) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${row.customer || row[1] || ''}</td>
+            <td>${row.whatsapp || row[2] || ''}</td>
+            <td>${row.alamat || row[3] || ''}</td>
+            <td>Rp ${parseInt(row.tagihan || row[4] || 0).toLocaleString("id-ID")}</td>
+            <td>${row.jatuh_tempo || row[5] || ''}</td>
+            <td>${row.ip_internet || row[6] || ''}</td>
+            <td>${row.keterangan || row[7] || ''}</td>
+          `;
+          tbody.appendChild(tr);
         });
+      } catch (error) {
+        console.error("Gagal memuat data:", error);
+        showStatus("❌ Gagal memuat data: " + error.message, false);
+      }
     }
 
-    window.onload = loadCustomer;
-  </script></body>
+    // Load data saat halaman dimuat
+    window.addEventListener('DOMContentLoaded', loadCustomer);
+  </script>
+</body>
 </html>
