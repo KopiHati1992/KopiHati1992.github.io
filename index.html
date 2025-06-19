@@ -250,9 +250,45 @@
       margin-top: 20px;
     }
     
+    .table-responsive {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .btn-text {
+      display: inline;
+    }
+    
+    /* Responsive Styles */
     @media (max-width: 768px) {
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      
+      .modal-content {
+        width: 95%;
+        padding: 15px;
+      }
+      
       .form-row {
         grid-template-columns: 1fr;
+      }
+      
+      .action-buttons {
+        flex-direction: column;
+        gap: 5px;
+      }
+      
+      .action-buttons .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      th, td {
+        padding: 8px 10px;
+        font-size: 14px;
       }
       
       .header-content {
@@ -260,10 +296,56 @@
         gap: 15px;
         align-items: flex-start;
       }
-      
-      .action-buttons {
-        flex-direction: column;
+    }
+    
+    @media (max-width: 600px) {
+      .btn-text {
+        display: none;
       }
+      
+      .btn i {
+        margin-right: 0;
+      }
+      
+      .form-group {
+        margin-bottom: 10px;
+      }
+      
+      .card {
+        margin-bottom: 15px;
+        padding: 15px;
+      }
+      
+      .btn {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+      
+      input, select, textarea {
+        padding: 8px 12px;
+      }
+    }
+    
+    /* Date input styling */
+    input[type="date"] {
+      position: relative;
+    }
+    
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: auto;
+      height: auto;
+      color: transparent;
+      background: transparent;
+    }
+    
+    input[type="date"]::-webkit-inner-spin-button,
+    input[type="date"]::-webkit-clear-button {
+      display: none;
     }
   </style>
 </head>
@@ -272,7 +354,7 @@
     <div class="container header-content">
       <h2><i class="fas fa-users"></i> Dashboard Customer</h2>
       <button class="btn btn-primary" onclick="handleAuthClick()">
-        <i class="fab fa-google"></i> Login dengan Google
+        <i class="fab fa-google"></i> <span class="btn-text">Login dengan Google</span>
       </button>
     </div>
   </header>
@@ -325,7 +407,7 @@
         </div>
         
         <button type="submit" class="btn btn-submit">
-          <i class="fas fa-save"></i> Simpan Data
+          <i class="fas fa-save"></i> <span class="btn-text">Simpan Data</span>
         </button>
       </form>
     </div>
@@ -381,10 +463,10 @@
         
         <div class="modal-footer">
           <button type="button" class="btn btn-cancel" onclick="closeModal()">
-            <i class="fas fa-times"></i> Batal
+            <i class="fas fa-times"></i> <span class="btn-text">Batal</span>
           </button>
           <button type="submit" class="btn btn-submit">
-            <i class="fas fa-save"></i> Simpan Perubahan
+            <i class="fas fa-save"></i> <span class="btn-text">Simpan Perubahan</span>
           </button>
         </div>
       </form>
@@ -402,10 +484,10 @@
       <input type="hidden" id="delete-row">
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" onclick="closeModal()">
-          <i class="fas fa-times"></i> Batal
+          <i class="fas fa-times"></i> <span class="btn-text">Batal</span>
         </button>
         <button type="button" class="btn btn-delete" onclick="confirmDelete()">
-          <i class="fas fa-trash-alt"></i> Hapus
+          <i class="fas fa-trash-alt"></i> <span class="btn-text">Hapus</span>
         </button>
       </div>
     </div>
@@ -485,11 +567,24 @@
       }, 5000);
     }
 
+    function excelDateToJSDate(serial) {
+      const utcDays = Math.floor(serial - 25569);
+      const utcValue = utcDays * 86400;
+      const date = new Date(utcValue * 1000);
+      
+      // Handle Excel's leap year bug (1900 is not a leap year)
+      if (serial < 60) {
+        date.setFullYear(date.getFullYear() - 1);
+      }
+      
+      return date;
+    }
+
     function loadSheetData() {
       gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEET_ID,
         range: RANGE,
-        valueRenderOption: 'UNFORMATTED_VALUE' // Get raw values for numbers
+        valueRenderOption: 'UNFORMATTED_VALUE'
       }).then(response => {
         const data = response.result.values;
         sheetData = data || [];
@@ -503,14 +598,14 @@
           return;
         }
 
-        // Get headers by reading the first row
+        // Get headers
         gapi.client.sheets.spreadsheets.values.get({
           spreadsheetId: SPREADSHEET_ID,
           range: `${SHEET_NAME}!A1:H1`
         }).then(headerResponse => {
           const headers = headerResponse.result.values[0];
           
-          let html = '<table><thead><tr>';
+          let html = '<div class="table-responsive"><table><thead><tr>';
           headers.forEach(header => {
             html += `<th>${header}</th>`;
           });
@@ -519,26 +614,34 @@
           sheetData.forEach((row, index) => {
             html += '<tr>';
             row.forEach((cell, colIndex) => {
-              // Format khusus untuk kolom tagihan (asumsi kolom ke-4)
+              // Format khusus untuk kolom tagihan (kolom ke-4)
               if (colIndex === 4 && cell !== '' && !isNaN(cell)) {
                 html += `<td>Rp${parseInt(cell).toLocaleString('id-ID')}</td>`;
-              } else {
+              } 
+              // Format khusus untuk kolom tanggal jatuh tempo (kolom ke-5)
+              else if (colIndex === 5 && cell) {
+                const date = excelDateToJSDate(cell);
+                const formattedDate = date.toISOString().split('T')[0];
+                const displayDate = formattedDate.split('-').reverse().join('-');
+                html += `<td>${displayDate}</td>`;
+              } 
+              else {
                 html += `<td>${cell || ''}</td>`;
               }
             });
             html += `
               <td class="action-buttons">
                 <button class="btn btn-edit" onclick="openEditModal(${index})">
-                  <i class="fas fa-edit"></i> Edit
+                  <i class="fas fa-edit"></i> <span class="btn-text">Edit</span>
                 </button>
                 <button class="btn btn-delete" onclick="openDeleteModal(${index})">
-                  <i class="fas fa-trash-alt"></i> Hapus
+                  <i class="fas fa-trash-alt"></i> <span class="btn-text">Hapus</span>
                 </button>
               </td>
             </tr>`;
           });
 
-          html += '</tbody></table>';
+          html += '</tbody></table></div>';
           document.getElementById('content').innerHTML = html;
         });
       }, error => {
@@ -564,7 +667,15 @@
       tagihanInput.value = rowData[4] ? parseInt(rowData[4]).toLocaleString('id-ID') : '';
       tagihanInput.dataset.rawValue = rowData[4] || '';
       
-      document.getElementById('edit-tempo').value = rowData[5] || '';
+      // Handle date conversion for edit form
+      const tempoInput = document.getElementById('edit-tempo');
+      if (rowData[5]) {
+        const date = excelDateToJSDate(rowData[5]);
+        tempoInput.value = date.toISOString().split('T')[0];
+      } else {
+        tempoInput.value = '';
+      }
+      
       document.getElementById('edit-ip').value = rowData[6] || '';
       document.getElementById('edit-ket').value = rowData[7] || '';
       
