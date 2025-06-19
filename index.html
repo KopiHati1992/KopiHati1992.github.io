@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dashboard Customer</title>
+  <title>Dashboard Customer & Juli</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://apis.google.com/js/api.js"></script>
@@ -268,15 +268,76 @@
       display: inline;
     }
     
-    #form-tambah-container {
-      display: none;
-      margin-top: 20px;
-      animation: fadeIn 0.3s ease;
+    .tab-container {
+      display: flex;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
     }
     
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-10px); }
-      to { opacity: 1; transform: translateY(0); }
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      border-bottom: none;
+      border-radius: 5px 5px 0 0;
+      margin-right: 5px;
+      background-color: #f1f1f1;
+    }
+    
+    .tab.active {
+      background-color: white;
+      border-color: #ddd;
+      border-bottom: 1px solid white;
+      margin-bottom: -1px;
+      font-weight: 500;
+      color: var(--primary);
+    }
+    
+    .tab-content {
+      display: none;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    .status-paid {
+      background-color: #d1fae5;
+      color: #065f46;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      display: inline-block;
+    }
+    
+    .status-unpaid {
+      background-color: #fee2e2;
+      color: #b91c1c;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      display: inline-block;
+    }
+    
+    .status-pending {
+      background-color: #fef3c7;
+      color: #92400e;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      display: inline-block;
+    }
+    
+    .customer-field, .juli-field {
+      transition: all 0.3s ease;
+    }
+    
+    #edit-status {
+      width: 100%;
+      padding: 10px 15px;
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      font-family: 'Poppins', sans-serif;
     }
     
     /* Responsive Styles */
@@ -372,7 +433,7 @@
 <body>
   <header>
     <div class="container header-content">
-      <h2><i class="fas fa-users"></i> Dashboard Customer</h2>
+      <h2><i class="fas fa-users"></i> Dashboard Customer & Juli</h2>
       <button class="btn btn-primary" onclick="handleAuthClick()">
         <i class="fab fa-google"></i> <span class="btn-text">Login dengan Google</span>
       </button>
@@ -380,84 +441,59 @@
   </header>
 
   <main class="container">
-    <!-- Card Laporan Bulanan -->
-    <div class="card">
-      <h3 class="card-title"><i class="fas fa-chart-bar"></i> Laporan Bulanan</h3>
-      <div id="monthly-report"></div>
+    <div class="tab-container">
+      <div class="tab active" onclick="switchTab('customer')">Data Customer</div>
+      <div class="tab" onclick="switchTab('juli')">Data Juli</div>
     </div>
-
-    <!-- Form Input Data -->
-    <div class="card">
-      <div class="header-content">
-        <h3 class="card-title"><i class="fas fa-plus-circle"></i> Tambah Data</h3>
-        <button class="btn btn-add" onclick="toggleAddForm()">
-          <i class="fas fa-plus"></i> <span class="btn-text">Tambah Customer</span>
-        </button>
-      </div>
-      
-      <div id="form-tambah-container" style="display:none;">
-        <form id="form-tambah">
-          <div class="form-row">
-            <div class="form-group">
-              <label for="cust">Customer</label>
-              <input type="text" id="cust" placeholder="Nama Customer" required>
-            </div>
-            <div class="form-group">
-              <label for="wa">WhatsApp</label>
-              <input type="text" id="wa" placeholder="Nomor WhatsApp" required>
-            </div>
-            <div class="form-group">
-              <label for="alamat">Alamat</label>
-              <input type="text" id="alamat" placeholder="Alamat" required>
-            </div>
-          </div>
-          
-          <div class="form-row">
-            <div class="form-group">
-              <label for="tagihan">Tagihan (Rp)</label>
-              <input type="text" id="tagihan" placeholder="150000" required oninput="formatCurrency(this)">
-            </div>
-            <div class="form-group">
-              <label for="tempo">Jatuh Tempo</label>
-              <input type="date" id="tempo" required>
-            </div>
-            <div class="form-group">
-              <label for="status">Status</label>
-              <select id="status" required>
-                <option value="BELUM">BELUM BAYAR</option>
-                <option value="LUNAS">LUNAS</option>
-              </select>
-            </div>
-          </div>
-          
-          <div class="form-footer">
-            <button type="button" class="btn btn-cancel" onclick="toggleAddForm()">
-              <i class="fas fa-times"></i> Batal
-            </button>
-            <button type="submit" class="btn btn-submit">
-              <i class="fas fa-save"></i> Simpan
-            </button>
-          </div>
-        </form>
+    
+    <!-- Tab Customer -->
+    <div id="customer-tab" class="tab-content active">
+      <div class="card">
+        <div class="header-content">
+          <h3 class="card-title"><i class="fas fa-list"></i> Daftar Customer</h3>
+          <button class="btn btn-add" onclick="toggleAddForm('customer')">
+            <i class="fas fa-plus"></i> <span class="btn-text">Tambah Customer</span>
+          </button>
+        </div>
+        
+        <div id="customer-form-tambah-container" class="form-tambah-container">
+          <!-- Form tambah customer akan di-render secara dinamis -->
+        </div>
+        
+        <div id="customer-content"></div>
       </div>
     </div>
-
-    <!-- Daftar Customer -->
-    <div class="card">
-      <h3 class="card-title"><i class="fas fa-list"></i> Daftar Customer</h3>
-      <div id="content"></div>
+    
+    <!-- Tab Juli -->
+    <div id="juli-tab" class="tab-content">
+      <div class="card">
+        <div class="header-content">
+          <h3 class="card-title"><i class="fas fa-calendar-alt"></i> Daftar Tagihan Juli</h3>
+          <button class="btn btn-add" onclick="toggleAddForm('juli')">
+            <i class="fas fa-plus"></i> <span class="btn-text">Tambah Data</span>
+          </button>
+        </div>
+        
+        <div id="juli-form-tambah-container" class="form-tambah-container">
+          <!-- Form tambah Juli akan di-render secara dinamis -->
+        </div>
+        
+        <div id="juli-content"></div>
+      </div>
     </div>
   </main>
 
-    <!-- Modal Edit -->
+  <!-- Modal Edit -->
   <div id="editModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3><i class="fas fa-edit"></i> Edit Customer</h3>
+        <h3 id="edit-modal-title"><i class="fas fa-edit"></i> Edit Data</h3>
         <button onclick="closeModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
       </div>
       <form id="form-edit">
+        <input type="hidden" id="edit-sheet">
         <input type="hidden" id="edit-row">
+        
         <div class="form-row">
           <div class="form-group">
             <label for="edit-no">No</label>
@@ -467,13 +503,15 @@
             <label for="edit-cust">Customer</label>
             <input type="text" id="edit-cust" required>
           </div>
-          <div class="form-group">
+          
+          <!-- Customer-specific fields -->
+          <div class="form-group customer-field">
             <label for="edit-wa">WhatsApp</label>
-            <input type="text" id="edit-wa" required>
+            <input type="text" id="edit-wa">
           </div>
-          <div class="form-group">
+          <div class="form-group customer-field">
             <label for="edit-alamat">Alamat</label>
-            <input type="text" id="edit-alamat" required>
+            <input type="text" id="edit-alamat">
           </div>
         </div>
         
@@ -487,11 +525,25 @@
             <label for="edit-tempo">Jatuh Tempo</label>
             <input type="date" id="edit-tempo" required>
           </div>
-          <div class="form-group">
+          
+          <!-- Customer-specific fields -->
+          <div class="form-group customer-field">
             <label for="edit-ip">IP Internet</label>
-            <input type="text" id="edit-ip" required>
+            <input type="text" id="edit-ip">
           </div>
-          <div class="form-group">
+          
+          <!-- Juli-specific field -->
+          <div class="form-group juli-field" style="display: none;">
+            <label for="edit-status">Status</label>
+            <select id="edit-status">
+              <option value="Lunas">Lunas</option>
+              <option value="Belum Lunas">Belum Lunas</option>
+              <option value="Pending">Pending</option>
+            </select>
+          </div>
+          
+          <!-- Customer-specific field -->
+          <div class="form-group customer-field">
             <label for="edit-ket">Keterangan</label>
             <input type="text" id="edit-ket">
           </div>
@@ -513,10 +565,11 @@
   <div id="deleteModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h3><i class="fas fa-trash-alt"></i> Hapus Customer</h3>
+        <h3><i class="fas fa-trash-alt"></i> Hapus Data</h3>
         <button onclick="closeModal()" style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">&times;</button>
       </div>
-      <p>Apakah Anda yakin ingin menghapus data customer ini?</p>
+      <p id="delete-message">Apakah Anda yakin ingin menghapus data ini?</p>
+      <input type="hidden" id="delete-sheet">
       <input type="hidden" id="delete-row">
       <div class="modal-footer">
         <button type="button" class="btn btn-cancel" onclick="closeModal()">
@@ -528,424 +581,543 @@
       </div>
     </div>
   </div>
-  
+
   <script>
-const CLIENT_ID = '805721921065-idl1i4jonepi7odtr4f7eiv1h4mbamk2.apps.googleusercontent.com';
-const API_KEY = 'AIzaSyArISbb4W_mfRyZxJzi12Sm3eByi0jQCjM';
-const SPREADSHEET_ID = '1AQx4YgRW9R-epO8BGlyFvN7CKIGyKgxmE1LgGqNpbs4';
-const SHEET_NAME = 'DATA_CUSTOMER';
-const SCOPES = 'https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive';
+    const CLIENT_ID = '805721921065-idl1i4jonepi7odtr4f7eiv1h4mbamk2.apps.googleusercontent.com';
+    const API_KEY = 'AIzaSyArISbb4W_mfRyZxJzi12Sm3eByi0jQCjM';
+    const SPREADSHEET_ID = '1AQx4YgRW9R-epO8BGlyFvN7CKIGyKgxmE1LgGqNpbs4';
+    const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
 
-let tokenClient;
-let sheetData = [];
-let lastNumber = 0;
-
-// ===================== INITIALIZATION =====================
-function handleClientLoad() {
-  gapi.load('client', initClient);
-}
-
-async function initClient() {
-  try {
-    await gapi.client.init({
-      apiKey: API_KEY,
-      discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"]
-    });
-
-    tokenClient = google.accounts.oauth2.initTokenClient({
-      client_id: CLIENT_ID,
-      scope: SCOPES,
-      callback: async (tokenResponse) => {
-        if (tokenResponse.error) {
-          showAlert('Login gagal: ' + tokenResponse.error, 'danger');
-          return;
-        }
-        await initSheet();
-        await loadSheetData();
+    const SHEETS_CONFIG = {
+      customer: {
+        name: 'DATA CUSTOMER',
+        range: 'DATA CUSTOMER!A2:H',
+        columns: ['No', 'Customer', 'WhatsApp', 'Alamat', 'Tagihan', 'Jatuh Tempo', 'IP Internet', 'Keterangan'],
+        formFields: [
+          { id: 'no', label: 'No', type: 'text', readonly: true },
+          { id: 'cust', label: 'Customer', type: 'text', required: true },
+          { id: 'wa', label: 'WhatsApp', type: 'text', required: true },
+          { id: 'alamat', label: 'Alamat', type: 'text', required: true },
+          { id: 'tagihan', label: 'Tagihan (Rp)', type: 'text', required: true, oninput: "formatCurrency(this)" },
+          { id: 'tempo', label: 'Jatuh Tempo', type: 'date', required: true },
+          { id: 'ip', label: 'IP Internet', type: 'text', required: true },
+          { id: 'ket', label: 'Keterangan', type: 'text' }
+        ]
       },
-    });
-  } catch (error) {
-    console.error('Init error:', error);
-    showAlert('Gagal menginisialisasi aplikasi', 'danger');
-  }
-}
+      juli: {
+        name: 'JULI',
+        range: 'JULI!A2:E',
+        columns: ['No', 'Customer', 'Tagihan', 'Jatuh Tempo', 'Status'],
+        formFields: [
+          { id: 'no', label: 'No', type: 'text', readonly: true },
+          { id: 'cust', label: 'Customer', type: 'text', required: true },
+          { id: 'tagihan', label: 'Tagihan (Rp)', type: 'text', required: true, oninput: "formatCurrency(this)" },
+          { id: 'tempo', label: 'Jatuh Tempo', type: 'date', required: true },
+          { 
+            id: 'status', 
+            label: 'Status', 
+            type: 'select', 
+            required: true,
+            options: [
+              { value: '', text: 'Pilih Status' },
+              { value: 'Lunas', text: 'Lunas' },
+              { value: 'Belum Lunas', text: 'Belum Lunas' },
+              { value: 'Pending', text: 'Pending' }
+            ]
+          }
+        ]
+      }
+    };
 
-// ===================== SHEET MANAGEMENT =====================
-async function initSheet() {
-  try {
-    const res = await gapi.client.sheets.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!1:1`
-    });
-    
-    const headers = res.result.values ? res.result.values[0] : [];
-    console.log('Headers:', headers);
-    
-    // Pastikan kolom minimal ada
-    const requiredColumns = ['NO', 'CUSTOMER', 'WHATSAPP', 'ALAMAT', 'TAGIHAN', 'JATUH_TEMPO', 'STATUS'];
-    const missingColumns = requiredColumns.filter(col => !headers.includes(col));
-    
-    if (missingColumns.length > 0) {
-      showAlert(`Kolom yang diperlukan tidak ditemukan: ${missingColumns.join(', ')}`, 'danger');
+    let tokenClient;
+    let sheetData = {
+      customer: [],
+      juli: []
+    };
+    let lastNumbers = {
+      customer: 0,
+      juli: 0
+    };
+    let activeTab = 'customer';
+
+    function handleClientLoad() {
+      gapi.load('client', initClient);
     }
-  } catch (error) {
-    console.error('Sheet init error:', error);
-    showAlert('Gagal memeriksa struktur sheet', 'danger');
-  }
-}
 
-// ===================== DATA LOADING =====================
-async function loadSheetData() {
-  try {
-    showLoading(true);
-    const response = await gapi.client.sheets.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!A2:I`, // Sesuaikan dengan jumlah kolom
-      valueRenderOption: 'UNFORMATTED_VALUE'
-    });
+    async function initClient() {
+      await gapi.client.init({
+        apiKey: API_KEY,
+        discoveryDocs: ["https://sheets.googleapis.com/$discovery/rest?version=v4"]
+      });
 
-    console.log('API Response:', response);
-    
-    if (response.result && response.result.values) {
-      sheetData = response.result.values;
-      lastNumber = getLastNumber(sheetData);
-      renderTable(sheetData);
-      generateMonthlyReport();
-    } else {
-      showAlert('Tidak ada data ditemukan', 'info');
-      renderTable([]);
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        callback: (tokenResponse) => {
+          if (tokenResponse.error) {
+            showAlert('Login gagal', 'danger');
+            return;
+          }
+          loadAllSheetData();
+        },
+      });
     }
-  } catch (error) {
-    console.error('Load data error:', error);
-    showAlert(`Gagal memuat data: ${error.result?.error?.message || error.message}`, 'danger');
-  } finally {
-    showLoading(false);
-  }
-}
 
-function getLastNumber(data) {
-  if (!data || data.length === 0) return 0;
-  return Math.max(...data.map(row => parseInt(row[0]) || 0));
-}
-
-// ===================== RENDER FUNCTIONS =====================
-function renderTable(data) {
-  const container = document.getElementById('content');
-  if (!container) return;
-
-  if (!data || data.length === 0) {
-    container.innerHTML = `
-      <div class="alert alert-info">
-        <i class="fas fa-info-circle"></i> Tidak ada data customer
-      </div>
-    `;
-    return;
-  }
-
-  const html = `
-    <div class="table-responsive">
-      <table>
-        <thead>
-          <tr>
-            <th>NO</th>
-            <th>CUSTOMER</th>
-            <th>WHATSAPP</th>
-            <th>ALAMAT</th>
-            <th>TAGIHAN</th>
-            <th>JATUH TEMPO</th>
-            <th>STATUS</th>
-            <th>AKSI</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${data.map((row, index) => `
-            <tr>
-              <td>${row[0] || ''}</td>
-              <td>${row[1] || ''}</td>
-              <td>${row[2] || ''}</td>
-              <td>${row[3] || ''}</td>
-              <td>${formatCurrencyDisplay(row[4])}</td>
-              <td>${formatDateDisplay(row[5])}</td>
-              <td class="status-${(row[6] || 'BELUM').toLowerCase()}">
-                ${row[6] || 'BELUM'}
-              </td>
-              <td class="action-buttons">
-                <button class="btn btn-edit" onclick="openEditModal(${index})">
-                  <i class="fas fa-edit"></i>
-                </button>
-                <button class="btn btn-delete" onclick="openDeleteModal(${index})">
-                  <i class="fas fa-trash-alt"></i>
-                </button>
-              </td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-  container.innerHTML = html;
-}
-
-function generateMonthlyReport() {
-  if (!sheetData || sheetData.length === 0) {
-    document.getElementById('monthly-report').innerHTML = `
-      <div class="alert alert-info">
-        <i class="fas fa-info-circle"></i> Tidak ada data laporan
-      </div>
-    `;
-    return;
-  }
-
-  // Group by month (simple version)
-  const monthlySummary = {};
-  sheetData.forEach(row => {
-    if (!row[5]) return; // Skip jika tidak ada tanggal
-    
-    const date = new Date(row[5]);
-    if (isNaN(date.getTime())) return;
-    
-    const monthYear = `${date.getMonth()+1}/${date.getFullYear()}`;
-    if (!monthlySummary[monthYear]) {
-      monthlySummary[monthYear] = { total: 0, lunas: 0, belum: 0, tagihan: 0 };
+    function loadAllSheetData() {
+      loadSheetData('customer');
+      loadSheetData('juli');
     }
-    
-    monthlySummary[monthYear].total++;
-    monthlySummary[monthYear].tagihan += parseInt(row[4]) || 0;
-    
-    if ((row[6] || '').toUpperCase() === 'LUNAS') {
-      monthlySummary[monthYear].lunas++;
-    } else {
-      monthlySummary[monthYear].belum++;
+
+    async function loadSheetData(sheetKey) {
+      const config = SHEETS_CONFIG[sheetKey];
+      
+      try {
+        const response = await gapi.client.sheets.spreadsheets.values.get({
+          spreadsheetId: SPREADSHEET_ID,
+          range: config.range,
+          valueRenderOption: 'UNFORMATTED_VALUE',
+          dateTimeRenderOption: 'FORMATTED_STRING'
+        });
+        
+        const data = response.result.values;
+        sheetData[sheetKey] = data || [];
+        
+        // Update lastNumber
+        lastNumbers[sheetKey] = getLastNumber(sheetData[sheetKey]);
+        
+        // Render data
+        renderData(sheetKey);
+        
+      } catch (error) {
+        console.error(`Error loading ${sheetKey} data:`, error);
+        document.getElementById(`${sheetKey}-content`).innerHTML = `
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i> Gagal mengambil data ${sheetKey}: ${error.result?.error?.message || 'Error tidak diketahui'}
+          </div>
+        `;
+      }
     }
-  });
 
-  const html = `
-    <div class="table-responsive">
-      <table>
-        <thead>
-          <tr>
-            <th>PERIODE</th>
-            <th>TOTAL</th>
-            <th>TAGIHAN</th>
-            <th>LUNAS</th>
-            <th>BELUM</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${Object.entries(monthlySummary).map(([monthYear, data]) => `
-            <tr>
-              <td>${monthYear}</td>
-              <td>${data.total}</td>
-              <td>Rp${data.tagihan.toLocaleString('id-ID')}</td>
-              <td>${data.lunas}</td>
-              <td>${data.belum}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-  document.getElementById('monthly-report').innerHTML = html;
-}
+    function renderData(sheetKey) {
+      const config = SHEETS_CONFIG[sheetKey];
+      const data = sheetData[sheetKey];
+      
+      if (!data || data.length === 0) {
+        document.getElementById(`${sheetKey}-content`).innerHTML = `
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Tidak ada data ditemukan.
+          </div>
+        `;
+        return;
+      }
 
-// ===================== FORM HANDLING =====================
-document.getElementById('form-tambah').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  
-  try {
-    const now = new Date();
-    const values = [
-      lastNumber + 1,
-      document.getElementById('cust').value.trim(),
-      document.getElementById('wa').value.trim(),
-      document.getElementById('alamat').value.trim(),
-      getRawNumber(document.getElementById('tagihan')),
-      document.getElementById('tempo').value,
-      document.getElementById('status').value,
-      now.getMonth() + 1,
-      now.getFullYear()
-    ];
+      // Urutkan data berdasarkan tanggal jatuh tempo jika ada kolom tempo
+      if (sheetKey === 'customer' || sheetKey === 'juli') {
+        data.sort((a, b) => {
+          const dateA = new Date(a[sheetKey === 'customer' ? 5 : 3]);
+          const dateB = new Date(b[sheetKey === 'customer' ? 5 : 3]);
+          return dateA - dateB;
+        });
+      }
 
-    showLoading(true);
-    const response = await gapi.client.sheets.spreadsheets.values.append({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!A1`,
-      valueInputOption: 'USER_ENTERED',
-      resource: { values: [values] }
-    });
-    
-    if (response.result.updates.updatedRows === 1) {
-      showAlert('Data berhasil ditambahkan!', 'success');
-      document.getElementById('form-tambah').reset();
-      toggleAddForm();
-      await loadSheetData();
-    } else {
-      throw new Error('Gagal menambahkan data');
-    }
-  } catch (error) {
-    console.error('Submit error:', error);
-    showAlert(`Gagal menambahkan data: ${error.result?.error?.message || error.message}`, 'danger');
-  } finally {
-    showLoading(false);
-  }
-});
+      let html = '<div class="table-responsive"><table><thead><tr>';
+      config.columns.forEach(header => {
+        html += `<th>${header || ''}</th>`;
+      });
+      html += '<th>Aksi</th></tr></thead><tbody>';
 
-// ===================== MODAL FUNCTIONS =====================
-function openEditModal(index) {
-  const rowData = sheetData[index];
-  if (!rowData) return;
-
-  document.getElementById('edit-row').value = index + 2; // +2 karena header
-  
-  document.getElementById('edit-no').value = rowData[0] || '';
-  document.getElementById('edit-cust').value = rowData[1] || '';
-  document.getElementById('edit-wa').value = rowData[2] || '';
-  document.getElementById('edit-alamat').value = rowData[3] || '';
-  
-  const tagihanInput = document.getElementById('edit-tagihan');
-  tagihanInput.value = rowData[4] ? parseInt(rowData[4]).toLocaleString('id-ID') : '';
-  tagihanInput.dataset.rawValue = rowData[4] || '';
-  
-  document.getElementById('edit-tempo').value = formatDateForInput(rowData[5]);
-  document.getElementById('edit-status').value = rowData[6] || 'BELUM';
-  
-  document.getElementById('editModal').style.display = 'flex';
-}
-
-function closeModal() {
-  document.getElementById('editModal').style.display = 'none';
-  document.getElementById('deleteModal').style.display = 'none';
-}
-
-async function confirmDelete() {
-  const rowNumber = document.getElementById('delete-row').value;
-  if (!rowNumber) return;
-
-  try {
-    showLoading(true);
-    const response = await gapi.client.sheets.spreadsheets.batchUpdate({
-      spreadsheetId: SPREADSHEET_ID,
-      resource: {
-        requests: [{
-          deleteDimension: {
-            range: {
-              sheetId: 0,
-              dimension: "ROWS",
-              startIndex: rowNumber - 1,
-              endIndex: rowNumber
+      data.forEach((row, index) => {
+        if (!row) return;
+        
+        html += '<tr>';
+        const rowData = [...row];
+        
+        rowData.forEach((cell, colIndex) => {
+          if (colIndex === (sheetKey === 'customer' ? 4 : 2) && cell !== '' && !isNaN(cell)) {
+            html += `<td>Rp${parseInt(cell).toLocaleString('id-ID')}</td>`;
+          } 
+          else if (colIndex === (sheetKey === 'customer' ? 5 : 3)) {
+            if (typeof cell === 'string') {
+              html += `<td>${cell || ''}</td>`;
+            } 
+            else if (!isNaN(cell)) {
+              const date = new Date((cell - 25568) * 86400 * 1000);
+              const formattedDate = date.toISOString().split('T')[0];
+              html += `<td>${formattedDate}</td>`;
+            } else {
+              html += `<td>${cell || ''}</td>`;
             }
           }
-        }]
+          else if (sheetKey === 'juli' && colIndex === 4) {
+            html += `<td><span class="${getStatusClass(cell)}">${cell || ''}</span></td>`;
+          }
+          else {
+            html += `<td>${cell || ''}</td>`;
+          }
+        });
+        
+        html += `
+          <td class="action-buttons">
+            <button class="btn btn-edit" onclick="openEditModal('${sheetKey}', ${index})">
+              <i class="fas fa-edit"></i> <span class="btn-text">Edit</span>
+            </button>
+            <button class="btn btn-delete" onclick="openDeleteModal('${sheetKey}', ${index})">
+              <i class="fas fa-trash-alt"></i> <span class="btn-text">Hapus</span>
+            </button>
+          </td>
+        </tr>`;
+      });
+
+      html += '</tbody></table></div>';
+      document.getElementById(`${sheetKey}-content`).innerHTML = html;
+    }
+
+    function switchTab(tabName) {
+      activeTab = tabName;
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+      document.getElementById(`${tabName}-tab`).classList.add('active');
+    }
+
+    function getLastNumber(data) {
+      if (!data || data.length === 0) return 0;
+      
+      let maxNumber = 0;
+      data.forEach(row => {
+        const num = parseInt(row[0]) || 0;
+        if (num > maxNumber) maxNumber = num;
+      });
+      
+      return maxNumber;
+    }
+
+    function formatCurrency(input) {
+      const rawValue = input.value.replace(/\D/g, '');
+      input.dataset.rawValue = rawValue;
+      
+      if (rawValue.length > 0) {
+        input.value = parseInt(rawValue).toLocaleString('id-ID');
+      } else {
+        input.value = '';
+      }
+    }
+
+    function getRawNumber(input) {
+      return input.dataset.rawValue || input.value.replace(/\D/g, '') || '0';
+    }
+
+    function showAlert(message, type) {
+      const alertDiv = document.createElement('div');
+      alertDiv.className = `alert alert-${type}`;
+      alertDiv.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+        ${message}
+      `;
+      
+      const container = document.querySelector('.container');
+      container.insertBefore(alertDiv, container.firstChild);
+      
+      setTimeout(() => {
+        alertDiv.remove();
+      }, 5000);
+    }
+
+    function toggleAddForm(sheetKey) {
+      const formContainer = document.getElementById(`${sheetKey}-form-tambah-container`);
+      
+      if (formContainer.style.display === 'block') {
+        formContainer.style.display = 'none';
+      } else {
+        formContainer.style.display = 'block';
+        renderAddForm(sheetKey);
+        // Set nomor otomatis saat form ditampilkan
+        document.getElementById(`${sheetKey}-no`).value = lastNumbers[sheetKey] + 1;
+      }
+    }
+
+    function renderAddForm(sheetKey) {
+      const config = SHEETS_CONFIG[sheetKey];
+      let formHTML = '<form id="form-tambah-' + sheetKey + '">';
+      
+      // Baris pertama form
+      formHTML += '<div class="form-row">';
+      config.formFields.slice(0, 2).forEach(field => {
+        formHTML += renderFormField(sheetKey, field);
+      });
+      formHTML += '</div>';
+      
+      // Baris kedua form
+      formHTML += '<div class="form-row">';
+      config.formFields.slice(2).forEach(field => {
+        formHTML += renderFormField(sheetKey, field);
+      });
+      formHTML += '</div>';
+      
+      // Footer form
+      formHTML += `
+        <div class="form-footer">
+          <button type="button" class="btn btn-cancel" onclick="toggleAddForm('${sheetKey}')">
+            <i class="fas fa-times"></i> <span class="btn-text">Batal</span>
+          </button>
+          <button type="submit" class="btn btn-submit">
+            <i class="fas fa-save"></i> <span class="btn-text">Simpan Data</span>
+          </button>
+        </div>
+      </form>`;
+      
+      const formContainer = document.getElementById(`${sheetKey}-form-tambah-container`);
+      formContainer.innerHTML = formHTML;
+      
+      // Tambahkan event listener untuk form submit
+      document.getElementById(`form-tambah-${sheetKey}`).addEventListener('submit', function(e) {
+        e.preventDefault();
+        saveData(sheetKey);
+      });
+    }
+
+    function renderFormField(sheetKey, field) {
+      let html = `<div class="form-group">
+        <label for="${sheetKey}-${field.id}">${field.label}</label>`;
+      
+      if (field.type === 'select') {
+        html += `<select id="${sheetKey}-${field.id}" ${field.required ? 'required' : ''}>`;
+        field.options.forEach(option => {
+          html += `<option value="${option.value}">${option.text}</option>`;
+        });
+        html += '</select>';
+      } else {
+        html += `<input type="${field.type}" id="${sheetKey}-${field.id}" 
+               placeholder="${field.label}" ${field.required ? 'required' : ''} 
+               ${field.readonly ? 'readonly' : ''}
+               ${field.oninput ? `oninput="${field.oninput}"` : ''}>`;
+      }
+      
+      html += '</div>';
+      return html;
+    }
+
+    function saveData(sheetKey) {
+      const config = SHEETS_CONFIG[sheetKey];
+      const prefix = `${sheetKey}-`;
+      
+      // Auto-increment nomor
+      lastNumbers[sheetKey]++;
+      
+      // Siapkan data sesuai dengan konfigurasi sheet
+      const values = config.formFields.map(field => {
+        const element = document.getElementById(prefix + field.id);
+        
+        if (field.id === 'tagihan') {
+          return parseInt(getRawNumber(element)) || 0;
+        }
+        return element.value || '';
+      });
+
+      const body = { values: [values] };
+
+      gapi.client.sheets.spreadsheets.values.append({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${config.name}!A1`,
+        valueInputOption: 'USER_ENTERED',
+        insertDataOption: 'INSERT_ROWS',
+        resource: body
+      }).then(() => {
+        showAlert('Data berhasil ditambahkan!', 'success');
+        loadSheetData(sheetKey);
+        toggleAddForm(sheetKey);
+        // Set nomor berikutnya
+        lastNumbers[sheetKey] = getLastNumber(sheetData[sheetKey]);
+      }, (error) => {
+        showAlert('Gagal menambah data: ' + error.result.error.message, 'danger');
+        // Rollback lastNumber jika gagal
+        lastNumbers[sheetKey]--;
+      });
+    }
+
+    function getStatusClass(status) {
+      if (status === 'Lunas') return 'status-paid';
+      if (status === 'Belum Lunas') return 'status-unpaid';
+      if (status === 'Pending') return 'status-pending';
+      return '';
+    }
+
+    function openEditModal(sheetKey, rowIndex) {
+      const config = SHEETS_CONFIG[sheetKey];
+      const rowData = sheetData[sheetKey][rowIndex];
+      
+      // Set modal title based on sheet
+      document.getElementById('edit-modal-title').innerHTML = 
+        `<i class="fas fa-edit"></i> Edit ${sheetKey === 'customer' ? 'Customer' : 'Tagihan Juli'}`;
+      
+      // Set sheet and row info
+      document.getElementById('edit-sheet').value = sheetKey;
+      document.getElementById('edit-row').value = rowIndex + 2;
+      
+      // Toggle field visibility
+      document.querySelectorAll('.customer-field').forEach(el => {
+        el.style.display = sheetKey === 'customer' ? 'block' : 'none';
+      });
+      document.querySelectorAll('.juli-field').forEach(el => {
+        el.style.display = sheetKey === 'juli' ? 'block' : 'none';
+      });
+      
+      // Fill form with data
+      config.formFields.forEach((field, index) => {
+        const element = document.getElementById('edit-' + field.id);
+        if (element) {
+          if (field.id === 'tagihan') {
+            element.value = rowData[index] ? parseInt(rowData[index]).toLocaleString('id-ID') : '';
+            element.dataset.rawValue = rowData[index] || '';
+          } 
+          else if (field.id === 'tempo') {
+            if (rowData[index]) {
+              const date = excelDateToJSDate(rowData[index]);
+              element.value = date.toISOString().split('T')[0];
+            }
+          }
+          else if (field.type === 'select') {
+            element.value = rowData[index] || '';
+          }
+          else {
+            element.value = rowData[index] || '';
+          }
+        }
+      });
+      
+      document.getElementById('editModal').style.display = 'flex';
+    }
+
+    function openDeleteModal(sheetKey, rowIndex) {
+      document.getElementById('delete-sheet').value = sheetKey;
+      document.getElementById('delete-row').value = rowIndex + 2;
+      document.getElementById('delete-message').textContent = 
+        `Apakah Anda yakin ingin menghapus data ${sheetKey === 'customer' ? 'customer' : 'tagihan Juli'} ini?`;
+      document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('editModal').style.display = 'none';
+      document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    document.getElementById('form-edit').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const sheetKey = document.getElementById('edit-sheet').value;
+      const config = SHEETS_CONFIG[sheetKey];
+      const rowNumber = document.getElementById('edit-row').value;
+      
+      try {
+        const values = config.formFields.map(field => {
+          const element = document.getElementById('edit-' + field.id);
+          
+          if (field.id === 'tagihan') {
+            return parseInt(getRawNumber(element)) || 0;
+          }
+          return element.value || '';
+        });
+
+        const response = await gapi.client.sheets.spreadsheets.values.update({
+          spreadsheetId: SPREADSHEET_ID,
+          range: `${config.name}!A${rowNumber}:${String.fromCharCode(65 + config.formFields.length - 1)}${rowNumber}`,
+          valueInputOption: 'USER_ENTERED',
+          resource: { values: [values] }
+        });
+        
+        showAlert('Data berhasil diperbarui!', 'success');
+        closeModal();
+        await loadSheetData(sheetKey);
+      } catch (error) {
+        console.error('Error updating data:', error);
+        showAlert(`Gagal memperbarui data: ${error.result?.error?.message || 'Error tidak diketahui'}`, 'danger');
       }
     });
+
+    async function confirmDelete() {
+      const sheetKey = document.getElementById('delete-sheet').value;
+      const rowNumber = document.getElementById('delete-row').value;
+      const config = SHEETS_CONFIG[sheetKey];
+      
+      try {
+        const sheetId = await getSheetIdByName(config.name);
+        
+        await gapi.client.sheets.spreadsheets.batchUpdate({
+          spreadsheetId: SPREADSHEET_ID,
+          resource: {
+            requests: [{
+              deleteDimension: {
+                range: {
+                  sheetId: sheetId,
+                  dimension: "ROWS",
+                  startIndex: rowNumber - 1,
+                  endIndex: rowNumber
+                }
+              }
+            }]
+          }
+        });
+        
+        showAlert('Data berhasil dihapus!', 'success');
+        closeModal();
+        await loadSheetData(sheetKey);
+      } catch (error) {
+        console.error('Error deleting data:', error);
+        showAlert('Gagal menghapus data: ' + error.result?.error?.message, 'danger');
+      }
+    }
+
+    async function getSheetIdByName(sheetName) {
+      try {
+        const response = await gapi.client.sheets.spreadsheets.get({
+          spreadsheetId: SPREADSHEET_ID,
+          fields: 'sheets.properties'
+        });
+        
+        const sheet = response.result.sheets.find(s => 
+          s.properties.title === sheetName
+        );
+        
+        if (!sheet) {
+          console.error(`Sheet ${sheetName} not found`);
+          return 0; // Default fallback
+        }
+        
+        return sheet.properties.sheetId;
+      } catch (error) {
+        console.error('Error getting sheet ID:', error);
+        return 0; // Fallback value
+      }
+    }
+
+    function excelDateToJSDate(serial) {
+      try {
+        if (typeof serial === 'string') return new Date(serial);
+        
+        const utcDays = Math.floor(serial - 25568);
+        const utcValue = utcDays * 86400;
+        const date = new Date(utcValue * 1000);
+        
+        if (serial < 60) {
+          date.setFullYear(date.getFullYear() - 1);
+        }
+        
+        return date;
+      } catch (e) {
+        console.error('Error converting Excel date:', serial, e);
+        return new Date();
+      }
+    }
+
+    function handleAuthClick() {
+      tokenClient.requestAccessToken();
+    }
     
-    showAlert('Data berhasil dihapus!', 'success');
-    closeModal();
-    await loadSheetData();
-  } catch (error) {
-    console.error('Delete error:', error);
-    showAlert(`Gagal menghapus data: ${error.result?.error?.message || error.message}`, 'danger');
-  } finally {
-    showLoading(false);
-  }
-}
-
-// ===================== UTILITY FUNCTIONS =====================
-function formatCurrency(input) {
-  const rawValue = input.value.replace(/\D/g, '');
-  input.dataset.rawValue = rawValue;
-  input.value = rawValue ? parseInt(rawValue).toLocaleString('id-ID') : '';
-}
-
-function getRawNumber(input) {
-  return input.dataset.rawValue || input.value.replace(/\D/g, '') || '0';
-}
-
-function formatCurrencyDisplay(value) {
-  if (!value) return '';
-  return `Rp${parseInt(value).toLocaleString('id-ID')}`;
-}
-
-function formatDateDisplay(dateValue) {
-  if (!dateValue) return '';
-  if (typeof dateValue === 'string') return dateValue;
-  
-  const date = new Date((dateValue - 25568) * 86400 * 1000);
-  return isNaN(date.getTime()) ? '' : date.toISOString().split('T')[0];
-}
-
-function formatDateForInput(dateValue) {
-  if (!dateValue) return '';
-  if (typeof dateValue === 'string') return dateValue;
-  
-  const date = new Date((dateValue - 25568) * 86400 * 1000);
-  return isNaN(date.getTime()) ? '' : date.toISOString().split('T')[0];
-}
-
-function showAlert(message, type) {
-  const alert = document.createElement('div');
-  alert.className = `alert alert-${type}`;
-  alert.innerHTML = `
-    <i class="fas fa-${type === 'success' ? 'check' : 'exclamation'}-circle"></i>
-    ${message}
-  `;
-  document.querySelector('.container').prepend(alert);
-  setTimeout(() => alert.remove(), 5000);
-}
-
-function showLoading(show) {
-  const loader = document.getElementById('loading');
-  if (loader) {
-    loader.style.display = show ? 'block' : 'none';
-  }
-}
-
-function toggleAddForm() {
-  const form = document.getElementById('form-tambah-container');
-  form.style.display = form.style.display === 'none' ? 'block' : 'none';
-  
-  // Reset form ketika dibuka
-  if (form.style.display === 'block') {
-    document.getElementById('form-tambah').reset();
-    document.getElementById('no').value = lastNumber + 1;
-  }
-}
-
-// ===================== EVENT LISTENERS =====================
-window.handleAuthClick = function() {
-  tokenClient.requestAccessToken();
-};
-
-window.openDeleteModal = function(index) {
-  document.getElementById('delete-row').value = index + 2;
-  document.getElementById('deleteModal').style.display = 'flex';
-};
-
-// ===================== INITIALIZE APP =====================
-window.addEventListener('DOMContentLoaded', () => {
-  // Tambahkan loading indicator
-  const loadingDiv = document.createElement('div');
-  loadingDiv.id = 'loading';
-  loadingDiv.style.display = 'none';
-  loadingDiv.style.position = 'fixed';
-  loadingDiv.style.top = '0';
-  loadingDiv.style.left = '0';
-  loadingDiv.style.width = '100%';
-  loadingDiv.style.height = '100%';
-  loadingDiv.style.backgroundColor = 'rgba(0,0,0,0.5)';
-  loadingDiv.style.zIndex = '2000';
-  loadingDiv.style.display = 'flex';
-  loadingDiv.style.justifyContent = 'center';
-  loadingDiv.style.alignItems = 'center';
-  loadingDiv.innerHTML = `
-    <div style="background: white; padding: 20px; border-radius: 8px;">
-      <i class="fas fa-spinner fa-spin"></i> Memuat...
-    </div>
-  `;
-  document.body.appendChild(loadingDiv);
-  
-  handleClientLoad();
-});
-</script>
+    window.onload = handleClientLoad;
+  </script>
 </body>
 </html>
