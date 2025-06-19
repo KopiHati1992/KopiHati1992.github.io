@@ -600,7 +600,7 @@ async function loadSheetData() {
     showLoading(true);
     const response = await gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!A2:G`, // Sesuaikan dengan jumlah kolom
+      range: `${SHEET_NAME}!A2:I`, // Sesuaikan dengan jumlah kolom
       valueRenderOption: 'UNFORMATTED_VALUE'
     });
 
@@ -768,7 +768,7 @@ document.getElementById('form-tambah').addEventListener('submit', async function
 
     showLoading(true);
     const response = await gapi.client.sheets.spreadsheets.values.append({
-      spreadsheetId: SPREADSHEET_ID,
+      spreadsheetId: DATA_CUSTOMER,
       range: `${SHEET_NAME}!A1`,
       valueInputOption: 'USER_ENTERED',
       resource: { values: [values] }
