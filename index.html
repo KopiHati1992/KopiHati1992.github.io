@@ -498,7 +498,7 @@
     const API_KEY = 'AIzaSyArISbb4W_mfRyZxJzi12Sm3eByi0jQCjM';
     const SPREADSHEET_ID = '1AQx4YgRW9R-epO8BGlyFvN7CKIGyKgxmE1LgGqNpbs4';
     const SHEET_NAME = 'DATA CUSTOMER';
-    const RANGE = `${SHEET_NAME}!A1:H4`;
+    const RANGE = `${SHEET_NAME}!A2:H`;
     const SCOPES = 'https://www.googleapis.com/auth/spreadsheets';
 
     let tokenClient;
@@ -580,78 +580,125 @@
       return date;
     }
 
-    function loadSheetData() {
-      gapi.client.sheets.spreadsheets.values.get({
-        spreadsheetId: SPREADSHEET_ID,
-        range: RANGE,
-        valueRenderOption: 'UNFORMATTED_VALUE'
-      }).then(response => {
-        const data = response.result.values;
-        sheetData = data || [];
-        
-        if (sheetData.length === 0) {
-          document.getElementById('content').innerHTML = `
-            <div class="alert alert-info">
-              <i class="fas fa-info-circle"></i> Tidak ada data ditemukan.
-            </div>
-          `;
-          return;
-        }
-
-        // Get headers
-        gapi.client.sheets.spreadsheets.values.get({
-          spreadsheetId: SPREADSHEET_ID,
-          range: `${SHEET_NAME}!A1:H1`
-        }).then(headerResponse => {
-          const headers = headerResponse.result.values[0];
-          
-          let html = '<div class="table-responsive"><table><thead><tr>';
-          headers.forEach(header => {
-            html += `<th>${header}</th>`;
-          });
-          html += '<th>Aksi</th></tr></thead><tbody>';
-
-          sheetData.forEach((row, index) => {
-            html += '<tr>';
-            row.forEach((cell, colIndex) => {
-              // Format khusus untuk kolom tagihan (kolom ke-4)
-              if (colIndex === 4 && cell !== '' && !isNaN(cell)) {
-                html += `<td>Rp${parseInt(cell).toLocaleString('id-ID')}</td>`;
-              } 
-              // Format khusus untuk kolom tanggal jatuh tempo (kolom ke-5)
-              else if (colIndex === 5 && cell) {
-                const date = excelDateToJSDate(cell);
-                const formattedDate = date.toISOString().split('T')[0];
-                const displayDate = formattedDate.split('-').reverse().join('-');
-                html += `<td>${displayDate}</td>`;
-              } 
-              else {
-                html += `<td>${cell || ''}</td>`;
-              }
-            });
-            html += `
-              <td class="action-buttons">
-                <button class="btn btn-edit" onclick="openEditModal(${index})">
-                  <i class="fas fa-edit"></i> <span class="btn-text">Edit</span>
-                </button>
-                <button class="btn btn-delete" onclick="openDeleteModal(${index})">
-                  <i class="fas fa-trash-alt"></i> <span class="btn-text">Hapus</span>
-                </button>
-              </td>
-            </tr>`;
-          });
-
-          html += '</tbody></table></div>';
-          document.getElementById('content').innerHTML = html;
-        });
-      }, error => {
-        document.getElementById('content').innerHTML = `
-          <div class="alert alert-danger">
-            <i class="fas fa-exclamation-triangle"></i> Gagal mengambil data: ${error.result.error.message}
-          </div>
-        `;
-      });
+    // Ganti fungsi loadSheetData dengan ini:
+function loadSheetData() {
+  gapi.client.sheets.spreadsheets.values.get({
+    spreadsheetId: SPREADSHEET_ID,
+    range: RANGE,
+    valueRenderOption: 'UNFORMATTED_VALUE',
+    dateTimeRenderOption: 'FORMATTED_STRING' // Tambahkan ini
+  }).then(response => {
+    const data = response.result.values;
+    sheetData = data || [];
+    
+    if (!sheetData || sheetData.length === 0) {
+      document.getElementById('content').innerHTML = `
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle"></i> Tidak ada data ditemukan.
+        </div>
+      `;
+      return;
     }
+
+    // Get headers
+    gapi.client.sheets.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${SHEET_NAME}!A1:H1`,
+      valueRenderOption: 'FORMATTED_VALUE'
+    }).then(headerResponse => {
+      const headers = headerResponse.result.values ? headerResponse.result.values[0] : [];
+      
+      let html = '<div class="table-responsive"><table><thead><tr>';
+      headers.forEach(header => {
+        html += `<th>${header || ''}</th>`;
+      });
+      html += '<th>Aksi</th></tr></thead><tbody>';
+
+      sheetData.forEach((row, index) => {
+        if (!row) return;
+        
+        html += '<tr>';
+        // Pastikan selalu ada 8 kolom
+        const rowData = [...row];
+        while (rowData.length < 8) rowData.push('');
+        
+        rowData.forEach((cell, colIndex) => {
+          // Kolom tagihan (index 4)
+          if (colIndex === 4 && cell !== '' && !isNaN(cell)) {
+            html += `<td>Rp${parseInt(cell).toLocaleString('id-ID')}</td>`;
+          } 
+          // Kolom tanggal (index 5)
+          else if (colIndex === 5) {
+            // Jika sudah format string (FORMATTED_STRING)
+            if (typeof cell === 'string') {
+              html += `<td>${cell || ''}</td>`;
+            } 
+            // Jika serial number Excel
+            else if (!isNaN(cell)) {
+              const date = new Date((cell - 25568) * 86400 * 1000);
+              const formattedDate = date.toISOString().split('T')[0];
+              html += `<td>${formattedDate}</td>`;
+            } else {
+              html += `<td>${cell || ''}</td>`;
+            }
+          }
+          else {
+            html += `<td>${cell || ''}</td>`;
+          }
+        });
+        
+        html += `
+          <td class="action-buttons">
+            <button class="btn btn-edit" onclick="openEditModal(${index})">
+              <i class="fas fa-edit"></i> <span class="btn-text">Edit</span>
+            </button>
+            <button class="btn btn-delete" onclick="openDeleteModal(${index})">
+              <i class="fas fa-trash-alt"></i> <span class="btn-text">Hapus</span>
+            </button>
+          </td>
+        </tr>`;
+      });
+
+      html += '</tbody></table></div>';
+      document.getElementById('content').innerHTML = html;
+      
+    }).catch(error => {
+      console.error('Error loading headers:', error);
+      showAlert('Gagal memuat header data', 'danger');
+    });
+    
+  }).catch(error => {
+    console.error('Error loading data:', error);
+    document.getElementById('content').innerHTML = `
+      <div class="alert alert-danger">
+        <i class="fas fa-exclamation-triangle"></i> Gagal mengambil data: ${error.result?.error?.message || 'Error tidak diketahui'}
+      </div>
+    `;
+  });
+}
+
+// Ganti fungsi excelDateToJSDate dengan ini:
+function excelDateToJSDate(serial) {
+  try {
+    // Jika sudah berupa string tanggal, langsung kembalikan
+    if (typeof serial === 'string') return new Date(serial);
+    
+    // Konversi dari serial Excel
+    const utcDays = Math.floor(serial - 25568); // 25568 = days between 1900-01-01 and 1970-01-01
+    const utcValue = utcDays * 86400; // 86400 = seconds per day
+    const date = new Date(utcValue * 1000);
+    
+    // Handle Excel leap year bug (1900 bukan kabisat)
+    if (serial < 60) {
+      date.setFullYear(date.getFullYear() - 1);
+    }
+    
+    return date;
+  } catch (e) {
+    console.error('Error converting Excel date:', serial, e);
+    return new Date(); // Kembalikan tanggal sekarang jika error
+  }
+}
 
     // Modal functions
     function openEditModal(rowIndex) {
