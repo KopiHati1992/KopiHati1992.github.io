@@ -1,32 +1,45 @@
 <!DOCTYPE html>
 <html>
-<head><title>KH1992 Billing</title></head>
+<head>
+  <title>KH1992 Billing</title>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input, select, button { width: 100%; padding: 8px; margin: 6px 0; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; }
+  </style>
+</head>
 <body>
-  <h2>Tambah Customer</h2>
-  <input id="nama" placeholder="Nama">
-  <input id="wa" placeholder="WhatsApp">
-  <input id="alamat" placeholder="Alamat">
-  <input id="tagihan" placeholder="Tagihan">
-  <input id="tanggal" type="date">
-  <input id="ip" placeholder="IP Internet">
-  <input id="keterangan" placeholder="Keterangan">
-  <button onclick="simpanCustomer()">Simpan</button>
 
-  <hr>
-  <h2>Bayar Tagihan</h2>
-  <select id="customerSelect"></select>
-  <select id="metode">
-    <option>Cash</option><option>TF</option><option>E-wallet</option>
-  </select>
-  <input id="tanggalBayar" type="date">
-  <button onclick="bayar()">Bayar</button>
+<h2>Input Customer</h2>
+<input id="nama" placeholder="Nama Customer">
+<input id="wa" placeholder="Nomor WhatsApp">
+<input id="alamat" placeholder="Alamat">
+<input id="tagihan" placeholder="Tagihan (Rp)">
+<input id="tanggal" type="date" placeholder="Tanggal Mulai">
+<input id="ip" placeholder="IP Internet">
+<input id="keterangan" placeholder="Keterangan">
+<button onclick="simpanCustomer()">💾 Simpan Customer</button>
 
-  <hr>
-  <h2>Laporan</h2>
-  <select id="bulan" onchange="tampilkanLaporan()">
-    <option>Juni</option><option>Juli</option><option>Agustus</option>
-  </select>
-  <table border="1" id="laporan"><tbody></tbody></table>
+<hr>
+<h2>Bayar Tagihan</h2>
+<select id="customerSelect"></select>
+<select id="metode">
+  <option>Cash</option><option>TF</option><option>E-wallet</option>
+</select>
+<input id="tanggalBayar" type="date">
+<button onclick="bayar()">💸 Bayar</button>
+
+<hr>
+<h2>Laporan</h2>
+<select id="bulan" onchange="tampilkanLaporan()">
+  <option>Juni</option><option>Juli</option><option>Agustus</option>
+</select>
+<table id="laporan">
+  <thead><tr><th>Customer</th><th>Status</th><th>Bulan</th></tr></thead>
+  <tbody></tbody>
+</table>
 
 <script>
 const URL = 'https://script.google.com/macros/s/AKfycbxsRli-J5zSgUFbERBkG86doZemQp969-v7ndPYEbzMFQwvpAl3zLMd96OHCzCOPD0v/exec';
@@ -34,50 +47,93 @@ const URL = 'https://script.google.com/macros/s/AKfycbxsRli-J5zSgUFbERBkG86doZem
 async function simpanCustomer() {
   const data = {
     action: 'tambahCustomer',
-    nama: nama.value, wa: wa.value, alamat: alamat.value,
-    tagihan: tagihan.value, tanggal: tanggal.value,
-    ip: ip.value, ket: keterangan.value
+    nama: document.getElementById('nama').value,
+    wa: document.getElementById('wa').value,
+    alamat: document.getElementById('alamat').value,
+    tagihan: document.getElementById('tagihan').value,
+    tanggal: document.getElementById('tanggal').value,
+    ip: document.getElementById('ip').value,
+    ket: document.getElementById('keterangan').value
   };
-  await fetch(URL, { method: 'POST', body: JSON.stringify(data) });
-  alert("Customer disimpan");
-  loadCustomer();
+
+  if (!data.nama || !data.wa || !data.alamat || !data.tagihan || !data.tanggal) {
+    alert("❗ Lengkapi semua kolom wajib!");
+    return;
+  }
+
+  try {
+    const res = await fetch(URL, {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+    const text = await res.text();
+    alert("✅ " + text);
+    loadCustomer();
+  } catch (e) {
+    alert("❌ Gagal simpan: " + e);
+  }
 }
 
 async function bayar() {
   const data = {
     action: 'simpanPembayaran',
-    customer: customerSelect.value,
-    metode: metode.value,
-    tanggal: tanggalBayar.value
+    customer: document.getElementById('customerSelect').value,
+    metode: document.getElementById('metode').value,
+    tanggal: document.getElementById('tanggalBayar').value
   };
-  await fetch(URL, { method: 'POST', body: JSON.stringify(data) });
-  alert("Pembayaran disimpan");
-  tampilkanLaporan();
+
+  if (!data.customer || !data.tanggal) {
+    alert("❗ Pilih customer dan tanggal bayar.");
+    return;
+  }
+
+  try {
+    const res = await fetch(URL, {
+      method: 'POST',
+      body: JSON.stringify(data)
+    });
+    const text = await res.text();
+    alert("✅ " + text);
+    tampilkanLaporan();
+  } catch (e) {
+    alert("❌ Gagal bayar: " + e);
+  }
 }
 
 async function tampilkanLaporan() {
-  const res = await fetch(`${URL}?action=getLaporan&bulan=${bulan.value}`);
-  const data = await res.json();
-  const tbody = document.getElementById('laporan').querySelector('tbody');
-  tbody.innerHTML = '';
-  data.forEach(r => {
-    tbody.innerHTML += `<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`;
-  });
+  const bulan = document.getElementById('bulan').value;
+  try {
+    const res = await fetch(`${URL}?action=getLaporan&bulan=${bulan}`);
+    const data = await res.json();
+    const tbody = document.querySelector('#laporan tbody');
+    tbody.innerHTML = '';
+    data.forEach(row => {
+      tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td></tr>`;
+    });
+  } catch (e) {
+    alert("❌ Gagal ambil laporan: " + e);
+  }
 }
 
 async function loadCustomer() {
-  const res = await fetch(`${URL}?action=getCustomers`);
-  const data = await res.json();
-  customerSelect.innerHTML = '';
-  data.forEach(n => {
-    const opt = document.createElement('option');
-    opt.value = opt.text = n;
-    customerSelect.appendChild(opt);
-  });
+  try {
+    const res = await fetch(`${URL}?action=getCustomers`);
+    const data = await res.json();
+    const select = document.getElementById('customerSelect');
+    select.innerHTML = '';
+    data.forEach(name => {
+      const opt = document.createElement('option');
+      opt.value = opt.text = name;
+      select.add(opt);
+    });
+  } catch (e) {
+    alert("❌ Gagal ambil daftar customer: " + e);
+  }
 }
 
 loadCustomer();
 tampilkanLaporan();
 </script>
+
 </body>
 </html>
