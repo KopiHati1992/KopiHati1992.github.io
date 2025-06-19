@@ -88,6 +88,15 @@
       transform: translateY(-2px);
     }
     
+    .btn-add {
+      background-color: var(--success);
+      color: white;
+    }
+    
+    .btn-add:hover {
+      background-color: #3aa8d8;
+    }
+    
     .btn-edit {
       background-color: var(--warning);
       color: white;
@@ -259,6 +268,17 @@
       display: inline;
     }
     
+    #form-tambah-container {
+      display: none;
+      margin-top: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
     /* Responsive Styles */
     @media (max-width: 768px) {
       table {
@@ -361,55 +381,66 @@
 
   <main class="container">
     <div class="card">
-      <div id="content"></div>
-    </div>
-
-    <div class="card">
-      <h3 class="card-title"><i class="fas fa-plus-circle"></i> Tambah Data Customer Baru</h3>
-      <form id="form-tambah">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="no">No</label>
-            <input type="text" id="no" placeholder="No" required>
-          </div>
-          <div class="form-group">
-            <label for="cust">Customer</label>
-            <input type="text" id="cust" placeholder="Nama Customer" required>
-          </div>
-          <div class="form-group">
-            <label for="wa">WhatsApp</label>
-            <input type="text" id="wa" placeholder="Nomor WhatsApp" required>
-          </div>
-          <div class="form-group">
-            <label for="alamat">Alamat</label>
-            <input type="text" id="alamat" placeholder="Alamat" required>
-          </div>
-        </div>
-        
-        <div class="form-row">
-          <div class="form-group">
-            <label for="tagihan">Tagihan (Rp)</label>
-            <input type="text" id="tagihan" placeholder="Contoh: 150000" required 
-                   oninput="formatCurrency(this)" pattern="[0-9.,]*">
-          </div>
-          <div class="form-group">
-            <label for="tempo">Jatuh Tempo</label>
-            <input type="date" id="tempo" required>
-          </div>
-          <div class="form-group">
-            <label for="ip">IP Internet</label>
-            <input type="text" id="ip" placeholder="Alamat IP" required>
-          </div>
-          <div class="form-group">
-            <label for="ket">Keterangan</label>
-            <input type="text" id="ket" placeholder="Keterangan tambahan">
-          </div>
-        </div>
-        
-        <button type="submit" class="btn btn-submit">
-          <i class="fas fa-save"></i> <span class="btn-text">Simpan Data</span>
+      <div class="header-content">
+        <h3 class="card-title"><i class="fas fa-list"></i> Daftar Customer</h3>
+        <button class="btn btn-add" onclick="toggleAddForm()">
+          <i class="fas fa-plus"></i> <span class="btn-text">Tambah Customer</span>
         </button>
-      </form>
+      </div>
+      
+      <div id="form-tambah-container">
+        <form id="form-tambah">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="no">No</label>
+              <input type="text" id="no" placeholder="No" required readonly>
+            </div>
+            <div class="form-group">
+              <label for="cust">Customer</label>
+              <input type="text" id="cust" placeholder="Nama Customer" required>
+            </div>
+            <div class="form-group">
+              <label for="wa">WhatsApp</label>
+              <input type="text" id="wa" placeholder="Nomor WhatsApp" required>
+            </div>
+            <div class="form-group">
+              <label for="alamat">Alamat</label>
+              <input type="text" id="alamat" placeholder="Alamat" required>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="tagihan">Tagihan (Rp)</label>
+              <input type="text" id="tagihan" placeholder="Contoh: 150000" required 
+                     oninput="formatCurrency(this)" pattern="[0-9.,]*">
+            </div>
+            <div class="form-group">
+              <label for="tempo">Jatuh Tempo</label>
+              <input type="date" id="tempo" required>
+            </div>
+            <div class="form-group">
+              <label for="ip">IP Internet</label>
+              <input type="text" id="ip" placeholder="Alamat IP" required>
+            </div>
+            <div class="form-group">
+              <label for="ket">Keterangan</label>
+              <input type="text" id="ket" placeholder="Keterangan tambahan">
+            </div>
+          </div>
+          
+          <div class="form-footer">
+            <button type="button" class="btn btn-cancel" onclick="toggleAddForm()">
+              <i class="fas fa-times"></i> <span class="btn-text">Batal</span>
+            </button>
+            <button type="submit" class="btn btn-submit">
+              <i class="fas fa-save"></i> <span class="btn-text">Simpan Data</span>
+            </button>
+          </div>
+        </form>
+      </div>
+      
+      <div id="content"></div>
     </div>
   </main>
 
@@ -425,7 +456,7 @@
         <div class="form-row">
           <div class="form-group">
             <label for="edit-no">No</label>
-            <input type="text" id="edit-no" required>
+            <input type="text" id="edit-no" required readonly>
           </div>
           <div class="form-group">
             <label for="edit-cust">Customer</label>
@@ -503,6 +534,7 @@
 
     let tokenClient;
     let sheetData = [];
+    let lastNumber = 0;
 
     function handleClientLoad() {
       gapi.load('client', initClient);
@@ -531,13 +563,22 @@
       tokenClient.requestAccessToken();
     }
 
-    // Format currency display while storing raw value
+    function getLastNumber(data) {
+      if (!data || data.length === 0) return 0;
+      
+      let maxNumber = 0;
+      data.forEach(row => {
+        const num = parseInt(row[0]) || 0;
+        if (num > maxNumber) maxNumber = num;
+      });
+      
+      return maxNumber;
+    }
+
     function formatCurrency(input) {
-      // Store the raw value in a data attribute
       const rawValue = input.value.replace(/\D/g, '');
       input.dataset.rawValue = rawValue;
       
-      // Format display with thousand separators
       if (rawValue.length > 0) {
         input.value = parseInt(rawValue).toLocaleString('id-ID');
       } else {
@@ -545,9 +586,7 @@
       }
     }
 
-    // Get the raw number value (without formatting)
     function getRawNumber(input) {
-      // Get from data attribute if available, otherwise parse from display value
       return input.dataset.rawValue || input.value.replace(/\D/g, '') || '0';
     }
 
@@ -567,149 +606,144 @@
       }, 5000);
     }
 
-    function excelDateToJSDate(serial) {
-      const utcDays = Math.floor(serial - 25569);
-      const utcValue = utcDays * 86400;
-      const date = new Date(utcValue * 1000);
-      
-      // Handle Excel's leap year bug (1900 is not a leap year)
-      if (serial < 60) {
-        date.setFullYear(date.getFullYear() - 1);
+    function toggleAddForm() {
+      const formContainer = document.getElementById('form-tambah-container');
+      if (formContainer.style.display === 'block') {
+        formContainer.style.display = 'none';
+      } else {
+        formContainer.style.display = 'block';
+        // Set nomor otomatis saat form ditampilkan
+        document.getElementById('no').value = lastNumber + 1;
       }
-      
-      return date;
     }
 
-    // Ganti fungsi loadSheetData dengan ini:
-function loadSheetData() {
-  gapi.client.sheets.spreadsheets.values.get({
-    spreadsheetId: SPREADSHEET_ID,
-    range: RANGE,
-    valueRenderOption: 'UNFORMATTED_VALUE',
-    dateTimeRenderOption: 'FORMATTED_STRING' // Tambahkan ini
-  }).then(response => {
-    const data = response.result.values;
-    sheetData = data || [];
-    
-    if (!sheetData || sheetData.length === 0) {
-      document.getElementById('content').innerHTML = `
-        <div class="alert alert-info">
-          <i class="fas fa-info-circle"></i> Tidak ada data ditemukan.
-        </div>
-      `;
-      return;
+    function excelDateToJSDate(serial) {
+      try {
+        if (typeof serial === 'string') return new Date(serial);
+        
+        const utcDays = Math.floor(serial - 25568);
+        const utcValue = utcDays * 86400;
+        const date = new Date(utcValue * 1000);
+        
+        if (serial < 60) {
+          date.setFullYear(date.getFullYear() - 1);
+        }
+        
+        return date;
+      } catch (e) {
+        console.error('Error converting Excel date:', serial, e);
+        return new Date();
+      }
     }
 
-// Urutkan data berdasarkan tanggal di kolom ke-6 (index 5)
-sheetData.sort((a, b) => {
-  const dateA = new Date(a[5]);
-  const dateB = new Date(b[5]);
-  return dateA - dateB; // naik, gunakan dateB - dateA untuk menurun
-});
-    // Get headers
-    gapi.client.sheets.spreadsheets.values.get({
-      spreadsheetId: SPREADSHEET_ID,
-      range: `${SHEET_NAME}!A1:H1`,
-      valueRenderOption: 'FORMATTED_VALUE'
-    }).then(headerResponse => {
-      const headers = headerResponse.result.values ? headerResponse.result.values[0] : [];
-      
-      let html = '<div class="table-responsive"><table><thead><tr>';
-      headers.forEach(header => {
-        html += `<th>${header || ''}</th>`;
-      });
-      html += '<th>Aksi</th></tr></thead><tbody>';
+    function loadSheetData() {
+      gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: RANGE,
+        valueRenderOption: 'UNFORMATTED_VALUE',
+        dateTimeRenderOption: 'FORMATTED_STRING'
+      }).then(response => {
+        const data = response.result.values;
+        sheetData = data || [];
+        
+        // Update lastNumber
+        lastNumber = getLastNumber(sheetData);
+        
+        // Set nilai default untuk input nomor
+        document.getElementById('no').value = lastNumber + 1;
+        
+        if (!sheetData || sheetData.length === 0) {
+          document.getElementById('content').innerHTML = `
+            <div class="alert alert-info">
+              <i class="fas fa-info-circle"></i> Tidak ada data ditemukan.
+            </div>
+          `;
+          return;
+        }
 
-      sheetData.forEach((row, index) => {
-        if (!row) return;
-        
-        html += '<tr>';
-        // Pastikan selalu ada 8 kolom
-        const rowData = [...row];
-        while (rowData.length < 8) rowData.push('');
-        
-        rowData.forEach((cell, colIndex) => {
-          // Kolom tagihan (index 4)
-          if (colIndex === 4 && cell !== '' && !isNaN(cell)) {
-            html += `<td>Rp${parseInt(cell).toLocaleString('id-ID')}</td>`;
-          } 
-          // Kolom tanggal (index 5)
-          else if (colIndex === 5) {
-            // Jika sudah format string (FORMATTED_STRING)
-            if (typeof cell === 'string') {
-              html += `<td>${cell || ''}</td>`;
-            } 
-            // Jika serial number Excel
-            else if (!isNaN(cell)) {
-              const date = new Date((cell - 25568) * 86400 * 1000);
-              const formattedDate = date.toISOString().split('T')[0];
-              html += `<td>${formattedDate}</td>`;
-            } else {
-              html += `<td>${cell || ''}</td>`;
-            }
-          }
-          else {
-            html += `<td>${cell || ''}</td>`;
-          }
+        // Urutkan data berdasarkan tanggal jatuh tempo
+        sheetData.sort((a, b) => {
+          const dateA = new Date(a[5]);
+          const dateB = new Date(b[5]);
+          return dateA - dateB;
+        });
+
+        // Get headers
+        gapi.client.sheets.spreadsheets.values.get({
+          spreadsheetId: SPREADSHEET_ID,
+          range: `${SHEET_NAME}!A1:H1`,
+          valueRenderOption: 'FORMATTED_VALUE'
+        }).then(headerResponse => {
+          const headers = headerResponse.result.values ? headerResponse.result.values[0] : [];
+          
+          let html = '<div class="table-responsive"><table><thead><tr>';
+          headers.forEach(header => {
+            html += `<th>${header || ''}</th>`;
+          });
+          html += '<th>Aksi</th></tr></thead><tbody>';
+
+          sheetData.forEach((row, index) => {
+            if (!row) return;
+            
+            html += '<tr>';
+            const rowData = [...row];
+            while (rowData.length < 8) rowData.push('');
+            
+            rowData.forEach((cell, colIndex) => {
+              if (colIndex === 4 && cell !== '' && !isNaN(cell)) {
+                html += `<td>Rp${parseInt(cell).toLocaleString('id-ID')}</td>`;
+              } 
+              else if (colIndex === 5) {
+                if (typeof cell === 'string') {
+                  html += `<td>${cell || ''}</td>`;
+                } 
+                else if (!isNaN(cell)) {
+                  const date = new Date((cell - 25568) * 86400 * 1000);
+                  const formattedDate = date.toISOString().split('T')[0];
+                  html += `<td>${formattedDate}</td>`;
+                } else {
+                  html += `<td>${cell || ''}</td>`;
+                }
+              }
+              else {
+                html += `<td>${cell || ''}</td>`;
+              }
+            });
+            
+            html += `
+              <td class="action-buttons">
+                <button class="btn btn-edit" onclick="openEditModal(${index})">
+                  <i class="fas fa-edit"></i> <span class="btn-text">Edit</span>
+                </button>
+                <button class="btn btn-delete" onclick="openDeleteModal(${index})">
+                  <i class="fas fa-trash-alt"></i> <span class="btn-text">Hapus</span>
+                </button>
+              </td>
+            </tr>`;
+          });
+
+          html += '</tbody></table></div>';
+          document.getElementById('content').innerHTML = html;
+          
+        }).catch(error => {
+          console.error('Error loading headers:', error);
+          showAlert('Gagal memuat header data', 'danger');
         });
         
-        html += `
-          <td class="action-buttons">
-            <button class="btn btn-edit" onclick="openEditModal(${index})">
-              <i class="fas fa-edit"></i> <span class="btn-text">Edit</span>
-            </button>
-            <button class="btn btn-delete" onclick="openDeleteModal(${index})">
-              <i class="fas fa-trash-alt"></i> <span class="btn-text">Hapus</span>
-            </button>
-          </td>
-        </tr>`;
+      }).catch(error => {
+        console.error('Error loading data:', error);
+        document.getElementById('content').innerHTML = `
+          <div class="alert alert-danger">
+            <i class="fas fa-exclamation-triangle"></i> Gagal mengambil data: ${error.result?.error?.message || 'Error tidak diketahui'}
+          </div>
+        `;
       });
-
-      html += '</tbody></table></div>';
-      document.getElementById('content').innerHTML = html;
-      
-    }).catch(error => {
-      console.error('Error loading headers:', error);
-      showAlert('Gagal memuat header data', 'danger');
-    });
-    
-  }).catch(error => {
-    console.error('Error loading data:', error);
-    document.getElementById('content').innerHTML = `
-      <div class="alert alert-danger">
-        <i class="fas fa-exclamation-triangle"></i> Gagal mengambil data: ${error.result?.error?.message || 'Error tidak diketahui'}
-      </div>
-    `;
-  });
-}
-
-// Ganti fungsi excelDateToJSDate dengan ini:
-function excelDateToJSDate(serial) {
-  try {
-    // Jika sudah berupa string tanggal, langsung kembalikan
-    if (typeof serial === 'string') return new Date(serial);
-    
-    // Konversi dari serial Excel
-    const utcDays = Math.floor(serial - 25568); // 25568 = days between 1900-01-01 and 1970-01-01
-    const utcValue = utcDays * 86400; // 86400 = seconds per day
-    const date = new Date(utcValue * 1000);
-    
-    // Handle Excel leap year bug (1900 bukan kabisat)
-    if (serial < 60) {
-      date.setFullYear(date.getFullYear() - 1);
     }
-    
-    return date;
-  } catch (e) {
-    console.error('Error converting Excel date:', serial, e);
-    return new Date(); // Kembalikan tanggal sekarang jika error
-  }
-}
 
     // Modal functions
     function openEditModal(rowIndex) {
       const rowData = sheetData[rowIndex];
-      document.getElementById('edit-row').value = rowIndex + 2; // +2 because sheet starts at row 2 (header is row 1)
+      document.getElementById('edit-row').value = rowIndex + 2;
       
       document.getElementById('edit-no').value = rowData[0] || '';
       document.getElementById('edit-cust').value = rowData[1] || '';
@@ -720,7 +754,6 @@ function excelDateToJSDate(serial) {
       tagihanInput.value = rowData[4] ? parseInt(rowData[4]).toLocaleString('id-ID') : '';
       tagihanInput.dataset.rawValue = rowData[4] || '';
       
-      // Handle date conversion for edit form
       const tempoInput = document.getElementById('edit-tempo');
       if (rowData[5]) {
         const date = excelDateToJSDate(rowData[5]);
@@ -736,7 +769,7 @@ function excelDateToJSDate(serial) {
     }
 
     function openDeleteModal(rowIndex) {
-      document.getElementById('delete-row').value = rowIndex + 2; // +2 because sheet starts at row 2
+      document.getElementById('delete-row').value = rowIndex + 2;
       document.getElementById('deleteModal').style.display = 'flex';
     }
 
@@ -774,7 +807,11 @@ function excelDateToJSDate(serial) {
     // Form submission handlers
     document.getElementById('form-tambah').addEventListener('submit', function(e) {
       e.preventDefault();
-      const no = document.getElementById('no').value;
+      
+      // Auto-increment nomor
+      lastNumber++;
+      const no = lastNumber;
+      
       const cust = document.getElementById('cust').value;
       const wa = document.getElementById('wa').value;
       const alamat = document.getElementById('alamat').value;
@@ -789,7 +826,7 @@ function excelDateToJSDate(serial) {
         cust, 
         wa, 
         alamat, 
-        parseInt(tagihan), // Submit as raw number
+        parseInt(tagihan),
         tempo, 
         ip, 
         ket
@@ -807,8 +844,13 @@ function excelDateToJSDate(serial) {
         showAlert('Data berhasil ditambahkan!', 'success');
         loadSheetData();
         document.getElementById('form-tambah').reset();
+        document.getElementById('form-tambah-container').style.display = 'none';
+        // Set nomor berikutnya
+        document.getElementById('no').value = lastNumber + 1;
       }, (error) => {
         showAlert('Gagal menambah data: ' + error.result.error.message, 'danger');
+        // Rollback lastNumber jika gagal
+        lastNumber--;
       });
     });
 
@@ -830,7 +872,7 @@ function excelDateToJSDate(serial) {
         cust, 
         wa, 
         alamat, 
-        parseInt(tagihan), // Submit as raw number
+        parseInt(tagihan),
         tempo, 
         ip, 
         ket
@@ -850,14 +892,6 @@ function excelDateToJSDate(serial) {
       }, (error) => {
         showAlert('Gagal memperbarui data: ' + error.result.error.message, 'danger');
       });
-    });
-
-    // Initialize formatting on page load
-    document.addEventListener('DOMContentLoaded', function() {
-      const tagihanInput = document.getElementById('tagihan');
-      if (tagihanInput.value) {
-        formatCurrency(tagihanInput);
-      }
     });
 
     window.onload = handleClientLoad;
