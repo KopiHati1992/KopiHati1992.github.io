@@ -1117,7 +1117,43 @@
       tokenClient.requestAccessToken();
     }
     
-    window.onload = handleClientLoad;
+    
+<script>
+function isiDataOtomatisJuli() {
+  const selectedName = document.getElementById("juli-cust").value;
+  const data = sheetData.customer.find(row => row[1] === selectedName);
+
+  if (data) {
+    const tagihanInput = document.getElementById("juli-tagihan");
+    const tempoInput = document.getElementById("juli-tempo");
+
+    tagihanInput.value = parseInt(data[4]).toLocaleString('id-ID');
+    tagihanInput.dataset.rawValue = data[4];
+
+    const date = excelDateToJSDate(data[5]);
+    tempoInput.value = date.toISOString().split('T')[0];
+  }
+}
+
+// Modifikasi renderFormField untuk dropdown customer (khusus sheetKey === 'juli')
+const originalRenderFormField = renderFormField;
+renderFormField = function(sheetKey, field) {
+  if (sheetKey === 'juli' && field.id === 'cust') {
+    let html = `<div class="form-group">
+      <label for="${sheetKey}-${field.id}">${field.label}</label>
+      <select id="${sheetKey}-${field.id}" required onchange="isiDataOtomatisJuli()">
+        <option value="">Pilih Customer</option>`;
+    sheetData.customer.forEach(row => {
+      html += `<option value="${row[1]}">${row[1]}</option>`;
+    });
+    html += `</select></div>`;
+    return html;
+  }
+  return originalRenderFormField(sheetKey, field);
+};
+</script>
+
+window.onload = handleClientLoad;
   </script>
 </body>
 </html>
