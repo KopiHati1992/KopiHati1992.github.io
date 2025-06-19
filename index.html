@@ -600,6 +600,12 @@ function loadSheetData() {
       return;
     }
 
+// Urutkan data berdasarkan tanggal di kolom ke-6 (index 5)
+sheetData.sort((a, b) => {
+  const dateA = new Date(a[5]);
+  const dateB = new Date(b[5]);
+  return dateA - dateB; // naik, gunakan dateB - dateA untuk menurun
+});
     // Get headers
     gapi.client.sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
