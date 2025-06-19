@@ -1,26 +1,117 @@
-<!DOCTYPE html>
-<html lang="id">
+<!DOCTYPE html><html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Form Customer</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manajemen Customer - Pagar Bintang</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
+  <div class="container py-4">
+    <h2 class="mb-4">Form Input Customer</h2>
+    <form id="customer-form" class="row g-3 mb-5">
+      <div class="col-md-6">
+        <input type="text" name="Customer" class="form-control" placeholder="Nama Customer" required>
+      </div>
+      <div class="col-md-6">
+        <input type="text" name="WhatsApp" class="form-control" placeholder="Nomor WhatsApp" required>
+      </div>
+      <div class="col-md-6">
+        <input type="text" name="Alamat" class="form-control" placeholder="Alamat" required>
+      </div>
+      <div class="col-md-3">
+        <input type="number" name="Tagihan" class="form-control" placeholder="Tagihan" required>
+      </div>
+      <div class="col-md-3">
+        <input type="text" name="Jatuh Tempo" class="form-control" placeholder="Jatuh Tempo" required>
+      </div>
+      <div class="col-md-6">
+        <input type="text" name="Ip internet" class="form-control" placeholder="IP Internet" required>
+      </div>
+      <div class="col-md-6">
+        <input type="text" name="Keterangan" class="form-control" placeholder="Keterangan">
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Simpan</button>
+      </div>
+      <div class="col-12">
+        <div id="status-msg" class="text-danger mt-2"></div>
+      </div>
+    </form><h2 class="mb-3">Daftar Customer</h2>
+<div class="table-responsive">
+  <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>No</th>
+        <th>Customer</th>
+        <th>WhatsApp</th>
+        <th>Alamat</th>
+        <th>Tagihan</th>
+        <th>Jatuh Tempo</th>
+        <th>IP Internet</th>
+        <th>Keterangan</th>
+      </tr>
+    </thead>
+    <tbody id="customer-table"></tbody>
+  </table>
+</div>
 
-  <h1>Form Input Customer</h1>
-  <form id="customer-form">
-    <input name="Customer" placeholder="Nama Customer" required>
-    <input name="WhatsApp" placeholder="No WhatsApp" required>
-    <input name="Alamat" placeholder="Alamat">
-    <input name="Tagihan" placeholder="Tagihan">
-    <input name="Jatuh Tempo" placeholder="Jatuh Tempo">
-    <input name="Ip internet" placeholder="IP Internet">
-    <input name="Keterangan" placeholder="Keterangan">
-    <button type="submit">Simpan</button>
-  </form>
+  </div>  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbz0zSh6dzFcMN1_I7n5SfTlmaG6JBJwZzU-xnmPkRFn5OBBva4Yy_d_45ksZtMRd5CxAA/exec";
 
-  <p id="status-msg"></p>
+    // Simpan data
+    document.getElementById("customer-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const data = {};
+      formData.forEach((value, key) => data[key] = value);
 
-  <script src="script.js"></script>
-</body>
+      fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+        .then(res => res.json())
+        .then(result => {
+          if (result.status === "success") {
+            document.getElementById("status-msg").textContent = "✅ Data berhasil disimpan.";
+            form.reset();
+            loadCustomer();
+          } else {
+            document.getElementById("status-msg").textContent = "❌ Gagal menyimpan data.";
+          }
+        })
+        .catch(() => {
+          document.getElementById("status-msg").textContent = "❌ Terjadi kesalahan.";
+        });
+    });
+
+    // Load data customer
+    function loadCustomer() {
+      fetch(API_URL)
+        .then(res => res.json())
+        .then(data => {
+          const tbody = document.getElementById("customer-table");
+          tbody.innerHTML = "";
+          data.forEach(row => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+              <td>${row[0]}</td>
+              <td>${row[1]}</td>
+              <td>${row[2]}</td>
+              <td>${row[3]}</td>
+              <td>Rp ${parseInt(row[4]).toLocaleString("id-ID")}</td>
+              <td>${row[5]}</td>
+              <td>${row[6]}</td>
+              <td>${row[7]}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        });
+    }
+
+    window.onload = loadCustomer;
+  </script></body>
 </html>
