@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Data Customer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav>
+    <button onclick="showSection('input')">Form Input</button>
+    <button onclick="showSection('list')">Daftar Customer</button>
+    <button onclick="showSection('tagihan')">Tagihan</button>
+    <button onclick="showSection('laporan')">Laporan</button>
+  </nav>
+
+  <section id="input" style="display:none;">
+    <h2>Form Input Customer</h2>
+    <form id="customer-form">
+      <input name="Customer" placeholder="Nama Customer" required><br>
+      <input name="WhatsApp" placeholder="Nomor WhatsApp" required><br>
+      <input name="Alamat" placeholder="Alamat"><br>
+      <input name="Tagihan" placeholder="Tagihan"><br>
+      <input name="Jatuh Tempo" placeholder="Jatuh Tempo"><br>
+      <input name="Ip internet" placeholder="IP Internet"><br>
+      <input name="Keterangan" placeholder="Keterangan"><br>
+      <button type="submit">Simpan</button>
+    </form>
+    <p id="status-msg"></p>
+  </section>
+
+  <section id="list" style="display:none;">
+    <h2>Daftar Customer</h2>
+    <table border="1" id="customer-table">
+      <thead>
+        <tr><th>No</th><th>Nama</th><th>WhatsApp</th><th>Alamat</th><th>Tagihan</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <section id="tagihan" style="display:none;">
+    <h2>Data Tagihan</h2>
+    <div id="tagihan-list"></div>
+  </section>
+
+  <section id="laporan" style="display:none;">
+    <h2>Laporan</h2>
+    <div id="laporan-summary"></div>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
