@@ -601,15 +601,16 @@
             <div class="nav-label">Laporan</div>
         </div>
         
-          <img 
+         <img 
   src="https://i.imgur.com/Ta99ebL.png" 
   alt="Logo" 
   class="logo" 
   style="float: right; height: 70px; cursor: pointer;" 
-  onclick="openBackupMenu()" 
+  ondblclick="openBackupMenu()" 
   oncontextmenu="return false;" 
   onmousedown="event.preventDefault();" 
   draggable="false"
+  title="Double click untuk menu backup"
 />
     </div>
     
@@ -801,11 +802,11 @@
         
         // Kategori keuangan
         const incomeCategories = [
-            'Penjualan Produk', 'Layanan Tambahan', 'Donasi', 'Lainnya'
+            'Penjualan Barang', 'Layanan Tambahan', 'Service', 'Lainnya'
         ];
         
         const expenseCategories = [
-            'Gaji Karyawan', 'Peralatan', 'Internet', 'Listrik', 'Sewa Tempat', 'Lainnya'
+            'Gaji Karyawan', 'Peralatan', 'Internet', 'Listrik', 'Akomodasi', 'Lainnya'
         ];
         
         // Initialize the app
