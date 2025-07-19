@@ -1302,7 +1302,7 @@
 
         const customerName = getCustomerName(transaction.customerId);
         const isCustomerDeleted = !customers.find(c => c.id === transaction.customerId);
-        const dueNote = getDueStatus(transaction.customerId, transaction.status);
+        const dueNote = getDueStatus(transaction.customerId, transaction.status, transaction.monthYear);
 
         row.innerHTML = `
             <td>${index + 1}</td>
@@ -1326,21 +1326,25 @@
     });
 }
 
-function getDueStatus(customerId, status) {
+function getDueStatus(customerId, status, trxMonth) {
     const customer = customers.find(c => c.id === customerId);
     if (!customer || status !== 'pending') return '';
 
-    const daftarDate = new Date(customer.tanggalDaftar);
     const today = new Date();
+    const daftarDate = new Date(customer.tanggalDaftar);
+    const trxDate = new Date(trxMonth + '-01');
 
-    if (today.getFullYear() === daftarDate.getFullYear() &&
-        today.getMonth() === daftarDate.getMonth()) {
+    // Transaksi bulan sekarang
+    const isThisMonth = trxDate.getFullYear() === today.getFullYear() && trxDate.getMonth() === today.getMonth();
 
+    if (trxDate < new Date(today.getFullYear(), today.getMonth(), 1)) {
+        return '🔴 Telat Bayar!'; // Bulan lalu masih pending
+    } else if (isThisMonth) {
         if (today.getDate() === daftarDate.getDate()) {
             return '⏰ Jatuh Tempo Hari Ini';
         } else if (today.getDate() > daftarDate.getDate()) {
             return '🔴 Telat Bayar!';
-        }
+        } 
     }
 
     return '';
