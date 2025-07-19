@@ -1,139 +1,1758 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-  <title>KH1992 Billing</title>
-  <meta charset="UTF-8">
-  <style>
-    body { font-family: Arial; padding: 20px; }
-    input, select, button { width: 100%; padding: 8px; margin: 6px 0; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th, td { border: 1px solid #ccc; padding: 8px; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manajemen Pelanggan & Tagihan</title>
+    <link rel="icon" href="https://i.imgur.com/Ta99ebL.png" type="image/png">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --secondary-color: #2196F3;
+            --danger-color: #f44336;
+            --warning-color: #ff9800;
+            --light-gray: #f5f5f5;
+            --dark-gray: #333;
+            --medium-gray: #ddd;
+            --income-color: #4CAF50;
+            --expense-color: #f44336;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            font-size: 14px;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background-color: white;
+            min-height: 100vh;
+            padding-bottom: 60px;
+            position: relative;
+        }
+        
+        .content {
+            padding: 15px;
+        }
+        
+        h1, h2, h3 {
+            color: var(--dark-gray);
+            margin-top: 0;
+        }
+        
+        .header-container {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            margin-bottom: 0;
+        }
+        
+        .logo {
+            width: 120px;
+            
+            margin-right: 15px;
+        }
+        
+        .app-title {
+            font-size: 1.5rem;
+            margin: 0;
+        }
+        
+        h2 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        
+        h3 {
+            font-size: 1.1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+        
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--medium-gray);
+            color: var(--dark-gray);
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .button-group button {
+            flex: 1 1 auto;
+            min-width: 100px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+        
+        th, td {
+            border: 1px solid var(--medium-gray);
+            padding: 8px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .active-row {
+            background-color: #e6f7ff;
+        }
+        
+        .inactive-row {
+            background-color: #fff2f2;
+            color: #999;
+        }
+        
+        .status-active {
+            color: green;
+            font-weight: bold;
+        }
+        
+        .status-pending {
+            color: orange;
+            font-weight: bold;
+        }
+        
+        .status-inactive {
+            color: red;
+            font-weight: bold;
+        }
+        
+        .action-btn {
+            padding: 5px 8px;
+            margin: 2px;
+            font-size: 12px;
+            border-radius: 3px;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+        
+        .nav-item {
+            padding: 12px 0;
+            text-align: center;
+            flex: 1;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .nav-item.active {
+            color: var(--primary-color);
+            border-top: 2px solid var(--primary-color);
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 3px;
+        }
+        
+        .nav-label {
+            font-size: 12px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .close-modal {
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .responsive-table {
+            overflow-x: auto;
+        }
+        
+        .summary-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .summary-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .summary-card h3 {
+            margin-top: 0;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .summary-card p {
+            margin-bottom: 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .search-box {
+            margin-bottom: 15px;
+        }
+        
+        .search-box input {
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: 1px solid var(--medium-gray);
+            width: 100%;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .badge-success {
+            background-color: #e6ffe6;
+            color: green;
+        }
+        
+        .badge-warning {
+            background-color: #fff2cc;
+            color: #b38f00;
+        }
+        
+        .badge-danger {
+            background-color: #ffe6e6;
+            color: red;
+        }
+        
+        .text-right {
+            text-align: right;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .mt-0 {
+            margin-top: 0;
+        }
+        
+        .mb-0 {
+            margin-bottom: 0;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .deleted-customer {
+            color: #999;
+            font-style: italic;
+        }
+        
+        #customAmountGroup {
+            display: none;
+            margin-top: 10px;
+        }
+        
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group select, .filter-group input {
+            flex: 1 1 auto;
+            min-width: 150px;
+        }
+        
+        .income-row {
+            background-color: rgba(76, 175, 80, 0.1);
+        }
+        
+        .expense-row {
+            background-color: rgba(244, 67, 54, 0.1);
+        }
+        
+        .income-text {
+            color: var(--income-color);
+        }
+        
+        .expense-text {
+            color: var(--expense-color);
+        }
+        
+        .footer {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            padding: 10px;
+            background-color: white;
+            border-top: 1px solid var(--medium-gray);
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
+    <div class="container">
+        <div class="header-container">
+           
+            <h1 class="app-title">BILLING KH1992</h1>
+        </div>
+        
+        <div class="content">
+            <!-- Tab Pelanggan -->
+            <div id="pelanggan-tab" class="tab-content active">
+                <div class="search-box">
+                    <input type="text" id="searchCustomer" placeholder="Cari pelanggan..." oninput="filterCustomers()">
+                </div>
+                
+                <button class="btn-primary" onclick="openCustomerForm()">+ Tambah Pelanggan</button>
+                
+                <div class="responsive-table">
+                    <table id="customerTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>Paket</th>
+                                <th>Tagihan</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerList">
+                            <!-- Data pelanggan akan dimuat di sini -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Tab Transaksi -->
+            <div id="transaksi-tab" class="tab-content">
+                <div class="filter-group">
+                    <input type="month" id="filterMonth" onchange="filterTransactions()">
+                    <select id="filterPaymentStatus" onchange="filterTransactions()">
+                        <option value="">Semua Status</option>
+                        <option value="paid">Lunas</option>
+                        <option value="pending">Belum Bayar</option>
+                    </select>
+                    <input type="text" id="searchTransactionCustomer" placeholder="Cari pelanggan..." oninput="filterTransactions()">
+                </div>
+                
+                <div class="responsive-table">
+                    <table id="transactionTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Pelanggan</th>
+                                <th>Bulan</th>
+                                <th>Tagihan</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transactionList">
+                            <!-- Data transaksi akan dimuat di sini -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Tab Keuangan -->
+            <div id="keuangan-tab" class="tab-content">
+                <button class="btn-primary" onclick="openFinanceForm('income')">+ Pemasukan</button>
+                <button class="btn-danger" onclick="openFinanceForm('expense')">+ Pengeluaran</button>
+                
+                <div class="filter-group">
+                    <input type="month" id="filterFinanceMonth" onchange="renderFinanceList()">
+                </div>
+                
+                <div class="responsive-table">
+                    <table id="financeTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Tanggal</th>
+                                <th>Kategori</th>
+                                <th>Keterangan</th>
+                                <th>Jumlah</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="financeList">
+                            <!-- Data keuangan akan dimuat di sini -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Tab Laporan -->
+            <div id="laporan-tab" class="tab-content">
+                <div class="form-group">
+                    <label for="reportYear">Tahun:</label>
+                    <select id="reportYear" onchange="generateReport()">
+                        <option value="2025"selected>2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                        <option value="2028">2028</option>
+                        <option value="2029">2029</option>
+                        <option value="2030">2030</option>
+                    </select>
+                </div>
+                
+                <h3>Ringkasan Tahunan</h3>
+                <div class="summary-container">
+                    <div class="summary-card">
+                        <h3>Total Tagihan</h3>
+                        <p id="annual-billed">Rp 0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Dibayar</h3>
+                        <p id="annual-paid">Rp 0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Pelanggan Aktif</h3>
+                        <p id="active-customers">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Pelanggan Baru</h3>
+                        <p id="new-customers">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Pelanggan Tidak Aktif</h3>
+                        <p id="inactive-customers">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Pemasukan</h3>
+                        <p id="total-income">Rp 0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Pengeluaran</h3>
+                        <p id="total-expense">Rp 0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Saldo</h3>
+                        <p id="balance">Rp 0</p>
+                    </div>
+                </div>
+                
+                <h3>Rincian Bulanan</h3>
+                <div class="responsive-table">
+                    <table id="reportTable">
+                        <thead>
+                            <tr>
+                                <th>Bulan</th>
+                                <th>Tagihan</th>
+                                <th>Dibayar</th>
+                                <th>Pemasukan</th>
+                                <th>Pengeluaran</th>
+                                <th>Saldo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportList">
+                            <!-- Data laporan akan dimuat di sini -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-<h2>Input Customer</h2>
-<input id="nama" placeholder="Nama Customer">
-<input id="wa" placeholder="Nomor WhatsApp">
-<input id="alamat" placeholder="Alamat">
-<input id="tagihan" placeholder="Tagihan (Rp)">
-<input id="tanggal" type="date" placeholder="Tanggal Mulai">
-<input id="ip" placeholder="IP Internet">
-<input id="keterangan" placeholder="Keterangan">
-<button onclick="simpanCustomer()">💾 Simpan Customer</button>
+        <div class="footer">
+     <img 
+  src="https://i.imgur.com/Ta99ebL.png" 
+  alt="Logo" 
+  class="logo" 
+  style="float: right; height: 80px; cursor: pointer;" 
+  onclick="openBackupMenu()" 
+  oncontextmenu="return false;" 
+  onmousedown="event.preventDefault();" 
+  draggable="false"
+/>
+            
+        </div>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('pelanggan')">
+            <div class="nav-icon">👤</div>
+            <div class="nav-label">Pelanggan</div>
+        </div>
+        <div class="nav-item" onclick="switchTab('transaksi')">
+            <div class="nav-icon">💰</div>
+            <div class="nav-label">Transaksi</div>
+        </div>
+        <div class="nav-item" onclick="switchTab('keuangan')">
+            <div class="nav-icon">💵</div>
+            <div class="nav-label">Keuangan</div>
+        </div>
+        <div class="nav-item" onclick="switchTab('laporan')">
+            <div class="nav-icon">📊</div>
+            <div class="nav-label">Laporan</div>
+        </div>
+    </div>
+    
+    <!-- Modal Form Pelanggan -->
+    <div id="customerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalCustomerTitle">Tambah Pelanggan</h2>
+                <span class="close-modal" onclick="closeModal('customerModal')">&times;</span>
+            </div>
+            
+            <form id="customerForm">
+                <input type="hidden" id="customerId">
+                
+                <div class="form-group">
+                    <label for="nama">Nama Pelanggan:</label>
+                    <input type="text" id="nama" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="alamat">Alamat:</label>
+                    <textarea id="alamat" rows="2" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="telepon">Telepon:</label>
+                    <input type="tel" id="telepon" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="paket">Paket Layanan:</label>
+                    <select id="paket" required onchange="toggleCustomAmount()">
+                        <option value="">Pilih Paket</option>
+                        <option value="Basic">Basic - Rp 100.000/bulan</option>
+                        <option value="Basic Plus">Basic Plus - Rp 120.000/bulan</option>
+                        <option value="Standard">Standard - Rp 150.000/bulan</option>
+                        <option value="Premium">Premium - Rp 200.000/bulan</option>
+                        <option value="Premium Plus">Premium Plus - Rp 300.000/bulan</option>
+                        <option value="Lainnya">Paket Lain</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="customAmountGroup">
+                    <label for="customAmount">Nominal Tagihan:</label>
+                    <input type="number" id="customAmount" placeholder="Masukkan nominal tagihan">
+                </div>
+                
+                <div class="form-group">
+                    <label for="tanggalDaftar">Tanggal Daftar:</label>
+                    <input type="date" id="tanggalDaftar" required>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="btn-primary">Simpan</button>
+                    <button type="button" class="btn-outline" onclick="closeModal('customerModal')">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal Pembayaran -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Pembayaran Tagihan</h2>
+                <span class="close-modal" onclick="closeModal('paymentModal')">&times;</span>
+            </div>
+            
+            <form id="paymentForm">
+                <input type="hidden" id="paymentTransactionId">
+                
+                <div class="form-group">
+                    <label>Pelanggan:</label>
+                    <p id="paymentCustomerName" class="mb-0" style="font-weight: bold;"></p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Bulan:</label>
+                    <p id="paymentMonth" class="mb-0" style="font-weight: bold;"></p>
+                </div>
+                
+                <div class="form-group">
+                    <label>Jumlah Tagihan:</label>
+                    <p id="paymentAmount" class="mb-0" style="font-weight: bold;"></p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="paymentDate">Tanggal Bayar:</label>
+                    <input type="date" id="paymentDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="paymentNotes">Keterangan:</label>
+                    <textarea id="paymentNotes" rows="2"></textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="btn-primary">Konfirmasi Pembayaran</button>
+                    <button type="button" class="btn-outline" onclick="closeModal('paymentModal')">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal Detail Pelanggan -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Detail Pelanggan</h2>
+                <span class="close-modal" onclick="closeModal('detailModal')">&times;</span>
+            </div>
+            
+            <div id="customerDetailContent">
+                <!-- Detail pelanggan akan dimuat di sini -->
+            </div>
+            
+            <div class="button-group" style="margin-top: 20px;">
+                <button type="button" class="btn-secondary" id="editDetailBtn">Edit</button>
+                <button type="button" class="btn-danger" id="deleteCustomerBtn">Hapus</button>
+                <button type="button" class="btn-warning" id="toggleStatusBtn">Nonaktifkan</button>
+                <button type="button" class="btn-outline" onclick="closeModal('detailModal')">Tutup</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Form Keuangan -->
+    <div id="financeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalFinanceTitle">Tambah Pemasukan</h2>
+                <span class="close-modal" onclick="closeModal('financeModal')">&times;</span>
+            </div>
+            
+            <form id="financeForm">
+                <input type="hidden" id="financeId">
+                <input type="hidden" id="financeType">
+                
+                <div class="form-group">
+                    <label for="financeDate">Tanggal:</label>
+                    <input type="date" id="financeDate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="financeCategory">Kategori:</label>
+                    <select id="financeCategory" required>
+                        <!-- Options will be loaded based on type -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="financeAmount">Jumlah:</label>
+                    <input type="number" id="financeAmount" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="financeDescription">Keterangan:</label>
+                    <textarea id="financeDescription" rows="2"></textarea>
+                </div>
+                
+                <div class="button-group">
+                    <button type="submit" class="btn-primary">Simpan</button>
+                    <button type="button" class="btn-outline" onclick="closeModal('financeModal')">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="backupModal" class="modal">
+  <div class="modal-content" style="text-align:center">
+    <div class="modal-header">
+      <h2>Backup & Restore</h2>
+      <span class="close-modal" onclick="closeModal('backupModal')">&times;</span>
+    </div>
+    <div class="button-group">
+      <button class="btn-secondary" onclick="importData()">Import Data</button>
+      <button class="btn-primary" onclick="exportData()">Export Data</button>
+    </div>
+    <input type="file" id="importFile" accept=".json" style="margin-top:15px;">
+  </div>
+</div>
 
-<hr>
-<h2>Bayar Tagihan</h2>
-<select id="customerSelect"></select>
-<select id="metode">
-  <option>Cash</option><option>TF</option><option>E-wallet</option>
-</select>
-<input id="tanggalBayar" type="date">
-<button onclick="bayar()">💸 Bayar</button>
+    <script>
+        // Data storage
+        let customers = JSON.parse(localStorage.getItem('customers')) || [];
+        let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        let finances = JSON.parse(localStorage.getItem('finances')) || [];
+        let editingCustomerId = null;
+        let currentTab = 'pelanggan';
+        
+        // Kategori keuangan
+        const incomeCategories = [
+            'Penjualan Produk', 'Layanan Tambahan', 'Donasi', 'Lainnya'
+        ];
+        
+        const expenseCategories = [
+            'Gaji Karyawan', 'Peralatan', 'Internet', 'Listrik', 'Sewa Tempat', 'Lainnya'
+        ];
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load data dari localStorage
+            customers = JSON.parse(localStorage.getItem('customers')) || [];
+            transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            finances = JSON.parse(localStorage.getItem('finances')) || [];
+            
+            renderCustomerList();
+            renderTransactionList();
+            renderFinanceList();
+            generateReport();
+            
+            // Form submissions
+            document.getElementById('customerForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveCustomer();
+            });
+            
+            document.getElementById('paymentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                processPayment();
+            });
+            
+            document.getElementById('financeForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveFinance();
+            });
+        });
+        
+        // Tampilkan/menyembunyikan input nominal custom
+        function toggleCustomAmount() {
+            const paket = document.getElementById('paket').value;
+            const customAmountGroup = document.getElementById('customAmountGroup');
+            
+            if (paket === 'Lainnya') {
+                customAmountGroup.style.display = 'block';
+                document.getElementById('customAmount').required = true;
+            } else {
+                customAmountGroup.style.display = 'none';
+                document.getElementById('customAmount').required = false;
+            }
+        }
+        
+        // Tab navigation
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            // Update bottom nav
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            document.querySelector(`.nav-item[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            
+            currentTab = tabName;
+            
+            // Refresh data if needed
+            if (tabName === 'pelanggan') {
+                renderCustomerList();
+            } else if (tabName === 'transaksi') {
+                renderTransactionList();
+            } else if (tabName === 'keuangan') {
+                renderFinanceList();
+            } else if (tabName === 'laporan') {
+                generateReport();
+            }
+        }
+        
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        function openCustomerForm(customerId = null) {
+            resetCustomerForm();
+            
+            if (customerId) {
+                const customer = customers.find(c => c.id === customerId);
+                if (customer) {
+                    document.getElementById('modalCustomerTitle').textContent = 'Edit Pelanggan';
+                    document.getElementById('customerId').value = customer.id;
+                    document.getElementById('nama').value = customer.nama;
+                    document.getElementById('alamat').value = customer.alamat;
+                    document.getElementById('telepon').value = customer.telepon;
+                    document.getElementById('paket').value = customer.paket;
+                    document.getElementById('tanggalDaftar').value = customer.tanggalDaftar;
+                    
+                    // Handle custom amount
+                    if (!['Basic', 'Basic Plus', 'Standard', 'Premium', 'Premium Plus'].includes(customer.paket)) {
+                        document.getElementById('customAmount').value = customer.tagihan;
+                        document.getElementById('customAmountGroup').style.display = 'block';
+                    }
+                }
+            } else {
+                document.getElementById('modalCustomerTitle').textContent = 'Tambah Pelanggan';
+                document.getElementById('tanggalDaftar').value = new Date().toISOString().substring(0, 10);
+            }
+            
+            openModal('customerModal');
+        }
+        
+        function resetCustomerForm() {
+            document.getElementById('customerForm').reset();
+            document.getElementById('customerId').value = '';
+            document.getElementById('customAmountGroup').style.display = 'none';
+        }
+        
+        // Customer functions
+        function saveCustomer() {
+            const customerId = document.getElementById('customerId').value;
+            const paket = document.getElementById('paket').value;
+            let tagihan = 0;
+            
+            if (paket === 'Lainnya') {
+                tagihan = parseInt(document.getElementById('customAmount').value) || 0;
+                if (tagihan <= 0) {
+                    alert('Nominal tagihan harus lebih dari 0');
+                    return;
+                }
+            } else {
+                tagihan = getPackagePrice(paket);
+            }
 
-<hr>
-<h2>Laporan</h2>
-<select id="bulan" onchange="tampilkanLaporan()">
-  <option>Juni</option><option>Juli</option><option>Agustus</option>
-</select>
-<table id="laporan">
-  <thead><tr><th>Customer</th><th>Status</th><th>Bulan</th></tr></thead>
-  <tbody></tbody>
-</table>
+            const customerData = {
+                nama: document.getElementById('nama').value,
+                alamat: document.getElementById('alamat').value,
+                telepon: document.getElementById('telepon').value,
+                paket: paket === 'Lainnya' ? 'Paket Lain' : paket,
+                tanggalDaftar: document.getElementById('tanggalDaftar').value,
+                status: 'active',
+                tagihan: tagihan
+            };
 
-<script>
-const URL = 'https://script.google.com/macros/s/AKfycbxsRli-J5zSgUFbERBkG86doZemQp969-v7ndPYEbzMFQwvpAl3zLMd96OHCzCOPD0v/exec';
+            if (customerId) {
+                // Update existing customer
+                const index = customers.findIndex(c => c.id === customerId);
+                if (index !== -1) {
+                    const oldTagihan = customers[index].tagihan;
+                    customers[index] = { ...customers[index], ...customerData };
+                    
+                    // Update semua transaksi yang belum dibayar dengan tagihan baru
+                    transactions.forEach(trans => {
+                        if (trans.customerId === customerId && trans.status === 'pending') {
+                            trans.amount = tagihan;
+                        }
+                    });
+                }
+            } else {
+                // Add new customer
+                customerData.id = Date.now().toString();
+                customers.push(customerData);
+                generateInitialTransactions(customerData);
+            }
 
-async function simpanCustomer() {
+            saveToLocalStorage();
+            closeModal('customerModal');
+            renderCustomerList();
+            renderTransactionList();
+            generateReport();
+        }
+        
+        function getPackagePrice(paket) {
+            switch(paket) {
+                case 'Basic': return 100000;
+                case 'Basic Plus': return 120000;
+                case 'Standard': return 150000;
+                case 'Premium': return 200000;
+                case 'Premium Plus': return 300000;
+                default: return 0;
+            }
+        }
+        
+        function generateInitialTransactions(customer) {
+            const startDate = new Date(customer.tanggalDaftar);
+            const endDate = new Date(startDate);
+            endDate.setMonth(endDate.getMonth() + 120); // Generate for next 120 months
+            
+            let date = new Date(startDate);
+            
+            while (date <= endDate) {
+                const monthYear = date.toISOString().substring(0, 7);
+                
+                transactions.push({
+                    id: `t${customer.id}-${monthYear}`,
+                    customerId: customer.id,
+                    customerName: customer.nama,
+                    monthYear: monthYear,
+                    amount: customer.tagihan,
+                    paid: 0,
+                    paymentDate: '',
+                    status: 'pending',
+                    notes: ''
+                });
+                
+                date.setMonth(date.getMonth() + 1);
+            }
+            
+            saveToLocalStorage();
+        }
+        
+        function renderCustomerList(filter = '') {
+            const customerList = document.getElementById('customerList');
+            customerList.innerHTML = '';
+            
+            let filteredCustomers = customers;
+            
+            if (filter) {
+                const searchTerm = filter.toLowerCase();
+                filteredCustomers = customers.filter(customer => 
+                    customer.nama.toLowerCase().includes(searchTerm) ||
+                    customer.alamat.toLowerCase().includes(searchTerm) ||
+                    customer.telepon.includes(searchTerm)
+                );
+            }
+            
+            if (filteredCustomers.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data pelanggan</td>`;
+                customerList.appendChild(row);
+                return;
+            }
+            
+            filteredCustomers.forEach((customer, index) => {
+                const row = document.createElement('tr');
+                row.className = customer.status === 'active' ? 'active-row' : 'inactive-row';
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${customer.nama}</td>
+                    <td>${customer.paket}</td>
+                    <td>Rp ${customer.tagihan.toLocaleString('id-ID')}</td>
+                    <td>
+                        <span class="${customer.status === 'active' ? 'status-active' : 'status-inactive'}">
+                            ${customer.status === 'active' ? 'Aktif' : 'Nonaktif'}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="action-btn btn-secondary" onclick="showCustomerDetail('${customer.id}')">Detail</button>
+                    </td>
+                `;
+                
+                customerList.appendChild(row);
+            });
+        }
+        
+        function filterCustomers() {
+            const filter = document.getElementById('searchCustomer').value;
+            renderCustomerList(filter);
+        }
+        
+        // Fungsi untuk mendapatkan nama pelanggan (termasuk yang sudah dihapus)
+        function getCustomerName(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (customer) return customer.nama;
+            
+            // Cari di transaksi untuk mendapatkan nama terakhir yang tersimpan
+            const transaction = transactions.find(t => t.customerId === customerId);
+            return transaction ? transaction.customerName : 'Pelanggan Terhapus';
+        }
+        
+        function showCustomerDetail(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) {
+                alert('Pelanggan tidak ditemukan atau sudah dihapus');
+                return;
+            }
+            
+            const detailContent = document.getElementById('customerDetailContent');
+            detailContent.innerHTML = `
+                <h3>${customer.nama}</h3>
+                <p><strong>Alamat:</strong> ${customer.alamat}</p>
+                <p><strong>Telepon:</strong> ${customer.telepon}</p>
+                <p><strong>Paket:</strong> ${customer.paket}</p>
+                <p><strong>Tagihan:</strong> Rp ${customer.tagihan.toLocaleString('id-ID')}/bulan</p>
+                <p><strong>Tanggal Daftar:</strong> ${formatDate(customer.tanggalDaftar)}</p>
+                <p><strong>Status:</strong> 
+                    <span class="${customer.status === 'active' ? 'status-active' : 'status-inactive'}">
+                        ${customer.status === 'active' ? 'Aktif' : 'Nonaktif'}
+                    </span>
+                </p>
+                
+                <h3 style="margin-top: 20px;">Riwayat Transaksi</h3>
+                <div style="max-height: 200px; overflow-y: auto;">
+                    <table style="width: 100%; font-size: 12px;">
+                        <thead>
+                            <tr>
+                                <th>Bulan</th>
+                                <th>Tagihan</th>
+                                <th>Status</th>
+                                <th>Dibayar</th>
+                            </tr>
+                        </thead>
+                        <tbody id="customerTransactions">
+                            <!-- Transactions will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            // Load customer transactions - diurutkan dari yang terbaru ke terlama
+            const customerTransactions = transactions
+                .filter(t => t.customerId === customerId)
+                .sort((a, b) => a.monthYear.localeCompare(b.monthYear)); // Urutkan dari bulan lama ke baru
+            
+            const transactionsTable = document.getElementById('customerTransactions');
+            transactionsTable.innerHTML = '';
+            
+            if (customerTransactions.length === 0) {
+                transactionsTable.innerHTML = '<tr><td colspan="4" class="text-center">Tidak ada transaksi</td></tr>';
+            } else {
+                customerTransactions.forEach(trans => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${formatMonthYear(trans.monthYear)}</td>
+                        <td>Rp ${trans.amount.toLocaleString('id-ID')}</td>
+                        <td>${getStatusBadge(trans.status)}</td>
+                        <td>${trans.paid ? 'Rp ' + trans.paid.toLocaleString('id-ID') : '-'}</td>
+                    `;
+                    transactionsTable.appendChild(row);
+                });
+            }
+            
+            // Set up buttons
+            document.getElementById('editDetailBtn').onclick = function() {
+                closeModal('detailModal');
+                openCustomerForm(customerId);
+            };
+            
+            document.getElementById('deleteCustomerBtn').onclick = function() {
+                deleteCustomer(customerId);
+            };
+            
+            document.getElementById('toggleStatusBtn').onclick = function() {
+                toggleCustomerStatus(customerId);
+                closeModal('detailModal');
+            };
+            
+            document.getElementById('toggleStatusBtn').textContent = customer.status === 'active' ? 'Nonaktifkan' : 'Aktifkan';
+            document.getElementById('toggleStatusBtn').className = customer.status === 'active' ? 'btn-danger' : 'btn-primary';
+            
+            openModal('detailModal');
+        }
+        
+        // Fungsi hapus pelanggan (tanpa menghapus transaksi yang sudah ada)
+        function deleteCustomer(customerId) {
+            if (confirm('Apakah Anda yakin ingin menghapus pelanggan ini? Semua data tagihan bulan ini dan berikutnya akan dihapus.')) {
+                // Hapus pelanggan dari array
+                customers = customers.filter(c => c.id !== customerId);
+                
+                const today = new Date();
+                const currentMonthYear = today.toISOString().substring(0, 7);
+                
+                // Hapus semua transaksi bulan ini dan mendatang
+                transactions = transactions.filter(trans => {
+                    return !(trans.customerId === customerId && trans.monthYear >= currentMonthYear);
+                });
+                
+                saveToLocalStorage();
+                renderCustomerList();
+                renderTransactionList();
+                generateReport();
+                closeModal('detailModal');
+            }
+        }
+        
+        function toggleCustomerStatus(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) return;
+            
+            customer.status = customer.status === 'active' ? 'inactive' : 'active';
+            
+            if (customer.status === 'inactive') {
+                const today = new Date();
+                const currentMonthYear = today.toISOString().substring(0, 7);
+                
+                // Hapus transaksi mendatang (bulan ini dan seterusnya)
+                transactions = transactions.filter(trans => {
+                    return !(trans.customerId === customerId && trans.monthYear >= currentMonthYear && trans.status === 'pending');
+                });
+            } else {
+                // Jika diaktifkan kembali, buat transaksi untuk 12 bulan ke depan
+                const today = new Date();
+                const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+                const endDate = new Date(startDate);
+                endDate.setMonth(endDate.getMonth() + 120); // Generate for next 120 months
+                
+                // Hapus dulu transaksi yang mungkin sudah ada untuk bulan-bulan mendatang
+                transactions = transactions.filter(trans => 
+                    !(trans.customerId === customerId && trans.monthYear >= startDate.toISOString().substring(0, 7))
+                );
+                
+                // Buat transaksi baru untuk 12 bulan ke depan
+                let date = new Date(startDate);
+                while (date <= endDate) {
+                    const monthYear = date.toISOString().substring(0, 7);
+                    
+                    // Cek apakah transaksi untuk bulan ini sudah ada (misalnya sudah ada yang dibayar)
+                    const existingTransaction = transactions.find(
+                        t => t.customerId === customerId && t.monthYear === monthYear
+                    );
+                    
+                    if (!existingTransaction) {
+                        transactions.push({
+                            id: `t${customerId}-${monthYear}`,
+                            customerId: customerId,
+                            customerName: customer.nama,
+                            monthYear: monthYear,
+                            amount: customer.tagihan,
+                            paid: 0,
+                            paymentDate: '',
+                            status: 'pending',
+                            notes: ''
+                        });
+                    }
+                    
+                    date.setMonth(date.getMonth() + 1);
+                }
+            }
+            
+            saveToLocalStorage();
+            renderCustomerList();
+            renderTransactionList();
+            generateReport();
+        }
+        
+        // Transaction functions
+        function renderTransactionList(filterMonth = '', paymentStatus = '', customerFilter = '') {
+            const transactionList = document.getElementById('transactionList');
+            transactionList.innerHTML = '';
+            
+            let filteredTransactions = [...transactions];
+            
+            // Filter by month
+            if (filterMonth) {
+                filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === filterMonth);
+            } else {
+                // Default to current month
+                const currentMonth = new Date().toISOString().substring(0, 7);
+                filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === currentMonth);
+                document.getElementById('filterMonth').value = currentMonth;
+            }
+            
+            // Filter by payment status
+            if (paymentStatus) {
+                filteredTransactions = filteredTransactions.filter(trans => trans.status === paymentStatus);
+            }
+            
+            // Filter by customer name
+            if (customerFilter) {
+                const searchTerm = customerFilter.toLowerCase();
+                filteredTransactions = filteredTransactions.filter(trans => {
+                    const customerName = getCustomerName(trans.customerId).toLowerCase();
+                    return customerName.includes(searchTerm);
+                });
+            }
+            
+            // Sort by status (pending first) and month
+            filteredTransactions.sort((a, b) => {
+                if (a.status === b.status) {
+                    return a.monthYear.localeCompare(b.monthYear);
+                }
+                return a.status === 'pending' ? -1 : 1;
+            });
+            
+            if (filteredTransactions.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data transaksi</td>`;
+                transactionList.appendChild(row);
+                return;
+            }
+            
+            filteredTransactions.forEach((transaction, index) => {
+                const row = document.createElement('tr');
+                row.className = transaction.status === 'paid' ? 'active-row' : 
+                                transaction.status === 'canceled' ? 'inactive-row' : '';
+                
+                // Tampilkan nama pelanggan (termasuk yang sudah dihapus)
+                const customerName = getCustomerName(transaction.customerId);
+                const isCustomerDeleted = !customers.find(c => c.id === transaction.customerId);
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${isCustomerDeleted ? `<span class="deleted-customer">${customerName}</span>` : customerName}</td>
+                    <td>${formatMonthYear(transaction.monthYear)}</td>
+                    <td>Rp ${transaction.amount.toLocaleString('id-ID')}</td>
+                    <td>${getStatusBadge(transaction.status)}</td>
+                    <td>
+                        ${transaction.status === 'pending' ? 
+                            `<button class="action-btn btn-primary" onclick="openPaymentModal('${transaction.id}')">Bayar</button>` : 
+                            `<button class="action-btn btn-secondary" onclick="viewTransactionDetail('${transaction.id}')">Detail</button>`
+                        }
+                    </td>
+                `;
+                
+                transactionList.appendChild(row);
+            });
+        }
+        
+        function filterTransactions() {
+            const month = document.getElementById('filterMonth').value;
+            const paymentStatus = document.getElementById('filterPaymentStatus').value;
+            const customerFilter = document.getElementById('searchTransactionCustomer').value;
+            renderTransactionList(month, paymentStatus, customerFilter);
+        }
+        
+        function openPaymentModal(transactionId) {
+            const transaction = transactions.find(t => t.id === transactionId);
+            if (!transaction) return;
+            
+            document.getElementById('paymentTransactionId').value = transactionId;
+            document.getElementById('paymentCustomerName').textContent = getCustomerName(transaction.customerId);
+            document.getElementById('paymentMonth').textContent = formatMonthYear(transaction.monthYear);
+            document.getElementById('paymentAmount').textContent = 'Rp ' + transaction.amount.toLocaleString('id-ID');
+            document.getElementById('paymentDate').value = new Date().toISOString().substring(0, 10);
+            document.getElementById('paymentNotes').value = '';
+            
+            openModal('paymentModal');
+        }
+        
+        function processPayment() {
+            const transactionId = document.getElementById('paymentTransactionId').value;
+            const paymentDate = document.getElementById('paymentDate').value;
+            const paymentNotes = document.getElementById('paymentNotes').value;
+            
+            const transactionIndex = transactions.findIndex(t => t.id === transactionId);
+            if (transactionIndex === -1) return;
+            
+            transactions[transactionIndex].status = 'paid';
+            transactions[transactionIndex].paid = transactions[transactionIndex].amount;
+            transactions[transactionIndex].paymentDate = paymentDate;
+            transactions[transactionIndex].notes = paymentNotes;
+            
+            saveToLocalStorage();
+            closeModal('paymentModal');
+            renderTransactionList(document.getElementById('filterMonth').value);
+            generateReport();
+        }
+        
+        function viewTransactionDetail(transactionId) {
+            const transaction = transactions.find(t => t.id === transactionId);
+            if (!transaction) return;
+            
+            const customer = customers.find(c => c.id === transaction.customerId);
+            const customerName = getCustomerName(transaction.customerId);
+            const packageInfo = customer ? customer.paket : 'Paket tidak tersedia (pelanggan dihapus)';
+            
+            alert(`Detail Transaksi:
+Pelanggan: ${customerName}
+Bulan: ${formatMonthYear(transaction.monthYear)}
+Paket: ${packageInfo}
+Tagihan: Rp ${transaction.amount.toLocaleString('id-ID')}
+Dibayar: Rp ${transaction.paid.toLocaleString('id-ID')}
+Tanggal Bayar: ${transaction.paymentDate || '-'}
+Status: ${getStatusText(transaction.status)}
+Keterangan: ${transaction.notes || '-'}`);
+        }
+        
+        // Finance functions
+        function openFinanceForm(type, financeId = null) {
+            resetFinanceForm();
+            
+            document.getElementById('financeType').value = type;
+            document.getElementById('modalFinanceTitle').textContent = type === 'income' ? 'Tambah Pemasukan' : 'Tambah Pengeluaran';
+            document.getElementById('financeDate').value = new Date().toISOString().substring(0, 10);
+            
+            // Load categories
+            const categorySelect = document.getElementById('financeCategory');
+            categorySelect.innerHTML = '';
+            
+            const categories = type === 'income' ? incomeCategories : expenseCategories;
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categorySelect.appendChild(option);
+            });
+            
+            if (financeId) {
+                const finance = finances.find(f => f.id === financeId);
+                if (finance) {
+                    document.getElementById('financeId').value = financeId;
+                    document.getElementById('financeDate').value = finance.date;
+                    document.getElementById('financeCategory').value = finance.category;
+                    document.getElementById('financeAmount').value = finance.amount;
+                    document.getElementById('financeDescription').value = finance.description || '';
+                }
+            }
+            
+            openModal('financeModal');
+        }
+        
+        function resetFinanceForm() {
+            document.getElementById('financeForm').reset();
+            document.getElementById('financeId').value = '';
+            document.getElementById('financeType').value = '';
+        }
+        
+        function saveFinance() {
+            const financeId = document.getElementById('financeId').value;
+            const type = document.getElementById('financeType').value;
+            const amount = parseFloat(document.getElementById('financeAmount').value);
+            
+            if (amount <= 0) {
+                alert('Jumlah harus lebih dari 0');
+                return;
+            }
+            
+            const financeData = {
+                type: type,
+                date: document.getElementById('financeDate').value,
+                category: document.getElementById('financeCategory').value,
+                amount: amount,
+                description: document.getElementById('financeDescription').value
+            };
+            
+            if (financeId) {
+                // Update existing finance
+                const index = finances.findIndex(f => f.id === financeId);
+                if (index !== -1) {
+                    finances[index] = { ...finances[index], ...financeData };
+                }
+            } else {
+                // Add new finance
+                financeData.id = Date.now().toString();
+                finances.push(financeData);
+            }
+            
+            saveToLocalStorage();
+            closeModal('financeModal');
+            renderFinanceList();
+            generateReport();
+        }
+        
+        function renderFinanceList(filterMonth = '') {
+            const financeList = document.getElementById('financeList');
+            financeList.innerHTML = '';
+            
+            let filteredFinances = [...finances];
+            
+            // Filter by month
+            if (filterMonth) {
+                filteredFinances = filteredFinances.filter(f => f.date.startsWith(filterMonth));
+            } else {
+                // Default to current month
+                const currentMonth = new Date().toISOString().substring(0, 7);
+                filteredFinances = filteredFinances.filter(f => f.date.startsWith(currentMonth));
+                document.getElementById('filterFinanceMonth').value = currentMonth;
+            }
+            
+            // Sort by date (newest first)
+            filteredFinances.sort((a, b) => b.date.localeCompare(a.date));
+            
+            if (filteredFinances.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data keuangan</td>`;
+                financeList.appendChild(row);
+                return;
+            }
+            
+            filteredFinances.forEach((finance, index) => {
+                const row = document.createElement('tr');
+                row.className = finance.type === 'income' ? 'income-row' : 'expense-row';
+                
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${formatDate(finance.date)}</td>
+                    <td>${finance.category}</td>
+                    <td>${finance.description || '-'}</td>
+                    <td class="${finance.type === 'income' ? 'income-text' : 'expense-text'}">
+                        ${finance.type === 'income' ? '+' : '-'} Rp ${finance.amount.toLocaleString('id-ID')}
+                    </td>
+                    <td>
+                        <button class="action-btn btn-secondary" onclick="openFinanceForm('${finance.type}', '${finance.id}')">Edit</button>
+                        <button class="action-btn btn-danger" onclick="deleteFinance('${finance.id}')">Hapus</button>
+                    </td>
+                `;
+                
+                financeList.appendChild(row);
+            });
+        }
+        
+        function deleteFinance(financeId) {
+            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+                finances = finances.filter(f => f.id !== financeId);
+                saveToLocalStorage();
+                renderFinanceList();
+                generateReport();
+            }
+        }
+        
+        // Report functions
+        function generateReport() {
+            const year = document.getElementById('reportYear').value;
+            const monthlyData = {};
+            
+            // Initialize monthly data dengan format yang benar (YYYY-MM)
+            for (let month = 1; month <= 12; month++) {
+                const monthStr = month < 10 ? `0${month}` : month.toString();
+                const monthKey = `${year}-${monthStr}`;
+                monthlyData[monthKey] = {
+                    month: monthKey,
+                    totalCustomers: 0,
+                    totalBilled: 0,
+                    totalPaid: 0,
+                    totalIncome: 0,
+                    totalExpense: 0,
+                    newCustomers: 0,
+                    churnedCustomers: 0
+                };
+            }
+            
+            // Process transactions
+            transactions.forEach(trans => {
+                if (trans.monthYear.startsWith(year)) {
+                    const monthData = monthlyData[trans.monthYear];
+                    if (monthData) {
+                        monthData.totalBilled += trans.amount;
+                        if (trans.status === 'paid') {
+                            monthData.totalPaid += trans.paid || trans.amount;
+                        }
+                    }
+                }
+            });
+            
+            // Process finances
+            finances.forEach(finance => {
+                if (finance.date.startsWith(year)) {
+                    const monthKey = finance.date.substring(0, 7);
+                    const monthData = monthlyData[monthKey];
+                    if (monthData) {
+                        if (finance.type === 'income') {
+                            monthData.totalIncome += finance.amount;
+                        } else {
+                            monthData.totalExpense += finance.amount;
+                        }
+                    }
+                }
+            });
+            
+            // Process customers
+            customers.forEach(customer => {
+                const joinDate = new Date(customer.tanggalDaftar);
+                const joinYear = joinDate.getFullYear();
+                const joinMonth = (joinDate.getMonth() + 1).toString().padStart(2, '0');
+                
+                if (joinYear.toString() === year) {
+                    const monthKey = `${year}-${joinMonth}`;
+                    if (monthlyData[monthKey]) {
+                        monthlyData[monthKey].newCustomers++;
+                    }
+                }
+                
+                // Count active customers each month (simplified)
+                if (customer.status === 'active') {
+                    Object.keys(monthlyData).forEach(monthKey => {
+                        if (customer.tanggalDaftar <= `${monthKey}-01`) {
+                            monthlyData[monthKey].totalCustomers++;
+                        }
+                    });
+                }
+            });
+            
+            // Calculate churned customers (simplified)
+            customers.forEach(customer => {
+                if (customer.status === 'inactive') {
+                    // Find when they became inactive (simplified)
+                    const deactivateDate = new Date();
+                    const deactivateYear = deactivateDate.getFullYear();
+                    const deactivateMonth = (deactivateDate.getMonth() + 1).toString().padStart(2, '0');
+                    
+                    if (deactivateYear.toString() === year) {
+                        const monthKey = `${year}-${deactivateMonth}`;
+                        if (monthlyData[monthKey]) {
+                            monthlyData[monthKey].churnedCustomers++;
+                        }
+                    }
+                }
+            });
+            
+            // Render report
+            renderReportTable(monthlyData);
+            renderAnnualSummary(monthlyData, year);
+        }
+        
+        function renderReportTable(monthlyData) {
+            const reportList = document.getElementById('reportList');
+            reportList.innerHTML = '';
+            
+            // Urutkan bulan dari Januari-Desember
+            const sortedMonthKeys = Object.keys(monthlyData).sort();
+            
+            sortedMonthKeys.forEach(monthKey => {
+                const monthData = monthlyData[monthKey];
+                const balance = monthData.totalPaid + monthData.totalIncome - monthData.totalExpense;
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${formatMonthYear(monthKey)}</td>
+                    <td>Rp ${monthData.totalBilled.toLocaleString('id-ID')}</td>
+                    <td>Rp ${monthData.totalPaid.toLocaleString('id-ID')}</td>
+                    <td class="income-text">Rp ${monthData.totalIncome.toLocaleString('id-ID')}</td>
+                    <td class="expense-text">Rp ${monthData.totalExpense.toLocaleString('id-ID')}</td>
+                    <td>Rp ${balance.toLocaleString('id-ID')}</td>
+                `;
+                
+                reportList.appendChild(row);
+            });
+        }
+        
+        function renderAnnualSummary(monthlyData, year) {
+            const totalBilled = Object.values(monthlyData).reduce((sum, month) => sum + month.totalBilled, 0);
+            const totalPaid = Object.values(monthlyData).reduce((sum, month) => sum + month.totalPaid, 0);
+            const totalIncome = Object.values(monthlyData).reduce((sum, month) => sum + month.totalIncome, 0);
+            const totalExpense = Object.values(monthlyData).reduce((sum, month) => sum + month.totalExpense, 0);
+            const totalNewCustomers = Object.values(monthlyData).reduce((sum, month) => sum + month.newCustomers, 0);
+            
+            const activeCustomersCount = customers.filter(c => c.status === 'active').length;
+            const inactiveCustomersCount = customers.filter(c => c.status === 'inactive').length;
+            const balance = totalPaid + totalIncome - totalExpense;
+            
+            // Update summary cards
+            document.getElementById('annual-billed').textContent = 'Rp ' + totalBilled.toLocaleString('id-ID');
+            document.getElementById('annual-paid').textContent = 'Rp ' + totalPaid.toLocaleString('id-ID');
+            document.getElementById('active-customers').textContent = activeCustomersCount;
+            document.getElementById('new-customers').textContent = totalNewCustomers;
+            document.getElementById('inactive-customers').textContent = inactiveCustomersCount;
+            document.getElementById('total-income').textContent = 'Rp ' + totalIncome.toLocaleString('id-ID');
+            document.getElementById('total-expense').textContent = 'Rp ' + totalExpense.toLocaleString('id-ID');
+            document.getElementById('balance').textContent = 'Rp ' + balance.toLocaleString('id-ID');
+        }
+        
+        // Utility functions
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+        
+        function formatMonthYear(monthYear) {
+            // Pastikan monthYear dalam format YYYY-MM
+            const [year, month] = monthYear.split('-');
+            const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                               'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            // Pastikan month adalah angka antara 1-12
+            const monthIndex = parseInt(month) - 1;
+            if (monthIndex >= 0 && monthIndex < 12) {
+                return `${monthNames[monthIndex]} ${year}`;
+            }
+            return 'Bulan tidak valid';
+        }
+        
+        function getStatusBadge(status) {
+            switch(status) {
+                case 'paid':
+                    return '<span class="badge badge-success">Lunas</span>';
+                case 'pending':
+                    return '<span class="badge badge-warning">Belum Bayar</span>';
+                case 'canceled':
+                    return '<span class="badge badge-danger">Dibatalkan</span>';
+                default:
+                    return status;
+            }
+        }
+        
+        function getStatusText(status) {
+            switch(status) {
+                case 'paid': return 'Lunas';
+                case 'pending': return 'Belum Bayar';
+                case 'canceled': return 'Dibatalkan';
+                default: return status;
+            }
+        }
+        
+        function saveToLocalStorage() {
+            localStorage.setItem('customers', JSON.stringify(customers));
+            localStorage.setItem('transactions', JSON.stringify(transactions));
+            localStorage.setItem('finances', JSON.stringify(finances));
+        }
+        
+        function openBackupMenu() {
+  openModal('backupModal');
+}
+
+function exportData() {
+  const confirmExport = confirm("Apakah Anda yakin ingin menyimpan data lokal saat ini?\nFile akan disimpan dalam format JSON.");
+  if (!confirmExport) return;
+
   const data = {
-    action: 'tambahCustomer',
-    nama: document.getElementById('nama').value,
-    wa: document.getElementById('wa').value,
-    alamat: document.getElementById('alamat').value,
-    tagihan: document.getElementById('tagihan').value,
-    tanggal: document.getElementById('tanggal').value,
-    ip: document.getElementById('ip').value,
-    ket: document.getElementById('keterangan').value
+    customers,
+    transactions,
+    finances
   };
+  const dataStr = JSON.stringify(data, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
 
-  if (!data.nama || !data.wa || !data.alamat || !data.tagihan || !data.tanggal) {
-    alert("❗ Lengkapi semua kolom wajib!");
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "backup_data_kh1992.json";
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+function importData() {
+  const fileInput = document.getElementById("importFile");
+  const file = fileInput.files[0];
+  if (!file) {
+    alert("Silakan pilih file terlebih dahulu.");
     return;
   }
 
-  try {
-    const res = await fetch(URL, {
-      method: 'POST',
-      body: JSON.stringify(data)
-    });
-    const text = await res.text();
-    alert("✅ " + text);
-    loadCustomer();
-  } catch (e) {
-    alert("❌ Gagal simpan: " + e);
-  }
-}
-
-async function bayar() {
-  const data = {
-    action: 'simpanPembayaran',
-    customer: document.getElementById('customerSelect').value,
-    metode: document.getElementById('metode').value,
-    tanggal: document.getElementById('tanggalBayar').value
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const importedData = JSON.parse(e.target.result);
+      if (importedData.customers && importedData.transactions && importedData.finances) {
+        customers = importedData.customers;
+        transactions = importedData.transactions;
+        finances = importedData.finances;
+        saveToLocalStorage();
+        renderCustomerList();
+        renderTransactionList();
+        renderFinanceList();
+        generateReport();
+        closeModal("backupModal");
+        alert("Data berhasil diimpor!");
+      } else {
+        alert("Format file tidak valid.");
+      }
+    } catch (error) {
+      alert("Gagal membaca file: " + error.message);
+    }
   };
-
-  if (!data.customer || !data.tanggal) {
-    alert("❗ Pilih customer dan tanggal bayar.");
-    return;
-  }
-
-  try {
-    const res = await fetch(URL, {
-      method: 'POST',
-      body: JSON.stringify(data)
-    });
-    const text = await res.text();
-    alert("✅ " + text);
-    tampilkanLaporan();
-  } catch (e) {
-    alert("❌ Gagal bayar: " + e);
-  }
+  reader.readAsText(file);
 }
-
-async function tampilkanLaporan() {
-  const bulan = document.getElementById('bulan').value;
-  try {
-    const res = await fetch(`${URL}?action=getLaporan&bulan=${bulan}`);
-    const data = await res.json();
-    const tbody = document.querySelector('#laporan tbody');
-    tbody.innerHTML = '';
-    data.forEach(row => {
-      tbody.innerHTML += `<tr><td>${row[0]}</td><td>${row[1]}</td><td>${row[2]}</td></tr>`;
-    });
-  } catch (e) {
-    alert("❌ Gagal ambil laporan: " + e);
-  }
-}
-
-async function loadCustomer() {
-  try {
-    const res = await fetch(`${URL}?action=getCustomers`);
-    const data = await res.json();
-    const select = document.getElementById('customerSelect');
-    select.innerHTML = '';
-    data.forEach(name => {
-      const opt = document.createElement('option');
-      opt.value = opt.text = name;
-      select.add(opt);
-    });
-  } catch (e) {
-    alert("❌ Gagal ambil daftar customer: " + e);
-  }
-}
-
-loadCustomer();
-tampilkanLaporan();
-</script>
-
+    </script>
 </body>
 </html>
