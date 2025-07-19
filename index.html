@@ -1017,49 +1017,52 @@
         }
         
         function renderCustomerList(filter = '') {
-            const customerList = document.getElementById('customerList');
-            customerList.innerHTML = '';
-            
-            let filteredCustomers = customers;
-            
-            if (filter) {
-                const searchTerm = filter.toLowerCase();
-                filteredCustomers = customers.filter(customer => 
-                    customer.nama.toLowerCase().includes(searchTerm) ||
-                    customer.alamat.toLowerCase().includes(searchTerm) ||
-                    customer.telepon.includes(searchTerm)
-                );
-            }
-            
-            if (filteredCustomers.length === 0) {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data pelanggan</td>`;
-                customerList.appendChild(row);
-                return;
-            }
-            
-            filteredCustomers.forEach((customer, index) => {
-                const row = document.createElement('tr');
-                row.className = customer.status === 'active' ? 'active-row' : 'inactive-row';
-                
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${customer.nama}</td>
-                    <td>${customer.paket}</td>
-                    <td>Rp ${customer.tagihan.toLocaleString('id-ID')}</td>
-                    <td>
-                        <span class="${customer.status === 'active' ? 'status-active' : 'status-inactive'}">
-                            ${customer.status === 'active' ? 'Aktif' : 'Nonaktif'}
-                        </span>
-                    </td>
-                    <td>
-                        <button class="action-btn btn-secondary" onclick="showCustomerDetail('${customer.id}')">Detail</button>
-                    </td>
-                `;
-                
-                customerList.appendChild(row);
-            });
-        }
+  const customerList = document.getElementById('customerList');
+  customerList.innerHTML = '';
+
+  let filteredCustomers = customers;
+
+  if (filter) {
+    const searchTerm = filter.toLowerCase();
+    filteredCustomers = customers.filter(customer => 
+      customer.nama.toLowerCase().includes(searchTerm) ||
+      customer.alamat.toLowerCase().includes(searchTerm) ||
+      customer.telepon.includes(searchTerm)
+    );
+  }
+
+  // 🔽 Urutkan berdasarkan tanggal daftar (terbaru dulu)
+  filteredCustomers.sort((a, b) => new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar));
+
+  if (filteredCustomers.length === 0) {
+    const row = document.createElement('tr');
+    row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data pelanggan</td>`;
+    customerList.appendChild(row);
+    return;
+  }
+
+  filteredCustomers.forEach((customer, index) => {
+    const row = document.createElement('tr');
+    row.className = customer.status === 'active' ? 'active-row' : 'inactive-row';
+
+    row.innerHTML = `
+      <td>${index + 1}</td>
+      <td>${customer.nama}</td>
+      <td>${customer.paket}</td>
+      <td>Rp ${customer.tagihan.toLocaleString('id-ID')}</td>
+      <td>
+        <span class="${customer.status === 'active' ? 'status-active' : 'status-inactive'}">
+          ${customer.status === 'active' ? 'Aktif' : 'Nonaktif'}
+        </span>
+      </td>
+      <td>
+        <button class="action-btn btn-secondary" onclick="showCustomerDetail('${customer.id}')">Detail</button>
+      </td>
+    `;
+
+    customerList.appendChild(row);
+  });
+}
         
         function filterCustomers() {
             const filter = document.getElementById('searchCustomer').value;
@@ -1242,77 +1245,104 @@
         }
         
         // Transaction functions
-        function renderTransactionList(filterMonth = '', paymentStatus = '', customerFilter = '') {
-            const transactionList = document.getElementById('transactionList');
-            transactionList.innerHTML = '';
-            
-            let filteredTransactions = [...transactions];
-            
-            // Filter by month
-            if (filterMonth) {
-                filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === filterMonth);
-            } else {
-                // Default to current month
-                const currentMonth = new Date().toISOString().substring(0, 7);
-                filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === currentMonth);
-                document.getElementById('filterMonth').value = currentMonth;
-            }
-            
-            // Filter by payment status
-            if (paymentStatus) {
-                filteredTransactions = filteredTransactions.filter(trans => trans.status === paymentStatus);
-            }
-            
-            // Filter by customer name
-            if (customerFilter) {
-                const searchTerm = customerFilter.toLowerCase();
-                filteredTransactions = filteredTransactions.filter(trans => {
-                    const customerName = getCustomerName(trans.customerId).toLowerCase();
-                    return customerName.includes(searchTerm);
-                });
-            }
-            
-            // Sort by status (pending first) and month
-            filteredTransactions.sort((a, b) => {
-                if (a.status === b.status) {
-                    return a.monthYear.localeCompare(b.monthYear);
+      function renderTransactionList(filterMonth = '', paymentStatus = '', customerFilter = '') {
+    const transactionList = document.getElementById('transactionList');
+    transactionList.innerHTML = '';
+
+    let filteredTransactions = [...transactions];
+
+    // Filter by month
+    if (filterMonth) {
+        filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === filterMonth);
+    } else {
+        const currentMonth = new Date().toISOString().substring(0, 7);
+        filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === currentMonth);
+        document.getElementById('filterMonth').value = currentMonth;
+    }
+
+    // Filter by payment status
+    if (paymentStatus) {
+        filteredTransactions = filteredTransactions.filter(trans => trans.status === paymentStatus);
+    }
+
+    // Filter by customer name
+    if (customerFilter) {
+        const searchTerm = customerFilter.toLowerCase();
+        filteredTransactions = filteredTransactions.filter(trans => {
+            const customerName = getCustomerName(trans.customerId).toLowerCase();
+            return customerName.includes(searchTerm);
+        });
+    }
+
+    const customerOrder = [...customers]
+        .sort((a, b) => new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar))
+        .map(c => c.id);
+
+    filteredTransactions.sort((a, b) => {
+        const orderA = customerOrder.indexOf(a.customerId);
+        const orderB = customerOrder.indexOf(b.customerId);
+        if (orderA !== orderB) return orderA - orderB;
+        return b.monthYear.localeCompare(a.monthYear);
+    });
+
+    if (filteredTransactions.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data transaksi</td>`;
+        transactionList.appendChild(row);
+        return;
+    }
+
+    filteredTransactions.forEach((transaction, index) => {
+        const row = document.createElement('tr');
+        row.className = transaction.status === 'paid' ? 'active-row' :
+                        transaction.status === 'canceled' ? 'inactive-row' : '';
+
+        const customerName = getCustomerName(transaction.customerId);
+        const isCustomerDeleted = !customers.find(c => c.id === transaction.customerId);
+        const dueNote = getDueStatus(transaction.customerId, transaction.status);
+
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${isCustomerDeleted ? `<span class="deleted-customer">${customerName}</span>` : customerName}</td>
+            <td>${formatMonthYear(transaction.monthYear)}</td>
+            <td>Rp ${transaction.amount.toLocaleString('id-ID')}</td>
+            <td>
+                ${(dueNote && transaction.status === 'pending') 
+                    ? `<span class="badge badge-danger">${dueNote}</span>` 
+                    : getStatusBadge(transaction.status)}
+            </td>
+            <td>
+                ${transaction.status === 'pending' ? 
+                    `<button class="action-btn btn-primary" onclick="openPaymentModal('${transaction.id}')">Bayar</button>` : 
+                    `<button class="action-btn btn-secondary" onclick="viewTransactionDetail('${transaction.id}')">Detail</button>`
                 }
-                return a.status === 'pending' ? -1 : 1;
-            });
-            
-            if (filteredTransactions.length === 0) {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data transaksi</td>`;
-                transactionList.appendChild(row);
-                return;
-            }
-            
-            filteredTransactions.forEach((transaction, index) => {
-                const row = document.createElement('tr');
-                row.className = transaction.status === 'paid' ? 'active-row' : 
-                                transaction.status === 'canceled' ? 'inactive-row' : '';
-                
-                // Tampilkan nama pelanggan (termasuk yang sudah dihapus)
-                const customerName = getCustomerName(transaction.customerId);
-                const isCustomerDeleted = !customers.find(c => c.id === transaction.customerId);
-                
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${isCustomerDeleted ? `<span class="deleted-customer">${customerName}</span>` : customerName}</td>
-                    <td>${formatMonthYear(transaction.monthYear)}</td>
-                    <td>Rp ${transaction.amount.toLocaleString('id-ID')}</td>
-                    <td>${getStatusBadge(transaction.status)}</td>
-                    <td>
-                        ${transaction.status === 'pending' ? 
-                            `<button class="action-btn btn-primary" onclick="openPaymentModal('${transaction.id}')">Bayar</button>` : 
-                            `<button class="action-btn btn-secondary" onclick="viewTransactionDetail('${transaction.id}')">Detail</button>`
-                        }
-                    </td>
-                `;
-                
-                transactionList.appendChild(row);
-            });
+            </td>
+        `;
+
+        transactionList.appendChild(row);
+    });
+}
+
+function getDueStatus(customerId, status) {
+    const customer = customers.find(c => c.id === customerId);
+    if (!customer || status !== 'pending') return '';
+
+    const daftarDate = new Date(customer.tanggalDaftar);
+    const today = new Date();
+
+    if (today.getFullYear() === daftarDate.getFullYear() &&
+        today.getMonth() === daftarDate.getMonth()) {
+
+        if (today.getDate() === daftarDate.getDate()) {
+            return '⏰ Jatuh Tempo Hari Ini';
+        } else if (today.getDate() > daftarDate.getDate()) {
+            return '🔴 Telat Bayar!';
         }
+    }
+
+    return '';
+}
+
         
         function filterTransactions() {
             const month = document.getElementById('filterMonth').value;
@@ -1466,7 +1496,7 @@ Keterangan: ${transaction.notes || '-'}`);
             }
             
             // Sort by date (newest first)
-            filteredFinances.sort((a, b) => b.date.localeCompare(a.date));
+            filteredFinances.sort((a, b) => a.date.localeCompare(b.date));
             
             if (filteredFinances.length === 0) {
                 const row = document.createElement('tr');
