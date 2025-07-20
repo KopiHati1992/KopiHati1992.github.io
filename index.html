@@ -492,6 +492,11 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
+                       <div id="transaction-summary">
+    
+    <p><strong>Total Saldo Belum Dibayar:</strong> <span id="total-pending">Rp 0</span></p>
+    <p><strong>Total Saldo Sudah Dibayar:</strong> <span id="total-paid">Rp 0</span></p>
+</div>
                         <tbody id="transactionList">
                             <!-- Data transaksi akan dimuat di sini -->
                         </tbody>
@@ -2016,6 +2021,96 @@ document.getElementById('receiptPeriod').textContent =
                 renderTransactionList();
             }
         }
+        
+       function renderTransactionList(filterMonth = '', paymentStatus = '', customerFilter = '') {
+    const transactionList = document.getElementById('transactionList');
+    transactionList.innerHTML = '';
+
+    let filteredTransactions = [...transactions];
+
+    // Filter by month
+    if (filterMonth) {
+        filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === filterMonth);
+    } else {
+        const currentMonth = new Date().toISOString().substring(0, 7);
+        filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === currentMonth);
+        document.getElementById('filterMonth').value = currentMonth;
+    }
+
+    // Filter by payment status
+    if (paymentStatus) {
+        filteredTransactions = filteredTransactions.filter(trans => trans.status === paymentStatus);
+    }
+
+    // Filter by customer name
+    if (customerFilter) {
+        const searchTerm = customerFilter.toLowerCase();
+        filteredTransactions = filteredTransactions.filter(trans => {
+            const customerName = getCustomerName(trans.customerId).toLowerCase();
+            return customerName.includes(searchTerm);
+        });
+    }
+
+    const customerOrder = [...customers]
+        .sort((a, b) => new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar))
+        .map(c => c.id);
+
+    filteredTransactions.sort((a, b) => {
+        const orderA = customerOrder.indexOf(a.customerId);
+        const orderB = customerOrder.indexOf(b.customerId);
+        if (orderA !== orderB) return orderA - orderB;
+        return b.monthYear.localeCompare(a.monthYear);
+    });
+
+    if (filteredTransactions.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data transaksi</td>`;
+        transactionList.appendChild(row);
+        return;
+    }
+
+    let totalPaid = 0;
+    let totalPending = 0;
+
+    filteredTransactions.forEach((transaction, index) => {
+        const row = document.createElement('tr');
+        row.className = transaction.status === 'paid' ? 'active-row' :
+                        transaction.status === 'canceled' ? 'inactive-row' : '';
+
+        const customerName = getCustomerName(transaction.customerId);
+        const isCustomerDeleted = !customers.find(c => c.id === transaction.customerId);
+
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${isCustomerDeleted ? `<span class="deleted-customer">${customerName}</span>` : customerName}</td>
+            <td>${formatMonthYear(transaction.monthYear)}</td>
+            <td>Rp ${transaction.amount.toLocaleString('id-ID')}</td>
+            <td>${getStatusBadge(transaction.status)}</td>
+            <td>
+                ${transaction.status === 'pending' ? 
+                    `<button class="action-btn btn-primary" onclick="openPaymentModal('${transaction.id}')">Bayar</button>` : 
+                    `
+                    <button class="action-btn btn-secondary" onclick="viewTransactionDetail('${transaction.id}')">Detail</button>
+                    <button class="action-btn btn-primary" onclick="openReceiptModal('${transaction.id}')" style="margin-left: 5px;">Cetak</button>
+                    `
+                }
+            </td>
+        `;
+
+        transactionList.appendChild(row);
+
+        // Add to totals
+        if (transaction.status === 'paid') {
+            totalPaid += transaction.amount;
+        } else if (transaction.status === 'pending') {
+            totalPending += transaction.amount;
+        }
+    });
+
+    // Update total saldo in the summary section
+    document.getElementById('total-pending').textContent = `Rp ${totalPending.toLocaleString('id-ID')}`;
+    document.getElementById('total-paid').textContent = `Rp ${totalPaid.toLocaleString('id-ID')}`;
+}
     </script>
 </body>
 </html>
