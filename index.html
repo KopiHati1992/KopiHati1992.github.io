@@ -1045,7 +1045,7 @@
                 <div class="form-group">
                     <label for="tanggalDaftar">Tanggal Daftar:</label>
                     <p style="font-size: 12px; color: #777; margin-top: 5px;">(input maksimal tanggal pada pelanggan adalah tanggal 28)</p>
-                    <input type="date" id="tanggalDaftar" required>
+                   <input type="date" id="tanggalDaftar" name="tanggalDaftar">
                 </div>
                 
                 <div class="button-group">
@@ -1501,7 +1501,7 @@
             const existing = transactions
                 .filter(t => t.id.startsWith(prefix))
                 .map(t => parseInt(t.id.slice(prefix.length)))
-                .sort((a, b) => b - a);
+                .sort((a, b) => a - b);
 
             const next = existing.length > 0 ? existing[0] + 1 : 1;
             return `${prefix}${String(next).padStart(3, '0')}`;
@@ -1523,7 +1523,7 @@
             }
 
             // Urutkan berdasarkan tanggal daftar (terbaru dulu)
-            filteredCustomers.sort((a, b) => new Date(b.tanggalDaftar) - new Date(a.tanggalDaftar));
+            filteredCustomers.sort((a, b) => new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar));
 
             if (filteredCustomers.length === 0) {
                 const row = document.createElement('tr');
@@ -1752,97 +1752,109 @@
         
         // Transaction functions
         function renderTransactionList(filterMonth = '', paymentStatus = '', customerFilter = '') {
-            const transactionList = document.getElementById('transactionList');
-            transactionList.innerHTML = '';
+    const transactionList = document.getElementById('transactionList');
+    transactionList.innerHTML = '';
 
-            let filteredTransactions = [...transactions];
+    let filteredTransactions = [...transactions];
 
-            // Filter by month
-            if (filterMonth) {
-                filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === filterMonth);
-            } else {
-                // Default to current month
-                const currentMonth = new Date().toISOString().substring(0, 7);
-                filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === currentMonth);
-                document.getElementById('filterMonth').value = currentMonth;
-            }
+    // Filter by month
+    if (filterMonth) {
+        filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === filterMonth);
+    } else {
+        // Default to current month
+        const currentMonth = new Date().toISOString().substring(0, 7);
+        filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === currentMonth);
+        document.getElementById('filterMonth').value = currentMonth;
+    }
 
-            // Filter by payment status
-            if (paymentStatus) {
-                filteredTransactions = filteredTransactions.filter(trans => trans.status === paymentStatus);
-            }
+    // Filter by payment status
+    if (paymentStatus) {
+        filteredTransactions = filteredTransactions.filter(trans => trans.status === paymentStatus);
+    }
 
-            // Filter by customer name
-            if (customerFilter) {
-                const searchTerm = customerFilter.toLowerCase();
-                filteredTransactions = filteredTransactions.filter(trans => {
-                    const customerName = getCustomerName(trans.customerId).toLowerCase();
-                    return customerName.includes(searchTerm);
-                });
-            }
+    // Filter by customer name
+    if (customerFilter) {
+        const searchTerm = customerFilter.toLowerCase();
+        filteredTransactions = filteredTransactions.filter(trans => {
+            const customerName = getCustomerName(trans.customerId).toLowerCase();
+            return customerName.includes(searchTerm);
+        });
+    }
 
-            // Sort by customer name and month
-            filteredTransactions.sort((a, b) => {
-                const nameA = getCustomerName(a.customerId).toLowerCase();
-                const nameB = getCustomerName(b.customerId).toLowerCase();
-                if (nameA < nameB) return -1;
-                if (nameA > nameB) return 1;
-                return a.monthYear.localeCompare(b.monthYear);
-            });
+    // Sort transactions to match customer list order
+    // Pertama, buat array pelanggan yang diurutkan seperti di tab pelanggan
+    const sortedCustomers = [...customers].sort((a, b) => {
+        // Urutkan berdasarkan tanggal daftar (terbaru dulu)
+        return new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar);
+    });
 
-            // Calculate summary data
-            const totalPaid = filteredTransactions
-                .filter(trans => trans.status === 'paid')
-                .reduce((sum, trans) => sum + (trans.paid || trans.amount), 0);
-            
-            const totalUnpaid = filteredTransactions
-                .filter(trans => trans.status === 'pending')
-                .reduce((sum, trans) => sum + trans.amount, 0);
-            
-            // Update summary cards
-            document.getElementById('totalPaidAmount').textContent = formatCurrency(totalPaid);
-            document.getElementById('totalUnpaidAmount').textContent = formatCurrency(totalUnpaid);
+    // Kemudian urutkan transaksi sesuai urutan pelanggan
+    filteredTransactions.sort((a, b) => {
+        // Cari index pelanggan di array yang sudah diurutkan
+        const indexA = sortedCustomers.findIndex(c => c.id === a.customerId);
+        const indexB = sortedCustomers.findIndex(c => c.id === b.customerId);
+        
+        // Jika pelanggan tidak ditemukan (mungkin sudah dihapus), taruh di akhir
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        
+        // Urutkan berdasarkan urutan pelanggan
+        return indexA - indexB;
+    });
 
-            if (filteredTransactions.length === 0) {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data transaksi</td>`;
-                transactionList.appendChild(row);
-                return;
-            }
+    // Calculate summary data
+    const totalPaid = filteredTransactions
+        .filter(trans => trans.status === 'paid')
+        .reduce((sum, trans) => sum + (trans.paid || trans.amount), 0);
+    
+    const totalUnpaid = filteredTransactions
+        .filter(trans => trans.status === 'pending')
+        .reduce((sum, trans) => sum + trans.amount, 0);
+    
+    // Update summary cards
+    document.getElementById('totalPaidAmount').textContent = formatCurrency(totalPaid);
+    document.getElementById('totalUnpaidAmount').textContent = formatCurrency(totalUnpaid);
 
-            filteredTransactions.forEach((transaction, index) => {
-                const row = document.createElement('tr');
-                row.className = transaction.status === 'paid' ? 'active-row' :
-                                transaction.status === 'canceled' ? 'inactive-row' : '';
+    if (filteredTransactions.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data transaksi</td>`;
+        transactionList.appendChild(row);
+        return;
+    }
 
-                const customerName = getCustomerName(transaction.customerId);
-                const isCustomerDeleted = !customers.find(c => c.id === transaction.customerId);
-                const dueNote = getDueStatus(transaction.customerId, transaction.status, transaction.monthYear);
+    filteredTransactions.forEach((transaction, index) => {
+        const row = document.createElement('tr');
+        row.className = transaction.status === 'paid' ? 'active-row' :
+                        transaction.status === 'canceled' ? 'inactive-row' : '';
 
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${isCustomerDeleted ? `<span class="deleted-customer">${customerName}</span>` : customerName}</td>
-                    <td>${formatMonthYear(transaction.monthYear)}</td>
-                    <td>${formatCurrency(transaction.amount)}</td>
-                    <td>
-                        ${(dueNote && transaction.status === 'pending') 
-                            ? `<span class="badge badge-danger">${dueNote}</span>` 
-                            : getStatusBadge(transaction.status)}
-                    </td>
-                    <td>
-                        ${transaction.status === 'pending' ? 
-                            `<button class="action-btn btn-primary" onclick="openPaymentModal('${transaction.id}')">Bayar</button>` : 
-                            `
-                            <button class="action-btn btn-secondary" onclick="viewTransactionDetail('${transaction.id}')">Detail</button>
-                            <button class="action-btn btn-primary" onclick="openReceiptModal('${transaction.id}')">Bukti</button>
-                            `
-                        }
-                    </td>
-                `;
+        const customerName = getCustomerName(transaction.customerId);
+        const isCustomerDeleted = !customers.find(c => c.id === transaction.customerId);
+        const dueNote = getDueStatus(transaction.customerId, transaction.status, transaction.monthYear);
 
-                transactionList.appendChild(row);
-            });
-        }
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${isCustomerDeleted ? `<span class="deleted-customer">${customerName}</span>` : customerName}</td>
+            <td>${formatMonthYear(transaction.monthYear)}</td>
+            <td>${formatCurrency(transaction.amount)}</td>
+            <td>
+                ${(dueNote && transaction.status === 'pending') 
+                    ? `<span class="badge badge-danger">${dueNote}</span>` 
+                    : getStatusBadge(transaction.status)}
+            </td>
+            <td>
+                ${transaction.status === 'pending' ? 
+                    `<button class="action-btn btn-primary" onclick="openPaymentModal('${transaction.id}')">Bayar</button>` : 
+                    `
+                    <button class="action-btn btn-secondary" onclick="viewTransactionDetail('${transaction.id}')">Detail</button>
+                    <button class="action-btn btn-primary" onclick="openReceiptModal('${transaction.id}')">Bukti</button>
+                    `
+                }
+            </td>
+        `;
+
+        transactionList.appendChild(row);
+    });
+}
 
         function getDueStatus(customerId, status, trxMonth) {
             const customer = customers.find(c => c.id === customerId);
@@ -2065,7 +2077,7 @@
             }
             
             // Sort by date (newest first)
-            filteredFinances.sort((a, b) => b.date.localeCompare(a.date));
+            filteredFinances.sort((a, b) => a.date.localeCompare(b.date));
             
             if (filteredFinances.length === 0) {
                 const row = document.createElement('tr');
@@ -2474,6 +2486,18 @@
                 alert('Gagal membuat bukti pembayaran. Silakan coba lagi.');
             });
         }
+        
+        
+  const dateInput = document.getElementById("tanggalDaftar");
+
+  // Batasi maksimal tanggal yang bisa dipilih adalah tanggal 28 bulan ini
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const maxDate = `${year}-${month}-28`;
+
+  dateInput.setAttribute("max", maxDate);
+
     </script>
 </body>
 </html>
