@@ -3,34 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
     <title>Manajemen Pelanggan & Tagihan</title>
     
+    <!-- Tambahkan library html2canvas untuk konversi ke gambar -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    
     <style>
+          /* ===== BUTTON STYLES ===== */
+    button {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(42,10,94,0.3);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(42,10,94,0.4);
+    }
+
+    
+    .btn-primary::after {
+    display: none;
+}
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255,255,255,0) 45%,
+            rgba(255,255,255,0.8) 50%,
+            rgba(255,255,255,0) 55%
+        );
+        transform: rotate(30deg);
+        transition: all 0.5s;
+    }
+
+    .btn-primary:hover::after {
+        left: 100%;
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(46,204,113,0.3);
+    }
+
+    .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(46,204,113,0.4);
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(231,76,60,0.3);
+    }
+
+    .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(231,76,60,0.4);
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(243,156,18,0.3);
+    }
+
+    .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(243,156,18,0.4);
+    }
+
+    .btn-outline {
+        background-color: transparent;
+        border: 1px solid #ddd;
+        color: var(--text-dark);
+    }
+
+    .btn-outline:hover {
+        background-color: #f9f9f9;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 12px;
+        margin-top: 25px;
+        flex-wrap: wrap;
+    }
+
+    .button-group button {
+        flex: 1 1 auto;
+        min-width: 120px;
+    }
+
+    .action-btn {
+        padding: 8px 14px;
+        margin: 2px;
+        font-size: 12px;
+        border-radius: 6px;
+        font-weight: 500;
+    }
+
+    /* ===== TYPOGRAPHY ===== */
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        color: var(--dark-color);
+    }
+
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.5rem; }
+    
+    
         :root {
-            --primary-color: #4CAF50;
-            --secondary-color: #2196F3;
-            --danger-color: #f44336;
-            --warning-color: #ff9800;
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
             --light-gray: #f5f5f5;
             --dark-gray: #333;
             --medium-gray: #ddd;
-            --income-color: #4CAF50;
-            --expense-color: #f44336;
+            --income-color: #27ae60;
+            --expense-color: #c0392b;
+            --header-bg: #2c3e50;
+            --card-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        
+
         * {
             box-sizing: border-box;
-        }
-        
-        body {
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--light-gray);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
             color: var(--dark-gray);
             font-size: 14px;
+            line-height: 1.6;
         }
-        
+
         .container {
             max-width: 100%;
             margin: 0 auto;
@@ -39,164 +171,206 @@
             padding-bottom: 60px;
             position: relative;
         }
-        
+
         .content {
-            padding: 15px;
+            padding: 20px;
         }
-        
+
         h1, h2, h3 {
             color: var(--dark-gray);
             margin-top: 0;
         }
-        
+
         .header-container {
             display: flex;
             align-items: center;
-            padding: 15px;
-            background-color: var(--primary-color);
+            padding: 15px 20px;
+            background-color: #008055;
             color: white;
             margin-bottom: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        
+
         .logo {
-            width: 80px;
+            width: 100%;
             margin-right: 15px;
         }
-        
+
         .app-title {
             font-size: 1.5rem;
             margin: 0;
+            font-weight: 600;
         }
-        
+
         h2 {
             font-size: 1.3rem;
-            margin-bottom: 15px;
-            padding-bottom: 5px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
             border-bottom: 1px solid var(--medium-gray);
+            color: var(--header-bg);
         }
-        
+
         h3 {
             font-size: 1.1rem;
-        }
-        
-        .form-group {
             margin-bottom: 15px;
         }
-        
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
         }
-        
+
         input, select, textarea {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid var(--medium-gray);
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 14px;
+            transition: border-color 0.3s;
         }
-        
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
         button {
-            padding: 10px 15px;
+            padding: 12px 18px;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 600;
+            transition: all 0.3s;
         }
-        
+
         .btn-primary {
             background-color: var(--primary-color);
             color: white;
         }
-        
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+
         .btn-secondary {
             background-color: var(--secondary-color);
             color: white;
         }
-        
+
+        .btn-secondary:hover {
+            background-color: #27ae60;
+        }
+
         .btn-danger {
             background-color: var(--danger-color);
             color: white;
         }
-        
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
         .btn-warning {
             background-color: var(--warning-color);
             color: white;
         }
-        
+
+        .btn-warning:hover {
+            background-color: #e67e22;
+        }
+
         .btn-outline {
             background-color: transparent;
             border: 1px solid var(--medium-gray);
             color: var(--dark-gray);
         }
-        
+
+        .btn-outline:hover {
+            background-color: #f5f5f5;
+        }
+
         .button-group {
             display: flex;
             gap: 10px;
-            margin-top: 15px;
+            margin-top: 20px;
             flex-wrap: wrap;
         }
-        
+
         .button-group button {
             flex: 1 1 auto;
-            min-width: 100px;
+            min-width: 120px;
         }
-        
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
+            margin-top: 20px;
             font-size: 13px;
+            box-shadow: var(--card-shadow);
+            border-radius: 8px;
+            overflow: hidden;
         }
-        
+
         th, td {
-            border: 1px solid var(--medium-gray);
-            padding: 8px;
+            border: 1px solid #e0e0e0;
+            padding: 12px;
             text-align: left;
         }
-        
+
         th {
-            background-color: #f2f2f2;
-            font-weight: bold;
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #444;
         }
-        
+
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-        
-        .active-row {
-            background-color: #e6f7ff;
+
+        tr:hover {
+            background-color: #f1f1f1;
         }
-        
+
+        .active-row {
+            background-color: #e8f4fd;
+        }
+
         .inactive-row {
-            background-color: #fff2f2;
+            background-color: #fde8e8;
             color: #999;
         }
-        
+
         .status-active {
-            color: green;
-            font-weight: bold;
+            color: var(--secondary-color);
+            font-weight: 600;
         }
-        
+
         .status-pending {
-            color: orange;
-            font-weight: bold;
+            color: var(--warning-color);
+            font-weight: 600;
         }
-        
+
         .status-inactive {
-            color: red;
-            font-weight: bold;
+            color: var(--danger-color);
+            font-weight: 600;
         }
-        
+
         .action-btn {
-            padding: 5px 8px;
+            padding: 8px 12px;
             margin: 2px;
             font-size: 12px;
-            border-radius: 3px;
+            border-radius: 4px;
+            font-weight: 500;
         }
-        
+
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -205,32 +379,39 @@
             background-color: white;
             display: flex;
             justify-content: space-around;
-            box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
             z-index: 1000;
+            padding: 8px 0;
         }
-        
+
         .nav-item {
-            padding: 12px 0;
+            padding: 8px 0;
             text-align: center;
             flex: 1;
             cursor: pointer;
             color: #666;
+            transition: all 0.3s;
         }
-        
+
         .nav-item.active {
             color: var(--primary-color);
-            border-top: 2px solid var(--primary-color);
+            border-top: 3px solid var(--primary-color);
         }
-        
+
+        .nav-item:hover {
+            background-color: #f5f5f5;
+        }
+
         .nav-icon {
             font-size: 20px;
-            margin-bottom: 3px;
+            margin-bottom: 4px;
         }
-        
+
         .nav-label {
             font-size: 12px;
+            font-weight: 500;
         }
-        
+
         .modal {
             display: none;
             position: fixed;
@@ -242,174 +423,266 @@
             z-index: 1001;
             justify-content: center;
             align-items: center;
+            animation: fadeIn 0.3s;
         }
-        
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
         .modal-content {
             background-color: white;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 10px;
             width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
+            max-width: 400px;
+            max-height: 80vh;
             overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        
+       
+
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
         }
-        
+
         .close-modal {
             font-size: 24px;
             cursor: pointer;
+            color: #999;
+            transition: color 0.3s;
         }
-        
+
+        .close-modal:hover {
+            color: var(--danger-color);
+        }
+
         .responsive-table {
             overflow-x: auto;
-        }
-        
-        .summary-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .summary-card {
-            background-color: white;
+            margin-bottom: 20px;
             border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: var(--card-shadow);
         }
+
         
+        
+        .summary-container  {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.summary-card {
+  flex: 1;
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.05);
+}
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+        }
+
         .summary-card h3 {
             margin-top: 0;
             font-size: 14px;
             color: #666;
+            margin-bottom: 10px;
         }
-        
+
         .summary-card p {
             margin-bottom: 0;
-            font-size: 18px;
-            font-weight: bold;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--header-bg);
         }
         
+        
+
         .tab-content {
             display: none;
+            animation: fadeIn 0.5s;
         }
-        
+
         .tab-content.active {
             display: block;
         }
-        
+
         .search-box {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
-        
+
         .search-box input {
-            padding: 10px 15px;
-            border-radius: 20px;
+            padding: 12px 20px;
+            border-radius: 30px;
             border: 1px solid var(--medium-gray);
             width: 100%;
+            background-color: #f9f9f9;
         }
-        
+
         .badge {
             display: inline-block;
-            padding: 3px 8px;
-            border-radius: 10px;
+            padding: 4px 10px;
+            border-radius: 12px;
             font-size: 12px;
-            font-weight: bold;
+            font-weight: 600;
         }
-        
+
         .badge-success {
             background-color: #e6ffe6;
-            color: green;
+            color: var(--secondary-color);
         }
-        
+
         .badge-warning {
             background-color: #fff2cc;
-            color: #b38f00;
+            color: var(--warning-color);
         }
-        
+
         .badge-danger {
             background-color: #ffe6e6;
-            color: red;
+            color: var(--danger-color);
         }
-        
+
         .text-right {
             text-align: right;
         }
-        
+
         .text-center {
             text-align: center;
         }
-        
+
         .mt-0 {
             margin-top: 0;
         }
-        
+
         .mb-0 {
             margin-bottom: 0;
         }
-        
+
         .hidden {
             display: none;
         }
-        
+
         .deleted-customer {
             color: #999;
             font-style: italic;
         }
-        
+
         #customAmountGroup {
             display: none;
-            margin-top: 10px;
+            margin-top: 15px;
         }
-        
+
         .filter-group {
             display: flex;
             gap: 10px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
-        
+
         .filter-group select, .filter-group input {
             flex: 1 1 auto;
-            min-width: 150px;
+            min-width: 180px;
         }
-        
+
         .income-row {
-            background-color: rgba(76, 175, 80, 0.1);
+            background-color: rgba(46, 204, 113, 0.08);
         }
-        
+
         .expense-row {
-            background-color: rgba(244, 67, 54, 0.1);
+            background-color: rgba(231, 76, 60, 0.08);
         }
-        
+
         .income-text {
             color: var(--income-color);
+            font-weight: 600;
         }
-        
+
         .expense-text {
             color: var(--expense-color);
+            font-weight: 600;
         }
-        
+
         .footer {
             position: fixed;
             bottom: 60px;
             left: 0;
             right: 0;
             text-align: center;
-            padding: 10px;
+            padding: 12px;
             background-color: white;
             border-top: 1px solid var(--medium-gray);
             font-size: 12px;
             color: #666;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
         }
 
-        /* Styles for receipt printing */
+        /* Styles for receipt */
+        #receiptContent {
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            margin: 0 auto;
+            background-color: white;
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
+        .watermark-ntu, 
+        #receiptContent::after,
+        .watermark-ntu-print,
+        .print-watermark {
+            content: "";
+            background-image: url('https://i.postimg.cc/kMVBzpx1/Nt-U-watermark.png');
+            background-size: 110px;
+            background-repeat: repeat;
+            opacity: 0.045;
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            right: -50%;
+            bottom: -50%;
+            z-index: 0;
+            pointer-events: none;
+            transform: rotate(-25deg);
+            transform-origin: center center;
+        }
+
+        .receipt-content {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255,255,255,0.9);
+        }
+        #receiptContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 30px;
+    min-height: 1000px; /* atau 100vh kalau fullscreen modal */
+    box-sizing: border-box;
+}
+#receiptContent table td,
+#receiptContent table tr {
+    background-color: transparent !important;
+}
+
+        #receiptContent > *:not(.print-watermark) {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Print specific styles */
         @media print {
             body * {
                 visibility: hidden;
@@ -424,6 +697,7 @@
                 width: 100%;
                 padding: 20px;
                 box-shadow: none;
+                border: none;
             }
             #receiptStamp {
                 display: block !important;
@@ -431,13 +705,88 @@
             .no-print {
                 display: none !important;
             }
+            .watermark-ntu-print {
+                display: block;
+            }
+        }
+
+        /* Mobile-specific styles */
+        @media screen and (max-width: 600px) {
+            .content {
+                padding: 15px;
+            }
+            
+            .summary-container {
+                grid-template-columns: 1fr;
+            }
+            
+            table td, table th {
+                padding: 10px 8px !important;
+                font-size: 12px !important;
+            }
+            
+            .modal-content {
+                width: 95%;
+                padding: 15px;
+            }
+            
+            #receiptContent {
+                padding: 20px !important;
+            }
+            
+            #receiptStamp {
+                height: 100px !important;
+                top: -90px !important;
+                right: -55px !important;
+            }
+        }
+
+        /* Finance specific styles */
+        .finance-button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        /* Loading spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header-container">
-            <h1 class="app-title">BILLING KH1992</h1>
+            <img src="https://id.bloggif.com/tmp/4676bfa6d4eb7de82e06cff66be9e66a/text.gif?1753722667" alt="Logo" class="logo">
+            <h1 class="app-title"></h1>
         </div>
         
         <div class="content">
@@ -448,6 +797,18 @@
                 </div>
                 
                 <button class="btn-primary" onclick="openCustomerForm()">+ Tambah Pelanggan</button>
+                
+                <!-- Summary Cards for Customers -->
+                <div class="summary-container">
+                    <div class="summary-card">
+                        <h3>Total Pelanggan Aktif</h3>
+                        <p id="totalActiveCustomers">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Bulanan</h3>
+                        <p id="totalMonthlyBills">Rp 0</p>
+                    </div>
+                </div>
                 
                 <div class="responsive-table">
                     <table id="customerTable">
@@ -480,6 +841,18 @@
                     <input type="text" id="searchTransactionCustomer" placeholder="Cari pelanggan..." oninput="filterTransactions()">
                 </div>
                 
+                <!-- Summary Cards for Transactions -->
+                <div class="summary-container">
+                    <div class="summary-card">
+                        <h3>Total Sudah Dibayar</h3>
+                        <p id="totalPaidAmount">Rp 0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Belum Dibayar</h3>
+                        <p id="totalUnpaidAmount">Rp 0</p>
+                    </div>
+                </div>
+                
                 <div class="responsive-table">
                     <table id="transactionTable">
                         <thead>
@@ -492,11 +865,6 @@
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                       <div id="transaction-summary">
-    
-    <p><strong>Total Saldo Belum Dibayar:</strong> <span id="total-pending">Rp 0</span></p>
-    <p><strong>Total Saldo Sudah Dibayar:</strong> <span id="total-paid">Rp 0</span></p>
-</div>
                         <tbody id="transactionList">
                             <!-- Data transaksi akan dimuat di sini -->
                         </tbody>
@@ -506,8 +874,10 @@
             
             <!-- Tab Keuangan -->
             <div id="keuangan-tab" class="tab-content">
-                <button class="btn-primary" onclick="openFinanceForm('income')">+ Pemasukan</button>
-                <button class="btn-danger" onclick="openFinanceForm('expense')">+ Pengeluaran</button>
+                <div class="finance-button-group">
+                    <button class="btn-primary" onclick="openFinanceForm('income')">+ Pemasukan</button>
+                    <button class="btn-danger" onclick="openFinanceForm('expense')">+ Pengeluaran</button>
+                </div>
                 
                 <div class="filter-group">
                     <input type="month" id="filterFinanceMonth" onchange="renderFinanceList(this.value)">
@@ -537,7 +907,7 @@
                 <div class="form-group">
                     <label for="reportYear">Tahun:</label>
                     <select id="reportYear" onchange="generateReport()">
-                        <option value="2025"selected>2025</option>
+                        <option value="2025" selected>2025</option>
                         <option value="2026">2026</option>
                         <option value="2027">2027</option>
                         <option value="2028">2028</option>
@@ -549,7 +919,7 @@
                 <h3>Ringkasan Tahunan</h3>
                 <div class="summary-container">
                     <div class="summary-card">
-                        <h3>Total Tagihan</h3>
+                        <h3>Total Tahunan</h3>
                         <p id="annual-billed">Rp 0</p>
                     </div>
                     <div class="summary-card">
@@ -581,7 +951,7 @@
                         <p id="balance">Rp 0</p>
                     </div>
                 </div>
-                
+                <br>
                 <h3>Rincian Bulanan</h3>
                 <div class="responsive-table">
                     <table id="reportTable">
@@ -604,7 +974,7 @@
         </div>
 
         <div class="footer">
-            <!-- Footer content -->
+            Sistem Billing KH1992 - © 2025
         </div>
     </div>
     
@@ -626,23 +996,11 @@
             <div class="nav-icon">📊</div>
             <div class="nav-label">Laporan</div>
         </div>
-        
-        <img 
-            src="https://i.imgur.com/Ta99ebL.png" 
-            alt="Logo" 
-            class="logo" 
-            style="float: right; height: 70px; cursor: pointer;" 
-            ondblclick="openBackupMenu()" 
-            oncontextmenu="return false;" 
-            onmousedown="event.preventDefault();" 
-            draggable="false"
-            title="Double click untuk menu backup"
-        />
     </div>
     
     <!-- Modal Form Pelanggan -->
     <div id="customerModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content fade-in-up">
             <div class="modal-header">
                 <h2 id="modalCustomerTitle">Tambah Pelanggan</h2> 
                 <span class="close-modal" onclick="closeModal('customerModal')">&times;</span>
@@ -685,7 +1043,8 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="tanggalDaftar">Tanggal Daftar:</label><p style="opacity: 0.3;">(input maxsimal tanggal pada pelanggan adalah tanggal 28)</p>
+                    <label for="tanggalDaftar">Tanggal Daftar:</label>
+                    <p style="font-size: 12px; color: #777; margin-top: 5px;">(input maksimal tanggal pada pelanggan adalah tanggal 28)</p>
                     <input type="date" id="tanggalDaftar" required>
                 </div>
                 
@@ -699,7 +1058,7 @@
     
     <!-- Modal Pembayaran -->
     <div id="paymentModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content fade-in-up">
             <div class="modal-header">
                 <h2>Pembayaran Tagihan</h2>
                 <span class="close-modal" onclick="closeModal('paymentModal')">&times;</span>
@@ -710,17 +1069,17 @@
                 
                 <div class="form-group">
                     <label>Pelanggan:</label>
-                    <p id="paymentCustomerName" class="mb-0" style="font-weight: bold;"></p>
+                    <p id="paymentCustomerName" class="mb-0" style="font-weight: bold; font-size: 16px;"></p>
                 </div>
                 
                 <div class="form-group">
                     <label>Bulan:</label>
-                    <p id="paymentMonth" class="mb-0" style="font-weight: bold;"></p>
+                    <p id="paymentMonth" class="mb-0" style="font-weight: bold; font-size: 16px;"></p>
                 </div>
                 
                 <div class="form-group">
                     <label>Jumlah Tagihan:</label>
-                    <p id="paymentAmount" class="mb-0" style="font-weight: bold;"></p>
+                    <p id="paymentAmount" class="mb-0" style="font-weight: bold; font-size: 16px;"></p>
                 </div>
                 
                 <div class="form-group">
@@ -729,7 +1088,8 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="paymentNotes">Keterangan:</label><p style="opacity: 0.3;">(kosongkan untuk keterangan otomatis)</p>
+                    <label for="paymentNotes">Keterangan:</label>
+                    <p style="font-size: 12px; color: #777; margin-top: 5px;">(kosongkan untuk keterangan otomatis)</p>
                     <textarea id="paymentNotes" rows="2"></textarea>
                 </div>
                 
@@ -743,7 +1103,7 @@
     
     <!-- Modal Detail Pelanggan -->
     <div id="detailModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content fade-in-up" style="max-width: 400px; padding: 20px;">
             <div class="modal-header">
                 <h2>Detail Pelanggan</h2>
                 <span class="close-modal" onclick="closeModal('detailModal')">&times;</span>
@@ -753,18 +1113,18 @@
                 <!-- Detail pelanggan akan dimuat di sini -->
             </div>
             
-            <div class="button-group" style="margin-top: 20px;">
-                <button type="button" class="btn-secondary" id="editDetailBtn">Edit</button>
-                <button type="button" class="btn-danger" id="deleteCustomerBtn">Hapus</button>
-                <button type="button" class="btn-warning" id="toggleStatusBtn">Nonaktifkan</button>
-                <button type="button" class="btn-outline" onclick="closeModal('detailModal')">Tutup</button>
-            </div>
+          <div class="button-group" style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px;">
+    <button type="button" class="btn-secondary" id="editDetailBtn" style="flex: 1;">Edit</button>
+    <button type="button" class="btn-danger" id="deleteCustomerBtn" style="flex: 1;">Hapus</button>
+    <button type="button" class="btn-warning" id="toggleStatusBtn" style="flex: 1;">Nonaktifkan</button>
+    <button type="button" class="btn-outline" onclick="closeModal('detailModal')" style="flex: 1;">Tutup</button>
+</div>
         </div>
     </div>
     
     <!-- Modal Form Keuangan -->
     <div id="financeModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content fade-in-up">
             <div class="modal-header">
                 <h2 id="modalFinanceTitle">Tambah Pemasukan</h2>
                 <span class="close-modal" onclick="closeModal('financeModal')">&times;</span>
@@ -806,7 +1166,7 @@
     
     <!-- Modal Backup -->
     <div id="backupModal" class="modal">
-        <div class="modal-content" style="text-align:center">
+        <div class="modal-content fade-in-up" style="text-align:center; max-width: 400px;">
             <div class="modal-header">
                 <h2>Backup & Restore</h2>
                 <span class="close-modal" onclick="closeModal('backupModal')">&times;</span>
@@ -815,26 +1175,25 @@
                 <button class="btn-secondary" onclick="importData()">Import Data</button>
                 <button class="btn-primary" onclick="exportData()">Export Data</button>
             </div>
-            <input type="file" id="importFile" accept=".json" style="margin-top:15px;">
+            <input type="file" id="importFile" accept=".json" style="margin: 20px auto; display: block;">
         </div>
     </div>
     
     <!-- Modal Cetak Bukti Pembayaran -->
     <div id="receiptModal" class="modal">
-        <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-content fade-in-up" style="max-width: 800px;">
             <div class="modal-header">
-                <h2>Cetak Bukti Pembayaran</h2>
+                <h2>Bukti Pembayaran</h2>
                 <span class="close-modal" onclick="closeModal('receiptModal')">&times;</span>
             </div>
             
-            <div id="receiptContent" style="padding: 20px; background: white; margin-bottom: 20px;">
-                <div style="text-align: center; margin-bottom: 20px;">
-                   
-                    <h2 style="margin-bottom: 5px;">BILLING KH1992</h2>
-                    <p style="margin-top: 0; color: #666;">Bukti Pembayaran Internet</p>
+            <div id="receiptContent">
+                <div style="text-align: center; margin-bottom: 25px;">
+                    <h2 style="margin-bottom: 5px; color: var(--header-bg);">BILLING KH1992</h2>
+                    <p style="margin-top: 0; color: #666; font-size: 16px;">Bukti Pembayaran Internet</p>
                 </div>
                 
-                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
                     <div>
                         <p><strong>No. Transaksi:</strong> <span id="receiptTrxId"></span></p>
                         <p><strong>Tanggal:</strong> <span id="receiptDate"></span></p>
@@ -844,56 +1203,58 @@
                     </div>
                 </div>
                 
-                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px;">
                     <tr>
-                        <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Pelanggan</strong></td>
-                        <td style="padding: 8px; border-bottom: 1px solid #eee;" id="receiptCustomer"></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Pelanggan</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;" id="receiptCustomer"></td>
                     </tr>
                     <tr>
-                        <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Alamat</strong></td>
-                        <td style="padding: 8px; border-bottom: 1px solid #eee;" id="receiptAddress"></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Alamat</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;" id="receiptAddress"></td>
                     </tr>
                     <tr>
-                        <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Telepon</strong></td>
-                        <td style="padding: 8px; border-bottom: 1px solid #eee;" id="receiptPhone"></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Telepon</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;" id="receiptPhone"></td>
                     </tr>
                     <tr>
-                        <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Paket</strong></td>
-                        <td style="padding: 8px; border-bottom: 1px solid #eee;" id="receiptPackage"></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Paket</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;" id="receiptPackage"></td>
                     </tr>
                     <tr>
-                        <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Periode</strong></td>
-                        <td style="padding: 8px; border-bottom: 1px solid #eee;" id="receiptPeriod"></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Periode</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;" id="receiptPeriod"></td>
                     </tr>
                     <tr>
-                        <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Jumlah</strong></td>
-                        <td style="padding: 8px; border-bottom: 1px solid #eee;" id="receiptAmount"></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Jumlah</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;" id="receiptAmount"></td>
                     </tr>
                     <tr>
-                        <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Keterangan</strong></td>
-                        <td style="padding: 8px; border-bottom: 1px solid #eee;" id="receiptNotes"></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Keterangan</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;" id="receiptNotes"></td>
                     </tr>
                 </table>
                 
-                <div style="text-align: center; margin-top: 30px;">
+                <div style="text-align: center; margin-top: 40px;">
                     <div style="display: inline-block; text-align: center; margin-top: 50px; position: relative;">
                         <div id="receiptStamp" style="position: absolute; top: -90px; right: -55px; opacity: 0.9; display: none;">
-                               <img src=" https://iili.io/Fwnvp2I.png" alt="Stempel" style="height: 153px; transform: rotate(-9deg);">              
+                            <img src="https://iili.io/Fwnvp2I.png" alt="Stempel" style="height: 153px; transform: rotate(-9deg);">              
                             <div style="position: absolute; bottom: 10px; width: 100%; text-align: right; font-weight: bold; color: red;"></div>
                         </div>
                         
-                       <p style="opacity: 0.8;">(suroso)</p>
+                        <p style="opacity: 0.8;">(suroso)</p>
                     </div>
                 </div>
                 
-                <div style="text-align: center; margin-top: 20px; font-size: 12px; color: #666;">
+                <div style="text-align: center; margin-top: 30px; font-size: 13px; color: #666;">
                     <p>Terima kasih telah melakukan pembayaran tepat waktu</p>
                     <p>Hubungi kami jika ada pertanyaan: 085850651102</p>
                 </div>
             </div>
             
             <div class="button-group">
-                <button class="btn-primary" onclick="printReceipt()">Cetak Bukti</button>
+                <button class="btn-primary" onclick="downloadReceiptImage()">
+                    <span id="downloadBtnText">Download Bukti</span>
+                </button>
                 <button class="btn-outline" onclick="closeModal('receiptModal')">Tutup</button>
             </div>
         </div>
@@ -943,6 +1304,9 @@
                 e.preventDefault();
                 saveFinance();
             });
+            
+            // Tambahkan event listener untuk logo backup
+            document.querySelector('.logo').addEventListener('dblclick', openBackupMenu);
         });
         
         // Tampilkan/menyembunyikan input nominal custom
@@ -1109,7 +1473,7 @@
                 const monthYear = date.toISOString().substring(0, 7);
                 
                 transactions.push({
-                    id: `t${customer.id}-${monthYear}`,
+                    id: generateTransactionId(customer),
                     customerId: customer.id,
                     customerName: customer.nama,
                     monthYear: monthYear,
@@ -1126,6 +1490,23 @@
             saveToLocalStorage();
         }
         
+        function generateTransactionId(customer) {
+            const daftar = new Date(customer.tanggalDaftar);
+            const yyyy = daftar.getFullYear();
+            const mm = String(daftar.getMonth() + 1).padStart(2, '0');
+            const dd = String(daftar.getDate()).padStart(2, '0');
+            const prefix = `KH${mm}${dd}`;
+            
+            // Cari nomor urut terakhir yang sudah pakai prefix ini
+            const existing = transactions
+                .filter(t => t.id.startsWith(prefix))
+                .map(t => parseInt(t.id.slice(prefix.length)))
+                .sort((a, b) => b - a);
+
+            const next = existing.length > 0 ? existing[0] + 1 : 1;
+            return `${prefix}${String(next).padStart(3, '0')}`;
+        }
+
         function renderCustomerList(filter = '') {
             const customerList = document.getElementById('customerList');
             customerList.innerHTML = '';
@@ -1142,7 +1523,7 @@
             }
 
             // Urutkan berdasarkan tanggal daftar (terbaru dulu)
-            filteredCustomers.sort((a, b) => new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar));
+            filteredCustomers.sort((a, b) => new Date(b.tanggalDaftar) - new Date(a.tanggalDaftar));
 
             if (filteredCustomers.length === 0) {
                 const row = document.createElement('tr');
@@ -1151,6 +1532,14 @@
                 return;
             }
 
+            // Calculate summary data
+            const activeCustomers = customers.filter(c => c.status === 'active').length;
+            const totalMonthlyBills = customers.reduce((sum, customer) => sum + customer.tagihan, 0);
+            
+            // Update summary cards
+            document.getElementById('totalActiveCustomers').textContent = activeCustomers;
+            document.getElementById('totalMonthlyBills').textContent = formatCurrency(totalMonthlyBills);
+            
             filteredCustomers.forEach((customer, index) => {
                 const row = document.createElement('tr');
                 row.className = customer.status === 'active' ? 'active-row' : 'inactive-row';
@@ -1159,7 +1548,7 @@
                     <td>${index + 1}</td>
                     <td>${customer.nama}</td>
                     <td>${customer.paket}</td>
-                    <td>Rp ${customer.tagihan.toLocaleString('id-ID')}</td>
+                    <td>${formatCurrency(customer.tagihan)}</td>
                     <td>
                         <span class="${customer.status === 'active' ? 'status-active' : 'status-inactive'}">
                             ${customer.status === 'active' ? 'Aktif' : 'Nonaktif'}
@@ -1198,27 +1587,33 @@
             
             const detailContent = document.getElementById('customerDetailContent');
             detailContent.innerHTML = `
-                <h3>${customer.nama}</h3>
-                <p><strong>Alamat:</strong> ${customer.alamat}</p>
-                <p><strong>Telepon:</strong> ${customer.telepon}</p>
-                <p><strong>Paket:</strong> ${customer.paket}</p>
-                <p><strong>Tagihan:</strong> Rp ${customer.tagihan.toLocaleString('id-ID')}/bulan</p>
-                <p><strong>Tanggal Daftar:</strong> ${formatDate(customer.tanggalDaftar)}</p>
-                <p><strong>Status:</strong> 
-                    <span class="${customer.status === 'active' ? 'status-active' : 'status-inactive'}">
-                        ${customer.status === 'active' ? 'Aktif' : 'Nonaktif'}
-                    </span>
-                </p>
+                <div style="border: 1px solid #eee; border-radius: 8px; padding: 15px; margin-bottom: 20px; background-color: #fdfdfd;">
+    <h2 style="margin-top: 0; color: var(--header-bg); text-align: center;">${customer.nama.toUpperCase()}</h2>
+    <table style="width: 100%; font-size: 14px;">
+        <tr><td><strong>Alamat</strong></td><td>: ${customer.alamat}</td></tr>
+        <tr><td><strong>Telepon</strong></td><td>: ${customer.telepon || '-'}</td></tr>
+        <tr><td><strong>Paket</strong></td><td>: ${customer.paket}</td></tr>
+        <tr><td><strong>Tagihan</strong></td><td>: ${formatCurrency(customer.tagihan)}/bulan</td></tr>
+        <tr><td><strong>Tanggal Daftar</strong></td><td>: ${formatDate(customer.tanggalDaftar)}</td></tr>
+        <tr><td><strong>Status</strong></td>
+            <td>: 
+                <span class="${customer.status === 'active' ? 'status-active' : 'status-inactive'}">
+                    ${customer.status === 'active' ? 'Aktif' : 'Nonaktif'}
+                </span>
+            </td>
+        </tr>
+    </table>
+</div>
                 
-                <h3 style="margin-top: 20px;">Riwayat Transaksi</h3>
-                <div style="max-height: 200px; overflow-y: auto;">
-                    <table style="width: 100%; font-size: 12px;">
+                <h3 style="margin-top: 25px; color: var(--header-bg);">Riwayat Transaksi</h3>
+                <div style="max-height: 250px; overflow-y: auto; margin-top: 10px;">
+                    <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
                         <thead>
-                            <tr>
-                                <th>Bulan</th>
-                                <th>Tagihan</th>
-                                <th>Status</th>
-                                <th>Dibayar</th>
+                            <tr style="background-color: #f8f9fa;">
+                                <th style="padding: 10px; text-align: left;">Bulan</th>
+                                <th style="padding: 10px; text-align: left;">Tagihan</th>
+                                <th style="padding: 10px; text-align: left;">Status</th>
+                                <th style="padding: 10px; text-align: left;">Dibayar</th>
                             </tr>
                         </thead>
                         <tbody id="customerTransactions">
@@ -1241,11 +1636,12 @@
             } else {
                 customerTransactions.forEach(trans => {
                     const row = document.createElement('tr');
+                    row.style.borderBottom = '1px solid #eee';
                     row.innerHTML = `
-                        <td>${formatMonthYear(trans.monthYear)}</td>
-                        <td>Rp ${trans.amount.toLocaleString('id-ID')}</td>
-                        <td>${getStatusBadge(trans.status)}</td>
-                        <td>${trans.paid ? 'Rp ' + trans.paid.toLocaleString('id-ID') : '-'}</td>
+                        <td style="padding: 10px;">${formatMonthYear(trans.monthYear)}</td>
+                        <td style="padding: 10px;">${formatCurrency(trans.amount)}</td>
+                        <td style="padding: 10px;">${getStatusBadge(trans.status)}</td>
+                        <td style="padding: 10px;">${trans.paid ? formatCurrency(trans.paid) : '-'}</td>
                     `;
                     transactionsTable.appendChild(row);
                 });
@@ -1365,6 +1761,7 @@
             if (filterMonth) {
                 filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === filterMonth);
             } else {
+                // Default to current month
                 const currentMonth = new Date().toISOString().substring(0, 7);
                 filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === currentMonth);
                 document.getElementById('filterMonth').value = currentMonth;
@@ -1384,16 +1781,27 @@
                 });
             }
 
-            const customerOrder = [...customers]
-                .sort((a, b) => new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar))
-                .map(c => c.id);
-
+            // Sort by customer name and month
             filteredTransactions.sort((a, b) => {
-                const orderA = customerOrder.indexOf(a.customerId);
-                const orderB = customerOrder.indexOf(b.customerId);
-                if (orderA !== orderB) return orderA - orderB;
-                return b.monthYear.localeCompare(a.monthYear);
+                const nameA = getCustomerName(a.customerId).toLowerCase();
+                const nameB = getCustomerName(b.customerId).toLowerCase();
+                if (nameA < nameB) return -1;
+                if (nameA > nameB) return 1;
+                return a.monthYear.localeCompare(b.monthYear);
             });
+
+            // Calculate summary data
+            const totalPaid = filteredTransactions
+                .filter(trans => trans.status === 'paid')
+                .reduce((sum, trans) => sum + (trans.paid || trans.amount), 0);
+            
+            const totalUnpaid = filteredTransactions
+                .filter(trans => trans.status === 'pending')
+                .reduce((sum, trans) => sum + trans.amount, 0);
+            
+            // Update summary cards
+            document.getElementById('totalPaidAmount').textContent = formatCurrency(totalPaid);
+            document.getElementById('totalUnpaidAmount').textContent = formatCurrency(totalUnpaid);
 
             if (filteredTransactions.length === 0) {
                 const row = document.createElement('tr');
@@ -1415,7 +1823,7 @@
                     <td>${index + 1}</td>
                     <td>${isCustomerDeleted ? `<span class="deleted-customer">${customerName}</span>` : customerName}</td>
                     <td>${formatMonthYear(transaction.monthYear)}</td>
-                    <td>Rp ${transaction.amount.toLocaleString('id-ID')}</td>
+                    <td>${formatCurrency(transaction.amount)}</td>
                     <td>
                         ${(dueNote && transaction.status === 'pending') 
                             ? `<span class="badge badge-danger">${dueNote}</span>` 
@@ -1426,7 +1834,7 @@
                             `<button class="action-btn btn-primary" onclick="openPaymentModal('${transaction.id}')">Bayar</button>` : 
                             `
                             <button class="action-btn btn-secondary" onclick="viewTransactionDetail('${transaction.id}')">Detail</button>
-                            <button class="action-btn btn-primary" onclick="openReceiptModal('${transaction.id}')" style="margin-left: 5px;">Cetak</button>
+                            <button class="action-btn btn-primary" onclick="openReceiptModal('${transaction.id}')">Bukti</button>
                             `
                         }
                     </td>
@@ -1474,7 +1882,7 @@
             document.getElementById('paymentTransactionId').value = transactionId;
             document.getElementById('paymentCustomerName').textContent = getCustomerName(transaction.customerId);
             document.getElementById('paymentMonth').textContent = formatMonthYear(transaction.monthYear);
-            document.getElementById('paymentAmount').textContent = 'Rp ' + transaction.amount.toLocaleString('id-ID');
+            document.getElementById('paymentAmount').textContent = formatCurrency(transaction.amount);
             document.getElementById('paymentDate').value = new Date().toISOString().substring(0, 10);
             document.getElementById('paymentNotes').value = '';
             
@@ -1492,7 +1900,7 @@
             transactions[transactionIndex].status = 'paid';
             transactions[transactionIndex].paid = transactions[transactionIndex].amount;
             transactions[transactionIndex].paymentDate = paymentDate;
-            transactions[transactionIndex].notes = paymentNotes;
+            transactions[transactionIndex].notes = paymentNotes || 'Pembayaran tagihan internet';
             
             saveToLocalStorage();
             closeModal('paymentModal');
@@ -1510,44 +1918,44 @@
             
             const detailHtml = `
                 <div style="max-width: 500px; margin: 0 auto;">
-                    <h3 style="text-align: center;">Detail Transaksi</h3>
+                    <h3 style="text-align: center; color: var(--header-bg);">Detail Transaksi</h3>
                     <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
                         <tr>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Pelanggan</strong></td>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;">${customerName}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Pelanggan</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${customerName}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Bulan</strong></td>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;">${formatMonthYear(transaction.monthYear)}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Bulan</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${formatMonthYear(transaction.monthYear)}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Paket</strong></td>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;">${packageInfo}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Paket</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${packageInfo}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Tagihan</strong></td>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;">Rp ${transaction.amount.toLocaleString('id-ID')}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Tagihan</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${formatCurrency(transaction.amount)}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Dibayar</strong></td>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;">Rp ${transaction.paid.toLocaleString('id-ID')}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Dibayar</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${formatCurrency(transaction.paid)}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Tanggal Bayar</strong></td>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;">${transaction.paymentDate || '-'}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Tanggal Bayar</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${transaction.paymentDate ? formatDate(transaction.paymentDate) : '-'}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Status</strong></td>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;">${getStatusBadge(transaction.status)}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Status</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${getStatusBadge(transaction.status)}</td>
                         </tr>
                         <tr>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Keterangan</strong></td>
-                            <td style="padding: 8px; border-bottom: 1px solid #eee;">${transaction.notes || '-'}</td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Keterangan</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${transaction.notes || '-'}</td>
                         </tr>
                     </table>
                     
                     <div style="text-align: center; margin-top: 20px;">
-                        <button class="btn-primary" onclick="openReceiptModal('${transactionId}')">Cetak Bukti</button>
+                        <button class="btn-primary" onclick="openReceiptModal('${transactionId}')">Download Bukti</button>
                         <button class="btn-outline" onclick="closeModal('detailModal')" style="margin-left: 10px;">Tutup</button>
                     </div>
                 </div>
@@ -1676,7 +2084,7 @@
                     <td>${finance.category}</td>
                     <td>${finance.description || '-'}</td>
                     <td class="${finance.type === 'income' ? 'income-text' : 'expense-text'}">
-                        ${finance.type === 'income' ? '+' : '-'} Rp ${finance.amount.toLocaleString('id-ID')}
+                        ${finance.type === 'income' ? '+' : '-'} ${formatCurrency(finance.amount)}
                     </td>
                     <td>
                         <button class="action-btn btn-secondary" onclick="openFinanceForm('${finance.type}', '${finance.id}')">Edit</button>
@@ -1805,11 +2213,11 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${formatMonthYear(monthKey)}</td>
-                    <td>Rp ${monthData.totalBilled.toLocaleString('id-ID')}</td>
-                    <td>Rp ${monthData.totalPaid.toLocaleString('id-ID')}</td>
-                    <td class="income-text">Rp ${monthData.totalIncome.toLocaleString('id-ID')}</td>
-                    <td class="expense-text">Rp ${monthData.totalExpense.toLocaleString('id-ID')}</td>
-                    <td>Rp ${balance.toLocaleString('id-ID')}</td>
+                    <td>${formatCurrency(monthData.totalBilled)}</td>
+                    <td>${formatCurrency(monthData.totalPaid)}</td>
+                    <td class="income-text">${formatCurrency(monthData.totalIncome)}</td>
+                    <td class="expense-text">${formatCurrency(monthData.totalExpense)}</td>
+                    <td>${formatCurrency(balance)}</td>
                 `;
                 
                 reportList.appendChild(row);
@@ -1828,14 +2236,14 @@
             const balance = totalPaid + totalIncome - totalExpense;
             
             // Update summary cards
-            document.getElementById('annual-billed').textContent = 'Rp ' + totalBilled.toLocaleString('id-ID');
-            document.getElementById('annual-paid').textContent = 'Rp ' + totalPaid.toLocaleString('id-ID');
+            document.getElementById('annual-billed').textContent = formatCurrency(totalBilled);
+            document.getElementById('annual-paid').textContent = formatCurrency(totalPaid);
             document.getElementById('active-customers').textContent = activeCustomersCount;
             document.getElementById('new-customers').textContent = totalNewCustomers;
             document.getElementById('inactive-customers').textContent = inactiveCustomersCount;
-            document.getElementById('total-income').textContent = 'Rp ' + totalIncome.toLocaleString('id-ID');
-            document.getElementById('total-expense').textContent = 'Rp ' + totalExpense.toLocaleString('id-ID');
-            document.getElementById('balance').textContent = 'Rp ' + balance.toLocaleString('id-ID');
+            document.getElementById('total-income').textContent = formatCurrency(totalIncome);
+            document.getElementById('total-expense').textContent = formatCurrency(totalExpense);
+            document.getElementById('balance').textContent = formatCurrency(balance);
         }
         
         // Utility functions
@@ -1846,58 +2254,44 @@
         }
         
         function formatMonthYear(monthYear) {
-    // Pastikan monthYear dalam format YYYY-MM
-    const [year, month] = monthYear.split('-');
-    const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
-                        'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-    
-    // Pastikan month adalah angka antara 1-12
-    const monthIndex = parseInt(month) - 1;
-    if (monthIndex >= 0 && monthIndex < 12) {
-        return `${monthNames[monthIndex]} ${year}`;
-    }
-    return 'Bulan tidak valid';
-}
+            // Pastikan monthYear dalam format YYYY-MM
+            const [year, month] = monthYear.split('-');
+            const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                              'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            // Pastikan month adalah angka antara 1-12
+            const monthIndex = parseInt(month) - 1;
+            if (monthIndex >= 0 && monthIndex < 12) {
+                return `${monthNames[monthIndex]} ${year}`;
+            }
+            return 'Bulan tidak valid';
+        }
 
-// Tambahan fungsi untuk ambil bulan sebelumnya
-function getPreviousMonthYear(monthYear) {
-    let [year, month] = monthYear.split('-').map(Number);
-    if (month === 1) {
-        month = 12;
-        year -= 1;
-    } else {
-        month -= 1;
-    }
-    return `${year}-${month.toString().padStart(2, '0')}`;
-}
+        function formatCurrency(amount) {
+            return 'Rp ' + (amount || 0).toLocaleString('id-ID');
+        }
 
-function getStatusBadge(status) {
-    switch(status) {
-        case 'paid':
-            return '<span class="badge badge-success">Lunas</span>';
-        case 'pending':
-            return '<span class="badge badge-warning">Belum Bayar</span>';
-        case 'canceled':
-            return '<span class="badge badge-danger">Dibatalkan</span>';
-        default:
-            return status;
-    }
-}
+        function getPreviousMonthYear(monthYear) {
+            let [year, month] = monthYear.split('-').map(Number);
+            if (month === 1) {
+                month = 12;
+                year -= 1;
+            } else {
+                month -= 1;
+            }
+            return `${year}-${month.toString().padStart(2, '0')}`;
+        }
 
-// Contoh penggunaan (jangan taruh di fungsi kalau cuma dipanggil 1x):
-// Misalnya transaction.monthYear = '2025-07'
-const currentMonthYear = transaction.monthYear;
-const previousMonthYear = getPreviousMonthYear(currentMonthYear);
-
-document.getElementById('receiptPeriod').textContent =
-  `${formatMonthYear(previousMonthYear)} - ${formatMonthYear(currentMonthYear)}`;
-        
-        function getStatusText(status) {
+        function getStatusBadge(status) {
             switch(status) {
-                case 'paid': return 'Lunas';
-                case 'pending': return 'Belum Bayar';
-                case 'canceled': return 'Dibatalkan';
-                default: return status;
+                case 'paid':
+                    return '<span class="badge badge-success">Lunas</span>';
+                case 'pending':
+                    return '<span class="badge badge-warning">Belum Bayar</span>';
+                case 'canceled':
+                    return '<span class="badge badge-danger">Dibatalkan</span>';
+                default:
+                    return status;
             }
         }
         
@@ -1912,25 +2306,25 @@ document.getElementById('receiptPeriod').textContent =
         }
 
         function exportData() {
-    const data = {
-        customers,
-        transactions,
-        finances
-    };
+            const data = {
+                customers,
+                transactions,
+                finances
+            };
 
-    const dataStr = JSON.stringify(data, null, 2);
+            const dataStr = JSON.stringify(data, null, 2);
 
-    // Buat nama file berdasarkan tanggal
-    const today = new Date().toISOString().split("T")[0]; // hasil: 2025-07-20
-    const fileName = `KH1992(${today}).json`;
+            // Buat nama file berdasarkan tanggal
+            const today = new Date().toISOString().split("T")[0]; // hasil: 2025-07-20
+            const fileName = `KH1992(${today}).json`;
 
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = fileName;
-    a.click();
-    URL.revokeObjectURL(a.href);
-}
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = fileName;
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
 
         function importData() {
             const fileInput = document.getElementById("importFile");
@@ -1982,7 +2376,7 @@ document.getElementById('receiptPeriod').textContent =
                 document.getElementById('receiptCustomer').textContent = customer.nama;
                 document.getElementById('receiptAddress').textContent = customer.alamat;
                 document.getElementById('receiptPhone').textContent = customer.telepon;
-                document.getElementById('receiptPackage').textContent = customer.paket + ' - Rp ' + customer.tagihan.toLocaleString('id-ID') + '/bulan';
+                document.getElementById('receiptPackage').textContent = customer.paket + ' - ' + formatCurrency(customer.tagihan) + '/bulan';
             } else {
                 document.getElementById('receiptCustomer').textContent = transaction.customerName;
                 document.getElementById('receiptAddress').textContent = 'Pelanggan sudah dihapus';
@@ -1990,9 +2384,9 @@ document.getElementById('receiptPeriod').textContent =
                 document.getElementById('receiptPackage').textContent = '-';
             }
             
-           document.getElementById('receiptPeriod').textContent =
-  `${formatMonthYear(getPreviousMonthYear(transaction.monthYear))} - ${formatMonthYear(transaction.monthYear)}`;
-            document.getElementById('receiptAmount').textContent = 'Rp ' + transaction.paid.toLocaleString('id-ID');
+            document.getElementById('receiptPeriod').textContent =
+                `${formatMonthYear(getPreviousMonthYear(transaction.monthYear))} - ${formatMonthYear(transaction.monthYear)}`;
+            document.getElementById('receiptAmount').textContent = formatCurrency(transaction.paid);
             document.getElementById('receiptNotes').textContent = transaction.notes || 'Jasa Layanan Internet';
             
             // Tampilkan stempel hanya untuk transaksi yang sudah dibayar
@@ -2005,112 +2399,81 @@ document.getElementById('receiptPeriod').textContent =
             openModal('receiptModal');
         }
 
-        // Fungsi untuk mencetak bukti pembayaran
-        function printReceipt() {
-            const receiptContent = document.getElementById('receiptContent').innerHTML;
-            const originalContent = document.body.innerHTML;
+        // Fungsi untuk download bukti sebagai gambar
+         function downloadReceiptImage() {
+            const transactionId = document.getElementById('receiptTrxId').textContent;
+            const customerName = document.getElementById('receiptCustomer').textContent;
+            const period = document.getElementById('receiptPeriod').textContent;
             
-            document.body.innerHTML = receiptContent;
-            window.print();
-            document.body.innerHTML = originalContent;
+            // Format nama file: Bukti_Bayar(nama pelanggan)(BulanTahun)
+            const fileName = `Bukti_Bayar_${customerName.replace(/[^a-zA-Z0-9]/g, '_')}_${period.replace(/ /g, '_')}.png`;
             
-            // Render ulang data setelah print
-            if (currentTab === 'pelanggan') {
-                renderCustomerList();
-            } else if (currentTab === 'transaksi') {
-                renderTransactionList();
-            }
+            // Tampilkan loading
+            const downloadBtnText = document.getElementById('downloadBtnText');
+            const originalText = downloadBtnText.textContent;
+            downloadBtnText.innerHTML = '<span class="loading-spinner"></span> Membuat bukti...';
+            
+            // Clone elemen receipt
+            const receiptOriginal = document.getElementById('receiptContent');
+            const receiptClone = receiptOriginal.cloneNode(true);
+            
+            // Atur styling untuk versi download
+            receiptClone.style.width = '600px';
+            receiptClone.style.padding = '40px'; // Padding lebih besar
+            receiptClone.style.margin = '0 auto';
+            receiptClone.style.backgroundColor = '#FFFFFF';
+            receiptClone.style.position = 'relative';
+            
+            // Buat container untuk rendering
+            const container = document.createElement('div');
+            container.style.position = 'fixed';
+            container.style.left = '-9999px';
+            container.style.backgroundColor = '#FFFFFF';
+            container.appendChild(receiptClone);
+            document.body.appendChild(container);
+
+            // Hitung tinggi konten sebenarnya
+            const contentHeight = receiptClone.scrollHeight;
+            const optimalHeight = Math.max(contentHeight, 800); // Minimal tinggi 800px
+
+            // Konfigurasi html2canvas dengan tinggi yang disesuaikan
+            const options = {
+                scale: 2,
+                width: 600,
+                height: optimalHeight,
+                backgroundColor: '#FFFFFF',
+                useCORS: true,
+                allowTaint: true,
+                letterRendering: true,
+                logging: false,
+                scrollY: 0 // Pastikan tidak ada scroll
+            };
+
+            // Generate gambar
+            html2canvas(receiptClone, options).then(canvas => {
+                // Kembalikan teks tombol
+                downloadBtnText.textContent = originalText;
+                
+                // Konversi ke blob
+                canvas.toBlob(blob => {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = fileName;
+                    link.click();
+                    
+                    // Bersihkan
+                    setTimeout(() => {
+                        URL.revokeObjectURL(link.href);
+                        document.body.removeChild(container);
+                    }, 100);
+                }, 'image/png', 0.9);
+            }).catch(error => {
+                console.error('Error:', error);
+                downloadBtnText.textContent = originalText;
+                document.body.removeChild(container);
+                alert('Gagal membuat bukti pembayaran. Silakan coba lagi.');
+            });
         }
-        
-       function renderTransactionList(filterMonth = '', paymentStatus = '', customerFilter = '') {
-    const transactionList = document.getElementById('transactionList');
-    transactionList.innerHTML = '';
-
-    let filteredTransactions = [...transactions];
-
-    // Filter by month
-    if (filterMonth) {
-        filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === filterMonth);
-    } else {
-        const currentMonth = new Date().toISOString().substring(0, 7);
-        filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === currentMonth);
-        document.getElementById('filterMonth').value = currentMonth;
-    }
-
-    // Filter by payment status
-    if (paymentStatus) {
-        filteredTransactions = filteredTransactions.filter(trans => trans.status === paymentStatus);
-    }
-
-    // Filter by customer name
-    if (customerFilter) {
-        const searchTerm = customerFilter.toLowerCase();
-        filteredTransactions = filteredTransactions.filter(trans => {
-            const customerName = getCustomerName(trans.customerId).toLowerCase();
-            return customerName.includes(searchTerm);
-        });
-    }
-
-    const customerOrder = [...customers]
-        .sort((a, b) => new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar))
-        .map(c => c.id);
-
-    filteredTransactions.sort((a, b) => {
-        const orderA = customerOrder.indexOf(a.customerId);
-        const orderB = customerOrder.indexOf(b.customerId);
-        if (orderA !== orderB) return orderA - orderB;
-        return b.monthYear.localeCompare(a.monthYear);
-    });
-
-    if (filteredTransactions.length === 0) {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data transaksi</td>`;
-        transactionList.appendChild(row);
-        return;
-    }
-
-    let totalPaid = 0;
-    let totalPending = 0;
-
-    filteredTransactions.forEach((transaction, index) => {
-        const row = document.createElement('tr');
-        row.className = transaction.status === 'paid' ? 'active-row' :
-                        transaction.status === 'canceled' ? 'inactive-row' : '';
-
-        const customerName = getCustomerName(transaction.customerId);
-        const isCustomerDeleted = !customers.find(c => c.id === transaction.customerId);
-
-        row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${isCustomerDeleted ? `<span class="deleted-customer">${customerName}</span>` : customerName}</td>
-            <td>${formatMonthYear(transaction.monthYear)}</td>
-            <td>Rp ${transaction.amount.toLocaleString('id-ID')}</td>
-            <td>${getStatusBadge(transaction.status)}</td>
-            <td>
-                ${transaction.status === 'pending' ? 
-                    `<button class="action-btn btn-primary" onclick="openPaymentModal('${transaction.id}')">Bayar</button>` : 
-                    `
-                    <button class="action-btn btn-secondary" onclick="viewTransactionDetail('${transaction.id}')">Detail</button>
-                    <button class="action-btn btn-primary" onclick="openReceiptModal('${transaction.id}')" style="margin-left: 5px;">Cetak</button>
-                    `
-                }
-            </td>
-        `;
-
-        transactionList.appendChild(row);
-
-        // Add to totals
-        if (transaction.status === 'paid') {
-            totalPaid += transaction.amount;
-        } else if (transaction.status === 'pending') {
-            totalPending += transaction.amount;
-        }
-    });
-
-    // Update total saldo in the summary section
-    document.getElementById('total-pending').textContent = `Rp ${totalPending.toLocaleString('id-ID')}`;
-    document.getElementById('total-paid').textContent = `Rp ${totalPaid.toLocaleString('id-ID')}`;
-}
     </script>
 </body>
 </html>
