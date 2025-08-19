@@ -1022,23 +1022,27 @@
                 
                 <!-- Summary Cards for Customers -->
                 <div class="summary-container">
-                    <div class="summary-card">
-                        <h3>Total Pelanggan Aktif</h3>
-                        <p id="totalActiveCustomers">0</p>
-                    </div>
-                    <div class="summary-card">
-                        <h3>Total Bulanan</h3>
-                        <p id="totalMonthlyBills">Rp 0</p>
-                    </div>
-                    </div>
-                    <div class="summary-card">
-                        <h3>Total Paket 6 Bulan</h3>
-                        <p id="totalPackage6Customers">0</p>
-                    </div>
-                    <div class="summary-card">
-                        <h3>Total Paket 12 Bulan</h3>
-                        <p id="totalPackage12Customers">0</p>
-                    </div>
+    <div class="summary-card">
+        <h3>Total Pelanggan Aktif</h3>
+        <p id="totalActiveCustomers">0</p>
+    </div>
+    <div class="summary-card">
+        <h3>Total Bulanan</h3>
+        <p id="totalMonthlyBills">Rp 0</p>
+    </div>
+    <div class="summary-card">
+        <h3>Total Pelanggan Free</h3>
+        <p id="totalFreeCustomers">0</p>
+    </div>
+    <div class="summary-card">
+        <h3>Total Paket 6 Bulan</h3>
+        <p id="totalPackage6Customers">0</p>
+    </div>
+    <div class="summary-card">
+        <h3>Total Paket 12 Bulan</h3>
+        <p id="totalPackage12Customers">0</p>
+    </div>
+</div>
                 
                 
                 <div class="responsive-table">
@@ -2111,42 +2115,43 @@ function saveCustomer() {
         }
         
         function generateInitialTransactions(customer) {
-            // Skip jika pelanggan paket 6/12 bulan
-            if (customer.paket === 'Paket 6/12') return;
-            
-            const startDate = new Date(customer.tanggalDaftar);
-            // Mulai dari bulan berikutnya
-            startDate.setMonth(startDate.getMonth() + 1);
-            // Set tanggal ke 1 untuk konsistensi
-            startDate.setDate(1);
-            
-            const endDate = new Date(startDate);
-            endDate.setMonth(endDate.getMonth() + 120); // Generate for next 120 months
-            
-            let date = new Date(startDate);
-            
-            while (date <= endDate) {
-                const monthYear = date.toISOString().substring(0, 7);
-                const dueDate = calculateDueDate(date, customer.tanggalDaftar);
-                
-                transactions.push({
-                    id: generateTransactionId(customer, monthYear),
-                    customerId: customer.id,
-                    customerName: customer.nama,
-                    monthYear: monthYear,
-                    amount: customer.finalPrice,
-                    paid: 0,
-                    paymentDate: '',
-                    dueDate: dueDate,
-                    status: 'pending',
-                    notes: ''
-                });
-                
-                date.setMonth(date.getMonth() + 1);
-            }
-            
-            saveToLocalStorage();
-        }
+    // Skip jika pelanggan paket 6/12 bulan
+    if (customer.paket === 'Paket 6/12') return;
+    
+    const startDate = new Date(customer.tanggalDaftar);
+    // Mulai dari bulan berikutnya
+    startDate.setMonth(startDate.getMonth() + 1);
+    // Set tanggal ke 1 untuk konsistensi
+    startDate.setDate(1);
+    
+    const endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + 120); // Generate for next 120 months
+    
+    let date = new Date(startDate);
+    
+    while (date <= endDate) {
+        const monthYear = date.toISOString().substring(0, 7);
+        const dueDate = calculateDueDate(date, customer.tanggalDaftar);
+        const isFree = customer.finalPrice < 1;
+        
+        transactions.push({
+            id: generateTransactionId(customer, monthYear),
+            customerId: customer.id,
+            customerName: customer.nama,
+            monthYear: monthYear,
+            amount: customer.finalPrice,
+            paid: 0,
+            paymentDate: '',
+            dueDate: dueDate,
+            status: isFree ? 'free' : 'pending',
+            notes: ''
+        });
+        
+        date.setMonth(date.getMonth() + 1);
+    }
+    
+    saveToLocalStorage();
+}
         
         // Hitung tanggal jatuh tempo berdasarkan tanggal pendaftaran
         function calculateDueDate(monthDate, registrationDate) {
@@ -2174,95 +2179,98 @@ function saveCustomer() {
             return `KH${yyyymm}${customer.id.slice(-3)}`;
         }
 
-        function renderCustomerList(filter = '') {
-            const customerList = document.getElementById('customerList');
-            customerList.innerHTML = '';
+       function renderCustomerList(filter = '') {
+    const customerList = document.getElementById('customerList');
+    customerList.innerHTML = '';
 
-            let filteredCustomers = customers;
+    let filteredCustomers = customers;
 
-            if (filter) {
-                const searchTerm = filter.toLowerCase();
-                filteredCustomers = customers.filter(customer => 
-                    customer.nama.toLowerCase().includes(searchTerm) ||
-                    customer.alamat.toLowerCase().includes(searchTerm) ||
-                    customer.telepon.includes(searchTerm)
-                );
+    if (filter) {
+        const searchTerm = filter.toLowerCase();
+        filteredCustomers = customers.filter(customer => 
+            customer.nama.toLowerCase().includes(searchTerm) ||
+            customer.alamat.toLowerCase().includes(searchTerm) ||
+            customer.telepon.includes(searchTerm)
+        );
+    }
+
+    // Urutkan berdasarkan tanggal daftar (terbaru dulu)
+    filteredCustomers.sort((a, b) => new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar));
+
+    if (filteredCustomers.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data pelanggan</td>`;
+        customerList.appendChild(row);
+        return;
+    }
+
+    // Calculate summary data
+    const activeCustomers = customers.filter(c => c.status === 'active' && c.paket !== 'Paket 6/12').length;
+    const freeCustomers = customers.filter(c => c.status === 'active' && c.finalPrice < 1).length;
+    const package6Customers = customers.filter(c => c.status === 'active' && c.paket === 'Paket 6/12' && c.packageDuration === '6').length;
+    const package12Customers = customers.filter(c => c.status === 'active' && c.paket === 'Paket 6/12' && c.packageDuration === '12').length;
+    
+    const totalMonthlyBills = customers.reduce((sum, customer) => {
+        return customer.status === 'active' && customer.paket !== 'Paket 6/12' && customer.finalPrice >= 1 ? 
+               sum + customer.finalPrice : sum;
+    }, 0);
+    
+    // Update summary cards
+    document.getElementById('totalActiveCustomers').textContent = activeCustomers;
+    document.getElementById('totalMonthlyBills').textContent = formatCurrency(totalMonthlyBills);
+    document.getElementById('totalFreeCustomers').textContent = freeCustomers;
+    document.getElementById('totalPackage6Customers').textContent = package6Customers;
+    document.getElementById('totalPackage12Customers').textContent = package12Customers;
+    
+    filteredCustomers.forEach((customer, index) => {
+        const row = document.createElement('tr');
+        
+        // Tentukan class row berdasarkan status dan jenis paket
+        if (customer.status === 'active') {
+            if (customer.paket === 'Paket 6/12') {
+                row.className = customer.packageDuration === '6' ? 'package6-row' : 'package12-row';
+            } else {
+                row.className = 'active-row';
             }
-
-            // Urutkan berdasarkan tanggal daftar (terbaru dulu)
-            filteredCustomers.sort((a, b) => new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar));
-
-            if (filteredCustomers.length === 0) {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data pelanggan</td>`;
-                customerList.appendChild(row);
-                return;
-            }
-
-            // Calculate summary data
-            const activeCustomers = customers.filter(c => c.status === 'active' && c.paket !== 'Paket 6/12').length;
-            const package6Customers = customers.filter(c => c.status === 'active' && c.paket === 'Paket 6/12' && c.packageDuration === '6').length;
-            const package12Customers = customers.filter(c => c.status === 'active' && c.paket === 'Paket 6/12' && c.packageDuration === '12').length;
-            
-            const totalMonthlyBills = customers.reduce((sum, customer) => {
-                return customer.status === 'active' && customer.paket !== 'Paket 6/12' ? sum + customer.finalPrice : sum;
-            }, 0);
-            
-            // Update summary cards
-            document.getElementById('totalActiveCustomers').textContent = activeCustomers;
-            document.getElementById('totalMonthlyBills').textContent = formatCurrency(totalMonthlyBills);
-            document.getElementById('totalPackage6Customers').textContent = package6Customers;
-            document.getElementById('totalPackage12Customers').textContent = package12Customers;
-            
-            filteredCustomers.forEach((customer, index) => {
-                const row = document.createElement('tr');
-                
-                // Tentukan class row berdasarkan status dan jenis paket
-                if (customer.status === 'active') {
-                    if (customer.paket === 'Paket 6/12') {
-                        row.className = customer.packageDuration === '6' ? 'package6-row' : 'package12-row';
-                    } else {
-                        row.className = 'active-row';
-                    }
-                } else {
-                    row.className = 'inactive-row';
-                }
-
-                // Cek apakah pelanggan memiliki tagihan pending (kecuali untuk paket 6/12)
-                const hasPending = customer.paket !== 'Paket 6/12' && transactions.some(t => 
-                    t.customerId === customer.id && t.status === 'pending'
-                );
-
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${customer.nama}</td>
-                    <td>${customer.paket}${customer.paket === 'Paket 6/12' ? ' (' + customer.packageDuration + ' Bulan)' : ''}</td>
-                    <td>
-                        ${formatCurrency(customer.finalPrice)}
-                        ${customer.discount > 0 ? 
-                            `<br><small class="discount-info">(Diskon ${formatCurrency(customer.discount)})</small>` : 
-                            ''}
-                    </td>
-                    <td>
-                        <span class="${getStatusClass(customer)}">
-                            ${getStatusText(customer)}
-                        </span>
-                    </td>
-                    <td>
-                        <button class="action-btn btn-secondary" onclick="showCustomerDetail('${customer.id}')">Detail</button>
-                        ${customer.paket !== 'Paket 6/12' ? 
-                            `<button class="action-btn ${hasPending ? 'btn-primary' : 'btn-outline disabled'}" 
-                                    onclick="${hasPending ? `openPaymentModal('${customer.id}')` : 'return false'}" 
-                                    ${!hasPending ? 'disabled' : ''}>
-                                Bayar
-                            </button>` : 
-                            ''}
-                    </td>
-                `;
-
-                customerList.appendChild(row);
-            });
+        } else {
+            row.className = 'inactive-row';
         }
+
+        // Cek apakah pelanggan memiliki tagihan pending (kecuali untuk paket 6/12 dan free)
+        const hasPending = customer.paket !== 'Paket 6/12' && 
+                          customer.finalPrice >= 1 && 
+                          transactions.some(t => t.customerId === customer.id && t.status === 'pending');
+
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${customer.nama}</td>
+            <td>${customer.paket}${customer.paket === 'Paket 6/12' ? ' (' + customer.packageDuration + ' Bulan)' : ''}</td>
+            <td>
+                ${formatCurrency(customer.finalPrice)}
+                ${customer.discount > 0 ? 
+                    `<br><small class="discount-info">(Diskon ${formatCurrency(customer.discount)})</small>` : 
+                    ''}
+            </td>
+            <td>
+                <span class="${getStatusClass(customer)}">
+                    ${getStatusText(customer)}
+                </span>
+            </td>
+            <td>
+                <button class="action-btn btn-secondary" onclick="showCustomerDetail('${customer.id}')">Detail</button>
+                ${customer.paket !== 'Paket 6/12' && customer.finalPrice >= 1 ? 
+                    `<button class="action-btn ${hasPending ? 'btn-primary' : 'btn-outline disabled'}" 
+                            onclick="${hasPending ? `openPaymentModal('${customer.id}')` : 'return false'}" 
+                            ${!hasPending ? 'disabled' : ''}>
+                        Bayar
+                    </button>` : 
+                    ''}
+            </td>
+        `;
+
+        customerList.appendChild(row);
+    });
+}
         
         function getStatusClass(customer) {
             if (customer.status === 'inactive') return 'status-inactive';
@@ -2523,111 +2531,118 @@ function toggleCustomerStatus(customerId) {
 
         // Transaction functions
         function renderTransactionList(filterMonth = '', paymentStatus = '', customerFilter = '') {
-            const transactionList = document.getElementById('transactionList');
-            transactionList.innerHTML = '';
+    const transactionList = document.getElementById('transactionList');
+    transactionList.innerHTML = '';
 
-            let filteredTransactions = [...transactions];
+    let filteredTransactions = [...transactions];
 
-            // Filter by month
-            if (filterMonth) {
-                filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === filterMonth);
-            } else {
-                // Default to current month
-                const currentMonth = new Date().toISOString().substring(0, 7);
-                filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === currentMonth);
-                document.getElementById('filterMonth').value = currentMonth;
+    // Filter by month
+    if (filterMonth) {
+        filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === filterMonth);
+    } else {
+        // Default to current month
+        const currentMonth = new Date().toISOString().substring(0, 7);
+        filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === currentMonth);
+        document.getElementById('filterMonth').value = currentMonth;
+    }
+
+    // Filter by payment status
+    if (paymentStatus) {
+        filteredTransactions = filteredTransactions.filter(trans => {
+            if (paymentStatus === 'free') {
+                return trans.amount < 1;
             }
+            return trans.status === paymentStatus && trans.amount >= 1;
+        });
+    }
 
-            // Filter by payment status
-            if (paymentStatus) {
-                filteredTransactions = filteredTransactions.filter(trans => trans.status === paymentStatus);
-            }
+    // Filter by customer name
+    if (customerFilter) {
+        const searchTerm = customerFilter.toLowerCase();
+        filteredTransactions = filteredTransactions.filter(trans => {
+            const customerName = getCustomerName(trans.customerId).toLowerCase();
+            return customerName.includes(searchTerm);
+        });
+    }
 
-            // Filter by customer name
-            if (customerFilter) {
-                const searchTerm = customerFilter.toLowerCase();
-                filteredTransactions = filteredTransactions.filter(trans => {
-                    const customerName = getCustomerName(trans.customerId).toLowerCase();
-                    return customerName.includes(searchTerm);
-                });
-            }
+    // Sort transactions to match customer list order
+    const sortedCustomers = [...customers].sort((a, b) => {
+        return new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar);
+    });
 
-            // Sort transactions to match customer list order
-            // Pertama, buat array pelanggan yang diurutkan seperti di tab pelanggan
-            const sortedCustomers = [...customers].sort((a, b) => {
-                // Urutkan berdasarkan tanggal daftar (terbaru dulu)
-                return new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar);
-            });
+    filteredTransactions.sort((a, b) => {
+        const indexA = sortedCustomers.findIndex(c => c.id === a.customerId);
+        const indexB = sortedCustomers.findIndex(c => c.id === b.customerId);
+        
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        
+        return indexA - indexB;
+    });
 
-            // Kemudian urutkan transaksi sesuai urutan pelanggan
-            filteredTransactions.sort((a, b) => {
-                // Cari index pelanggan di array yang sudah diurutkan
-                const indexA = sortedCustomers.findIndex(c => c.id === a.customerId);
-                const indexB = sortedCustomers.findIndex(c => c.id === b.customerId);
-                
-                // Jika pelanggan tidak ditemukan (mungkin sudah dihapus), taruh di akhir
-                if (indexA === -1) return 1;
-                if (indexB === -1) return -1;
-                
-                // Urutkan berdasarkan urutan pelanggan
-                return indexA - indexB;
-            });
+    // Calculate summary data
+    const totalPaid = filteredTransactions
+        .filter(trans => trans.status === 'paid' && trans.amount >= 1)
+        .reduce((sum, trans) => sum + (trans.paid || trans.amount), 0);
+    
+    const totalUnpaid = filteredTransactions
+        .filter(trans => trans.status === 'pending' && trans.amount >= 1)
+        .reduce((sum, trans) => sum + trans.amount, 0);
+    
+    // Update summary cards
+    document.getElementById('totalPaidAmount').textContent = formatCurrency(totalPaid);
+    document.getElementById('totalUnpaidAmount').textContent = formatCurrency(totalUnpaid);
 
-            // Calculate summary data
-            const totalPaid = filteredTransactions
-                .filter(trans => trans.status === 'paid')
-                .reduce((sum, trans) => sum + (trans.paid || trans.amount), 0);
-            
-            const totalUnpaid = filteredTransactions
-                .filter(trans => trans.status === 'pending')
-                .reduce((sum, trans) => sum + trans.amount, 0);
-            
-            // Update summary cards
-            document.getElementById('totalPaidAmount').textContent = formatCurrency(totalPaid);
-            document.getElementById('totalUnpaidAmount').textContent = formatCurrency(totalUnpaid);
+    if (filteredTransactions.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data transaksi</td>`;
+        transactionList.appendChild(row);
+        return;
+    }
 
-            if (filteredTransactions.length === 0) {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data transaksi</td>`;
-                transactionList.appendChild(row);
-                return;
-            }
+    filteredTransactions.forEach((transaction, index) => {
+        const row = document.createElement('tr');
+        const isFree = transaction.amount < 1;
+        
+        row.className = transaction.status === 'paid' ? 'active-row' :
+                        transaction.status === 'canceled' ? 'inactive-row' : '';
 
-            filteredTransactions.forEach((transaction, index) => {
-                const row = document.createElement('tr');
-                row.className = transaction.status === 'paid' ? 'active-row' :
-                                transaction.status === 'canceled' ? 'inactive-row' : '';
-
-                const customerName = getCustomerName(transaction.customerId);
-                const isCustomerDeleted = !customers.find(c => c.id === transaction.customerId);
-                const dueNote = getDueStatus(transaction);
-
-                row.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${isCustomerDeleted ? `<span class="deleted-customer">${customerName}</span>` : customerName}</td>
-                    <td>${formatMonthYear(transaction.monthYear)}</td>
-                    <td>${formatCurrency(transaction.amount)}</td>
-                    <td>
-                        ${(dueNote && transaction.status === 'pending') 
-                            ? `<span class="badge badge-danger">${dueNote}</span>` 
-                            : getStatusBadge(transaction.status)}
-                    </td>
-                    <td>
-                        ${transaction.status === 'pending' ? 
-                            `<button class="action-btn btn-primary" onclick="openPaymentModal('${transaction.customerId}', '${transaction.id}')">Bayar</button>
-                             <button class="action-btn btn-warning" onclick="openReceiptModal('${transaction.id}', true)">Cetak Tagihan</button>
-                            ` : 
-                            `
-                            <button class="action-btn btn-secondary" onclick="viewTransactionDetail('${transaction.id}')">Detail</button>
-                            <button class="action-btn btn-primary" onclick="openReceiptModal('${transaction.id}')">Bukti</button>
-                            `
-                        }
-                    </td>
-                `;
-
-                transactionList.appendChild(row);
-            });
+        const customerName = getCustomerName(transaction.customerId);
+        const isCustomerDeleted = !customers.find(c => c.id === transaction.customerId);
+        const dueNote = isFree ? '' : getDueStatus(transaction);
+        
+        // Determine status
+        let statusDisplay;
+        if (isFree) {
+            statusDisplay = getStatusBadge('free');
+        } else {
+            statusDisplay = (dueNote && transaction.status === 'pending') 
+                ? `<span class="badge badge-danger">${dueNote}</span>` 
+                : getStatusBadge(transaction.status);
         }
+
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${isCustomerDeleted ? `<span class="deleted-customer">${customerName}</span>` : customerName}</td>
+            <td>${formatMonthYear(transaction.monthYear)}</td>
+            <td>${formatCurrency(transaction.amount)}</td>
+            <td>${statusDisplay}</td>
+            <td>
+                ${transaction.status === 'pending' && !isFree ? 
+                    `<button class="action-btn btn-primary" onclick="openPaymentModal('${transaction.customerId}', '${transaction.id}')">Bayar</button>
+                     <button class="action-btn btn-warning" onclick="openReceiptModal('${transaction.id}', true)">Cetak Tagihan</button>
+                    ` : 
+                    `
+                    <button class="action-btn btn-secondary" onclick="viewTransactionDetail('${transaction.id}')">Detail</button>
+                    ${!isFree ? `<button class="action-btn btn-primary" onclick="openReceiptModal('${transaction.id}')">Bukti</button>` : ''}
+                    `
+                }
+            </td>
+        `;
+
+        transactionList.appendChild(row);
+    });
+}
 
         function getDueStatus(transaction) {
             if (transaction.status !== 'pending') return '';
@@ -3311,18 +3326,20 @@ function toggleCustomerStatus(customerId) {
             return 'Rp ' + (amount || 0).toLocaleString('id-ID');
         }
 
-        function getStatusBadge(status) {
-            switch(status) {
-                case 'paid':
-                    return '<span class="badge badge-success">Lunas</span>';
-                case 'pending':
-                    return '<span class="badge badge-danger">BELUM LUNAS</span>';
-                case 'canceled':
-                    return '<span class="badge badge-danger">Dibatalkan</span>';
-                default:
-                    return status;
-            }
-        }
+       function getStatusBadge(status) {
+    switch(status) {
+        case 'paid':
+            return '<span class="badge badge-success">Lunas</span>';
+        case 'pending':
+            return '<span class="badge badge-danger">BELUM LUNAS</span>';
+        case 'free':
+            return '<span class="badge badge-warning">FREE</span>';
+        case 'canceled':
+            return '<span class="badge badge-danger">Dibatalkan</span>';
+        default:
+            return status;
+    }
+}
         
         function saveToLocalStorage() {
             localStorage.setItem('customers', JSON.stringify(customers));
