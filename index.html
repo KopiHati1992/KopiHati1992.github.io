@@ -5,134 +5,140 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
     <title>Manajemen Pelanggan & Tagihan</title>
-    
-    <!-- Tambahkan library html2canvas untuk konversi ke gambar -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    
     <style>
-          /* ===== BUTTON STYLES ===== */
-    button {
-        padding: 12px 20px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 14px;
-        font-weight: 600;
-        transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        position: relative;
-        overflow: hidden;
-    }
+        /* ===== BUTTON STYLES ===== */
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
 
-    .btn-primary {
-        background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-        color: white;
-        box-shadow: 0 4px 15px rgba(42,10,94,0.3);
-    }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(42,10,94,0.3);
+        }
 
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(42,10,94,0.4);
-    }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(42,10,94,0.4);
+        }
 
-    
-    .btn-primary::after {
-    display: none;
-}
-        content: "";
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(
-            to bottom right,
-            rgba(255,255,255,0) 45%,
-            rgba(255,255,255,0.8) 50%,
-            rgba(255,255,255,0) 55%
-        );
-        transform: rotate(30deg);
-        transition: all 0.5s;
-    }
+        .btn-primary::after {
+            display: none;
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255,255,255,0) 45%,
+                rgba(255,255,255,0.8) 50%,
+                rgba(255,255,255,0) 55%
+            );
+            transform: rotate(30deg);
+            transition: all 0.5s;
+        }
 
-    .btn-primary:hover::after {
-        left: 100%;
-    }
+        .btn-primary:hover::after {
+            left: 100%;
+        }
 
-    .btn-secondary {
-        background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
-        color: white;
-        box-shadow: 0 4px 15px rgba(46,204,113,0.3);
-    }
+        .btn-secondary {
+            background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(46,204,113,0.3);
+        }
 
-    .btn-secondary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(46,204,113,0.4);
-    }
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46,204,113,0.4);
+        }
 
-    .btn-danger {
-        background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
-        color: white;
-        box-shadow: 0 4px 15px rgba(231,76,60,0.3);
-    }
+        .btn-danger {
+            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(231,76,60,0.3);
+        }
 
-    .btn-danger:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(231,76,60,0.4);
-    }
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(231,76,60,0.4);
+        }
 
-    .btn-warning {
-        background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
-        color: white;
-        box-shadow: 0 4px 15px rgba(243,156,18,0.3);
-    }
+        .btn-warning {
+            background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(243,156,18,0.3);
+        }
 
-    .btn-warning:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 20px rgba(243,156,18,0.4);
-    }
+        .btn-warning:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(243,156,18,0.4);
+        }
 
-    .btn-outline {
-        background-color: transparent;
-        border: 1px solid #ddd;
-        color: var(--text-dark);
-    }
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #ddd;
+            color: var(--text-dark);
+        }
 
-    .btn-outline:hover {
-        background-color: #f9f9f9;
-    }
+        .btn-outline:hover {
+            background-color: #f9f9f9;
+        }
 
-    .button-group {
-        display: flex;
-        gap: 12px;
-        margin-top: 25px;
-        flex-wrap: wrap;
-    }
+        .button-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
 
-    .button-group button {
-        flex: 1 1 auto;
-        min-width: 120px;
-    }
+        .button-group button {
+            flex: 1 1 auto;
+            min-width: 120px;
+        }
 
-    .action-btn {
-        padding: 8px 14px;
-        margin: 2px;
-        font-size: 12px;
-        border-radius: 6px;
-        font-weight: 500;
-    }
+        .action-btn {
+            padding: 8px 14px;
+            margin: 2px;
+            font-size: 12px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+        }
 
-    /* ===== TYPOGRAPHY ===== */
-    h1, h2, h3, h4, h5, h6 {
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 600;
-        color: var(--dark-color);
-    }
+        .action-btn.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
 
-    h1 { font-size: 2rem; }
-    h2 { font-size: 1.75rem; }
-    h3 { font-size: 1.5rem; }
-    
-    
+        .action-btn:not(.disabled):hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        h1 { font-size: 2rem; }
+        h2 { font-size: 1.75rem; }
+        h3 { font-size: 1.5rem; }
+        
         :root {
             --primary-color: #3498db;
             --secondary-color: #2ecc71;
@@ -145,6 +151,8 @@
             --expense-color: #c0392b;
             --header-bg: #2c3e50;
             --card-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            --package6-color: #9b59b6;
+            --package12-color: #34495e;
         }
 
         * {
@@ -287,6 +295,24 @@
             background-color: #e67e22;
         }
 
+        .btn-package6 {
+            background-color: var(--package6-color);
+            color: white;
+        }
+
+        .btn-package6:hover {
+            background-color: #8e44ad;
+        }
+
+        .btn-package12 {
+            background-color: var(--package12-color);
+            color: white;
+        }
+
+        .btn-package12:hover {
+            background-color: #2c3e50;
+        }
+
         .btn-outline {
             background-color: transparent;
             border: 1px solid var(--medium-gray);
@@ -348,6 +374,14 @@
             color: #999;
         }
 
+        .package6-row {
+            background-color: rgba(155, 89, 182, 0.08);
+        }
+
+        .package12-row {
+            background-color: rgba(52, 73, 94, 0.08);
+        }
+
         .status-active {
             color: var(--secondary-color);
             font-weight: 600;
@@ -360,6 +394,16 @@
 
         .status-inactive {
             color: var(--danger-color);
+            font-weight: 600;
+        }
+
+        .status-package6 {
+            color: var(--package6-color);
+            font-weight: 600;
+        }
+
+        .status-package12 {
+            color: var(--package12-color);
             font-weight: 600;
         }
 
@@ -442,7 +486,6 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
        
-
         .modal-header {
             display: flex;
             justify-content: space-between;
@@ -470,22 +513,35 @@
             box-shadow: var(--card-shadow);
         }
 
-        
+        @media (max-width: 600px) {
+            .responsive-table table {
+                font-size: 12px;
+            }
+            .responsive-table th, 
+            .responsive-table td {
+                padding: 6px 4px !important;
+            }
+            .action-btn {
+                display: block;
+                margin: 2px 0;
+                width: 100%;
+            }
+        }
         
         .summary-container  {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  flex-wrap: wrap;
-}
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
 
-.summary-card {
-  flex: 1;
-  background: #fff;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.05);
-}
+        .summary-card {
+            flex: 1;
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.05);
+        }
 
         .summary-card:hover {
             transform: translateY(-5px);
@@ -505,8 +561,6 @@
             color: var(--header-bg);
         }
         
-        
-
         .tab-content {
             display: none;
             animation: fadeIn 0.5s;
@@ -549,6 +603,16 @@
         .badge-danger {
             background-color: #ffe6e6;
             color: var(--danger-color);
+        }
+
+        .badge-package6 {
+            background-color: #f0e6f5;
+            color: var(--package6-color);
+        }
+
+        .badge-package12 {
+            background-color: #e6ebf0;
+            color: var(--package12-color);
         }
 
         .text-right {
@@ -611,6 +675,16 @@
             font-weight: 600;
         }
 
+        .package6-text {
+            color: var(--package6-color);
+            font-weight: 600;
+        }
+
+        .package12-text {
+            color: var(--package12-color);
+            font-weight: 600;
+        }
+
         .footer {
             position: fixed;
             bottom: 60px;
@@ -665,17 +739,17 @@
             background-color: rgba(255,255,255,0.9);
         }
         #receiptContent {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 60px 30px;
-    min-height: 1000px; /* atau 100vh kalau fullscreen modal */
-    box-sizing: border-box;
-}
-#receiptContent table td,
-#receiptContent table tr {
-    background-color: transparent !important;
-}
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 30px;
+            min-height: 1000px;
+            box-sizing: border-box;
+        }
+        #receiptContent table td,
+        #receiptContent table tr {
+            background-color: transparent !important;
+        }
 
         #receiptContent > *:not(.print-watermark) {
             position: relative;
@@ -780,12 +854,160 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
+        .badge-danger {
+            background-color: #ffe6e6;
+            color: var(--danger-color);
+        }
+
+        /* New styles for multi-select */
+        .form-control[multiple] {
+            min-height: 100px;
+            padding: 8px;
+            border: 1px solid var(--medium-gray);
+            border-radius: 6px;
+        }
+
+        .form-control[multiple] option {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .form-control[multiple] option:checked {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .form-text.text-muted {
+            font-size: 12px;
+            color: #6c757d;
+        }
+
+        /* Ensure buttons are clickable */
+        #receiptModal .btn-primary, 
+        #receiptModal .btn-outline {
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Ensure modal can receive interactions */
+        .modal-content {
+            pointer-events: auto;
+        }
+
+        /* Ensure receipt elements don't block buttons */
+        #receiptContent {
+            pointer-events: none;
+        }
+        #receiptContent > * {
+            pointer-events: auto;
+        }
+        
+        /* Tambahkan di bagian CSS */
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 15px;
+        }
+
+        .action-btn.disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .no-print {
+            display: none !important;
+        }
+
+        /* Style untuk diskon */
+        #discountGroup {
+            margin-top: 15px;
+        }
+
+        #discountAmount {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .discount-info {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        .strikethrough {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        /* Style untuk paket 6/12 */
+        #packageDurationGroup {
+            display: none;
+            margin-top: 15px;
+        }
+
+        /* Style untuk tab paket */
+        .package-tabs {
+            display: flex;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .package-tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .package-tab.active {
+            border-bottom: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .package-tab:hover {
+            background-color: #f5f5f5;
+        }
+        
+        /* Tambahkan di bagian CSS */
+.modal-fullscreen .modal-content {
+    width: 95%;
+    max-width: none;
+    height: 95vh;
+    max-height: none;
+    margin: 0;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.modal-fullscreen {
+    align-items: flex-start;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header-container">
-            <img src="https://id.bloggif.com/tmp/4676bfa6d4eb7de82e06cff66be9e66a/text.gif?1753722667" alt="Logo" class="logo">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9MlltS8Z9gDyRUe09dh6vmIye6mjgzi0a4-94BaOVSeIpa-7Dp7qjns6t_1dSwvuZF4mi0P998TolhFJS2DT9Ge_aXL1qdO9FnbscN5ZgJoDuPHYX4ekJgVwttL7q9ChXExhizmZ9rx44pDB4rdy1EVnADyfZ6q3HZzY2CJ8aEhxLa_zA6z9xPfpKWRo/s16000/text.gif" alt="Logo" class="logo">
             <h1 class="app-title"></h1>
         </div>
         
@@ -808,7 +1030,16 @@
                         <h3>Total Bulanan</h3>
                         <p id="totalMonthlyBills">Rp 0</p>
                     </div>
-                </div>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Paket 6 Bulan</h3>
+                        <p id="totalPackage6Customers">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Total Paket 12 Bulan</h3>
+                        <p id="totalPackage12Customers">0</p>
+                    </div>
+                
                 
                 <div class="responsive-table">
                     <table id="customerTable">
@@ -902,6 +1133,59 @@
                 </div>
             </div>
             
+            <!-- Tab Paket 6/12 Bulan -->
+            <div id="paket-tab" class="tab-content">
+                <div class="package-tabs">
+                    <div class="package-tab active" onclick="switchPackageTab('all')">Semua</div>
+                    <div class="package-tab" onclick="switchPackageTab('6')">Paket 6 Bulan</div>
+                    <div class="package-tab" onclick="switchPackageTab('12')">Paket 12 Bulan</div>
+                </div>
+                <!-- Di dalam div id="paket-tab" -->
+<div class="summary-container">
+    <div class="summary-card">
+        <h3>Total Paket 6 Bulan</h3>
+        <p id="totalPackage6">0</p>
+    </div>
+     <div class="summary-card">
+        <h3>Total Paket 12 Bulan</h3>
+        <p id="totalPackage12">0</p>
+    </div>
+    </div>
+    <div class="summary-card">
+        <h3>Total Pendapatan 6 Bulan</h3>
+        <p id="totalRevenue6">Rp 0</p>
+    </div>
+   
+    <div class="summary-card">
+        <h3>Total Pendapatan 12 Bulan</h3>
+        <p id="totalRevenue12">Rp 0</p>
+    </div>
+
+                <div class="search-box">
+                    <input type="text" id="searchPackageCustomer" placeholder="Cari pelanggan..." oninput="filterPackageCustomers()">
+                </div>
+                
+                <div class="responsive-table">
+                    <table id="packageTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Nama</th>
+                                <th>Paket</th>
+                                <th>Jumlah</th>
+                                <th>Tanggal Mulai</th>
+                                <th>Tanggal Berakhir</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="packageList">
+                            <!-- Data paket akan dimuat di sini -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
             <!-- Tab Laporan -->
             <div id="laporan-tab" class="tab-content">
                 <div class="form-group">
@@ -949,8 +1233,17 @@
                     <div class="summary-card">
                         <h3>Saldo</h3>
                         <p id="balance">Rp 0</p>
+                    </div></div>
+                    
+                    <div class="summary-card">
+                        <h3>Total Paket 6 Bulan</h3>
+                        <p id="annual-package6">0</p>
                     </div>
-                </div>
+                    <div class="summary-card">
+                        <h3>Total Paket 12 Bulan</h3>
+                        <p id="annual-package12">0</p>
+                    </div>
+                
                 <br>
                 <h3>Rincian Bulanan</h3>
                 <div class="responsive-table">
@@ -992,6 +1285,10 @@
             <div class="nav-icon">💵</div>
             <div class="nav-label">Keuangan</div>
         </div>
+        <div class="nav-item" onclick="switchTab('paket')">
+            <div class="nav-icon">📦</div>
+            <div class="nav-label">Paket 6/12</div>
+        </div>
         <div class="nav-item" onclick="switchTab('laporan')">
             <div class="nav-icon">📊</div>
             <div class="nav-label">Laporan</div>
@@ -1026,14 +1323,23 @@
                 
                 <div class="form-group">
                     <label for="paket">Paket Layanan:</label>
-                    <select id="paket" required onchange="toggleCustomAmount()">
+                    <select id="paket" required onchange="togglePackageOptions()">
                         <option value="">Pilih Paket</option>
                         <option value="Basic">Basic - Rp 100.000/bulan</option>
                         <option value="Basic Plus">Basic Plus - Rp 120.000/bulan</option>
                         <option value="Standard">Standard - Rp 150.000/bulan</option>
                         <option value="Premium">Premium - Rp 200.000/bulan</option>
                         <option value="Premium Plus">Premium Plus - Rp 300.000/bulan</option>
+                        <option value="Paket 6/12">Paket 6/12 Bulan</option>
                         <option value="Lainnya">Paket Lain</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="packageDurationGroup">
+                    <label for="packageDuration">Durasi Paket:</label>
+                    <select id="packageDuration" class="form-control">
+                        <option value="6">6 Bulan</option>
+                        <option value="12">12 Bulan</option>
                     </select>
                 </div>
                 
@@ -1042,11 +1348,17 @@
                     <input type="number" id="customAmount" placeholder="Masukkan nominal tagihan">
                 </div>
                 
-                <div class="form-group">
-                    <label for="tanggalDaftar">Tanggal Daftar:</label>
-                    <p style="font-size: 12px; color: #777; margin-top: 5px;">(input maksimal tanggal pada pelanggan adalah tanggal 28)</p>
-                   <input type="date" id="tanggalDaftar" name="tanggalDaftar">
+                <div class="form-group" id="discountGroup">
+                    <label for="discountAmount">Diskon (Nominal):</label>
+                    <input type="number" id="discountAmount" placeholder="Masukkan nominal diskon (opsional)">
+                    <small class="text-muted">Isi jika ingin memberikan diskon khusus</small>
                 </div>
+                
+            <div class="form-group">
+    <label for="tanggalDaftar">Tanggal Daftar:</label>
+    <p style="font-size: 12px; color: #777; margin-top: 5px;">(Maksimal tanggal pendaftaran adalah tanggal 28)</p>
+    <input type="date" id="tanggalDaftar" name="tanggalDaftar" required>
+</div>
                 
                 <div class="button-group">
                     <button type="submit" class="btn-primary">Simpan</button>
@@ -1058,28 +1370,30 @@
     
     <!-- Modal Pembayaran -->
     <div id="paymentModal" class="modal">
-        <div class="modal-content fade-in-up">
+        <div class="modal-content">
             <div class="modal-header">
                 <h2>Pembayaran Tagihan</h2>
                 <span class="close-modal" onclick="closeModal('paymentModal')">&times;</span>
             </div>
             
             <form id="paymentForm">
-                <input type="hidden" id="paymentTransactionId">
+                <input type="hidden" id="paymentCustomerId">
                 
                 <div class="form-group">
                     <label>Pelanggan:</label>
-                    <p id="paymentCustomerName" class="mb-0" style="font-weight: bold; font-size: 16px;"></p>
+                    <p id="paymentCustomerName" class="mb-0" style="font-weight: bold;"></p>
                 </div>
                 
                 <div class="form-group">
-                    <label>Bulan:</label>
-                    <p id="paymentMonth" class="mb-0" style="font-weight: bold; font-size: 16px;"></p>
+                    <label for="paymentMonthSelect">Pilih Bulan Tagihan:</label>
+                    <select id="paymentMonthSelect" class="form-control" required>
+                        <!-- Options akan diisi oleh JavaScript -->
+                    </select>
                 </div>
                 
                 <div class="form-group">
                     <label>Jumlah Tagihan:</label>
-                    <p id="paymentAmount" class="mb-0" style="font-weight: bold; font-size: 16px;"></p>
+                    <p id="paymentAmount" class="mb-0" style="font-weight: bold;"></p>
                 </div>
                 
                 <div class="form-group">
@@ -1089,8 +1403,8 @@
                 
                 <div class="form-group">
                     <label for="paymentNotes">Keterangan:</label>
-                    <p style="font-size: 12px; color: #777; margin-top: 5px;">(kosongkan untuk keterangan otomatis)</p>
                     <textarea id="paymentNotes" rows="2"></textarea>
+                    <small class="text-muted">Kosongkan untuk keterangan otomatis</small>
                 </div>
                 
                 <div class="button-group">
@@ -1098,6 +1412,19 @@
                     <button type="button" class="btn-outline" onclick="closeModal('paymentModal')">Batal</button>
                 </div>
             </form>
+        </div>
+    </div>
+    
+    <!-- Modal Bulk Pembayaran -->
+    <div id="bulkPaymentModal" class="modal">
+        <div class="modal-content fade-in-up" style="max-width: 600px;">
+            <div class="modal-header">
+                <h2>Pembayaran Multiple Bulan</h2>
+                <span class="close-modal" onclick="closeModal('bulkPaymentModal')">&times;</span>
+            </div>
+            <div id="bulkPaymentContent">
+                <!-- Content will be loaded dynamically -->
+            </div>
         </div>
     </div>
     
@@ -1113,12 +1440,12 @@
                 <!-- Detail pelanggan akan dimuat di sini -->
             </div>
             
-          <div class="button-group" style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px;">
-    <button type="button" class="btn-secondary" id="editDetailBtn" style="flex: 1;">Edit</button>
-    <button type="button" class="btn-danger" id="deleteCustomerBtn" style="flex: 1;">Hapus</button>
-    <button type="button" class="btn-warning" id="toggleStatusBtn" style="flex: 1;">Nonaktifkan</button>
-    <button type="button" class="btn-outline" onclick="closeModal('detailModal')" style="flex: 1;">Tutup</button>
-</div>
+            <div class="button-group" style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px;">
+                <button type="button" class="btn-secondary" id="editDetailBtn" style="flex: 1;">Edit</button>
+                <button type="button" class="btn-danger" id="deleteCustomerBtn" style="flex: 1;">Hapus</button>
+                <button type="button" class="btn-warning" id="toggleStatusBtn" style="flex: 1;">Nonaktifkan</button>
+                <button type="button" class="btn-outline" onclick="closeModal('detailModal')" style="flex: 1;">Tutup</button>
+            </div>
         </div>
     </div>
     
@@ -1183,14 +1510,14 @@
     <div id="receiptModal" class="modal">
         <div class="modal-content fade-in-up" style="max-width: 800px;">
             <div class="modal-header">
-                <h2>Bukti Pembayaran</h2>
+                <h2 id="receiptTitle">Bukti Pembayaran</h2>
                 <span class="close-modal" onclick="closeModal('receiptModal')">&times;</span>
             </div>
             
             <div id="receiptContent">
                 <div style="text-align: center; margin-bottom: 25px;">
                     <h2 style="margin-bottom: 5px; color: var(--header-bg);">BILLING KH1992</h2>
-                    <p style="margin-top: 0; color: #666; font-size: 16px;">Bukti Pembayaran Internet</p>
+                    <p style="margin-top: 0; color: #666; font-size: 16px;" id="receiptSubtitle">Bukti Pembayaran Internet</p>
                 </div>
                 
                 <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
@@ -1225,6 +1552,10 @@
                         <td style="padding: 10px; border-bottom: 1px solid #eee;" id="receiptPeriod"></td>
                     </tr>
                     <tr>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Jatuh Tempo</strong></td>
+                        <td style="padding: 10px; border-bottom: 1px solid #eee;" id="receiptDueDate"></td>
+                    </tr>
+                    <tr>
                         <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Jumlah</strong></td>
                         <td style="padding: 10px; border-bottom: 1px solid #eee;" id="receiptAmount"></td>
                     </tr>
@@ -1234,6 +1565,18 @@
                     </tr>
                 </table>
                 
+                <!-- Instruksi Pembayaran (hanya muncul di tagihan) -->
+                <div id="paymentInstructions" style="margin-top: 30px; padding: 15px; background-color: #f9f9f9; border-radius: 8px; display: none;">
+                    <h3 style="margin-top: 0; color: var(--header-bg);">Instruksi Pembayaran:</h3>
+                    <ol style="padding-left: 20px; margin-bottom: 0;"> <center> <img 
+        src="https://i.postimg.cc/G2hCPXLZ/file-00000000c69461f9a7d407e0da794c3a.png" 
+        alt="Gambar Responsif"
+        style="max-width:300px; height:320px;"
+    >
+                        <br>Batas pembayaran<br> sesuai jatuh tempo pada tanggal <span id="dueDateText"></span></center>
+                    </ol>
+                </div>
+                
                 <div style="text-align: center; margin-top: 40px;">
                     <div style="display: inline-block; text-align: center; margin-top: 50px; position: relative;">
                         <div id="receiptStamp" style="position: absolute; top: -90px; right: -55px; opacity: 0.9; display: none;">
@@ -1241,11 +1584,11 @@
                             <div style="position: absolute; bottom: 10px; width: 100%; text-align: right; font-weight: bold; color: red;"></div>
                         </div>
                         
-                        <p style="opacity: 0.8;">(suroso)</p>
+                       <p style="opacity: 0.8;">(suroso)</p>
                     </div>
                 </div>
                 
-                <div style="text-align: center; margin-top: 30px; font-size: 13px; color: #666;">
+                <div style="text-align: center; margin-top: 20px; font-size: 12px; color: #666;">
                     <p>Terima kasih telah melakukan pembayaran tepat waktu</p>
                     <p>Hubungi kami jika ada pertanyaan: 085850651102</p>
                 </div>
@@ -1265,8 +1608,10 @@
         let customers = JSON.parse(localStorage.getItem('customers')) || [];
         let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
         let finances = JSON.parse(localStorage.getItem('finances')) || [];
+        let packageCustomers = JSON.parse(localStorage.getItem('packageCustomers')) || [];
         let editingCustomerId = null;
         let currentTab = 'pelanggan';
+        let currentPackageTab = 'all';
         
         // Kategori keuangan
         const incomeCategories = [
@@ -1279,14 +1624,29 @@
         
         // Initialize the app
         document.addEventListener('DOMContentLoaded', function() {
+    
+    
+    // Validasi real-time saat input tanggal diubah
+    document.getElementById('tanggalDaftar').addEventListener('change', function() {
+        const selectedDate = new Date(this.value);
+        if (selectedDate.getDate() > 28) {
+            alert('Tanggal pendaftaran maksimal adalah tanggal 28');
+            const correctedDate = new Date(selectedDate);
+            correctedDate.setDate(28);
+            this.value = correctedDate.toISOString().substring(0, 10);
+        }
+    
+});
             // Load data dari localStorage
             customers = JSON.parse(localStorage.getItem('customers')) || [];
             transactions = JSON.parse(localStorage.getItem('transactions')) || [];
             finances = JSON.parse(localStorage.getItem('finances')) || [];
+            packageCustomers = JSON.parse(localStorage.getItem('packageCustomers')) || [];
             
             renderCustomerList();
             renderTransactionList();
             renderFinanceList();
+            renderPackageList();
             generateReport();
             
             // Form submissions
@@ -1307,23 +1667,47 @@
             
             // Tambahkan event listener untuk logo backup
             document.querySelector('.logo').addEventListener('dblclick', openBackupMenu);
+            
+            // Batasi input tanggal daftar maksimal tanggal 28
+            const dateInput = document.getElementById("tanggalDaftar");
+            const today = new Date();
+            const currentYear = today.getFullYear();
+            const currentMonth = today.getMonth() + 1;
+            const currentDay = today.getDate();
+            
+            let maxDate;
+
+            if (currentDay >= 28) {
+                // Jika sudah lewat tanggal 28 bulan ini, batasi sampai 28 bulan ini
+                maxDate = `${currentYear}-${String(currentMonth).padStart(2, '0')}-28`;
+            } else {
+                // Jika belum lewat 28, izinkan sampai 28 bulan depan
+                let nextMonth = currentMonth + 1;
+                let nextYear = currentYear;
+                
+                if (nextMonth > 12) {
+                    nextMonth = 1;
+                    nextYear++;
+                }
+                
+                maxDate = `${nextYear}-${String(nextMonth).padStart(2, '0')}-28`;
+            }
+
+            dateInput.setAttribute("max", maxDate);
         });
         
-        // Tampilkan/menyembunyikan input nominal custom
-        function toggleCustomAmount() {
-            const paket = document.getElementById('paket').value;
-            const customAmountGroup = document.getElementById('customAmountGroup');
-            
-            if (paket === 'Lainnya') {
-                customAmountGroup.style.display = 'block';
-                document.getElementById('customAmount').required = true;
-            } else {
-                customAmountGroup.style.display = 'none';
-                document.getElementById('customAmount').required = false;
-            }
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
         }
-        
-        // Tab navigation
+
+        function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.style.display = 'none';
+    modal.classList.remove('modal-fullscreen'); // Hapus class fullscreen
+}
+
+        // Tab switching
         function switchTab(tabName) {
             // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => {
@@ -1333,122 +1717,386 @@
             // Show selected tab
             document.getElementById(`${tabName}-tab`).classList.add('active');
             
-            // Update bottom nav
+            // Update nav items
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            document.querySelector(`.nav-item[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            // Activate selected nav item
+            const navItems = document.querySelectorAll('.nav-item');
+            const tabIndex = ['pelanggan', 'transaksi', 'keuangan', 'paket', 'laporan'].indexOf(tabName);
+            if (tabIndex >= 0) {
+                navItems[tabIndex].classList.add('active');
+            }
             
+            // Update current tab
             currentTab = tabName;
             
             // Refresh data if needed
-            if (tabName === 'pelanggan') {
-                renderCustomerList();
-            } else if (tabName === 'transaksi') {
-                renderTransactionList();
-            } else if (tabName === 'keuangan') {
-                renderFinanceList();
-            } else if (tabName === 'laporan') {
-                generateReport();
-            }
+            if (tabName === 'pelanggan') renderCustomerList();
+            else if (tabName === 'transaksi') renderTransactionList();
+            else if (tabName === 'keuangan') renderFinanceList();
+            else if (tabName === 'paket') renderPackageList();
+            else if (tabName === 'laporan') generateReport();
         }
         
-        // Modal functions
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
-        }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-        
-        function openCustomerForm(customerId = null) {
-            resetCustomerForm();
+        // Switch package tab (all, 6, 12)
+        function switchPackageTab(tabName) {
+            currentPackageTab = tabName;
             
-            if (customerId) {
-                const customer = customers.find(c => c.id === customerId);
-                if (customer) {
-                    document.getElementById('modalCustomerTitle').textContent = 'Edit Pelanggan';
-                    document.getElementById('customerId').value = customer.id;
-                    document.getElementById('nama').value = customer.nama;
-                    document.getElementById('alamat').value = customer.alamat;
-                    document.getElementById('telepon').value = customer.telepon;
-                    document.getElementById('paket').value = customer.paket;
-                    document.getElementById('tanggalDaftar').value = customer.tanggalDaftar;
-                    
-                    // Handle custom amount
-                    if (!['Basic', 'Basic Plus', 'Standard', 'Premium', 'Premium Plus'].includes(customer.paket)) {
-                        document.getElementById('customAmount').value = customer.tagihan;
-                        document.getElementById('customAmountGroup').style.display = 'block';
-                    }
-                }
+            // Update active tab
+            document.querySelectorAll('.package-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            const tabs = document.querySelectorAll('.package-tab');
+            if (tabName === 'all') tabs[0].classList.add('active');
+            else if (tabName === '6') tabs[1].classList.add('active');
+            else if (tabName === '12') tabs[2].classList.add('active');
+            
+            renderPackageList();
+        }
+        
+        // Tampilkan/menyembunyikan input durasi paket dan nominal custom
+        function togglePackageOptions() {
+            const paket = document.getElementById('paket').value;
+            const customAmountGroup = document.getElementById('customAmountGroup');
+            const packageDurationGroup = document.getElementById('packageDurationGroup');
+            
+            if (paket === 'Paket 6/12') {
+                packageDurationGroup.style.display = 'block';
+                customAmountGroup.style.display = 'none';
+                document.getElementById('customAmount').required = false;
+            } else if (paket === 'Lainnya') {
+                packageDurationGroup.style.display = 'none';
+                customAmountGroup.style.display = 'block';
+                document.getElementById('customAmount').required = true;
             } else {
-                document.getElementById('modalCustomerTitle').textContent = 'Tambah Pelanggan';
-                document.getElementById('tanggalDaftar').value = new Date().toISOString().substring(0, 10);
+                packageDurationGroup.style.display = 'none';
+                customAmountGroup.style.display = 'none';
+                document.getElementById('customAmount').required = false;
             }
-            
-            openModal('customerModal');
         }
         
+        // Fungsi untuk mengatur tanggal maksimum
+function setMaxRegistrationDate() {
+    const today = new Date();
+    const offset = 7; // GMT+7 untuk WIB
+    const localDate = new Date(today.getTime() + offset * 60 * 60 * 1000);
+    
+    // Pastikan tidak melebihi tanggal 28
+    if (localDate.getDate() > 28) {
+        localDate.setDate(28);
+    }
+    
+    document.getElementById('tanggalDaftar').max = localDate.toISOString().substring(0, 10);
+    
+    // Jika hari ini > 28, set nilai default ke 28
+    if (today.getDate() > 28) {
+        document.getElementById('tanggalDaftar').value = localDate.toISOString().substring(0, 10);
+    }
+}
+
+// Fungsi untuk mengupdate due date transaksi
+function updateDueDatesForCustomer(customerId, newRegistrationDate) {
+    // Update due date for all pending transactions
+    transactions.forEach(transaction => {
+        if (transaction.customerId === customerId && transaction.status === 'pending') {
+            // Pastikan tanggal jatuh tempo tidak melebihi 28
+            const dueDate = new Date(transaction.monthYear + '-01');
+            const day = new Date(newRegistrationDate).getDate();
+            const dueDay = Math.min(day, 28);
+            
+            dueDate.setDate(dueDay);
+            transaction.dueDate = dueDate.toISOString().substring(0, 10);
+        }
+    });
+    
+    saveToLocalStorage();
+}
+
+// Fungsi untuk menghitung due date
+function calculateDueDate(monthDate, registrationDate) {
+    const regDate = new Date(registrationDate);
+    // Pastikan tidak melebihi 28
+    const day = Math.min(regDate.getDate(), 28);
+    
+    const dueDate = new Date(monthDate);
+    dueDate.setDate(day);
+    
+    return dueDate.toISOString().substring(0, 10);
+}
+
+// Fungsi untuk validasi tanggal
+function validateRegistrationDate(dateString) {
+    if (!dateString) return false;
+    
+    const date = new Date(dateString);
+    const offset = 7; // GMT+7 untuk WIB
+    const localDate = new Date(date.getTime() + offset * 60 * 60 * 1000);
+    
+    if (localDate.getDate() > 28) {
+        alert('Tanggal pendaftaran tidak boleh melebihi tanggal 28');
+        return false;
+    }
+    return true;
+}
+
+        // Fungsi untuk membuka form pelanggan (baru atau edit)
+        function openCustomerForm(customerId = null) {
+    resetCustomerForm();
+    
+    // Set batas tanggal
+    setMaxRegistrationDate();
+    
+    if (customerId) {
+        // Mode edit
+        const customer = customers.find(c => c.id === customerId);
+        if (customer) {
+            document.getElementById('customerId').value = customer.id;
+            document.getElementById('nama').value = customer.nama;
+            document.getElementById('alamat').value = customer.alamat;
+            document.getElementById('telepon').value = customer.telepon;
+            document.getElementById('paket').value = customer.paket === 'Paket Lain' ? 'Lainnya' : customer.paket;
+            
+            // Validasi dan koreksi tanggal yang sudah ada
+            const existingDate = new Date(customer.tanggalDaftar);
+            if (existingDate.getDate() > 28) {
+                existingDate.setDate(28);
+                document.getElementById('tanggalDaftar').value = existingDate.toISOString().substring(0, 10);
+                alert('Tanggal pendaftaran pelanggan ini telah dikoreksi ke tanggal 28');
+            } else {
+                document.getElementById('tanggalDaftar').value = customer.tanggalDaftar;
+            }
+            
+            document.getElementById('discountAmount').value = customer.discount || 0;
+            
+            // Jika paket 6/12
+            if (customer.paket === 'Paket 6/12') {
+                document.getElementById('packageDuration').value = customer.packageDuration || '6';
+                document.getElementById('packageDurationGroup').style.display = 'block';
+            }
+            
+            // Jika paket custom
+            if (customer.paket === 'Paket Lain') {
+                document.getElementById('customAmount').value = customer.originalPrice || customer.tagihan;
+                document.getElementById('customAmountGroup').style.display = 'block';
+            }
+            
+            document.getElementById('modalCustomerTitle').textContent = 'Edit Pelanggan';
+        }
+    } else {
+        // Mode tambah baru
+        document.getElementById('modalCustomerTitle').textContent = 'Tambah Pelanggan';
+        
+        // Set default date - tidak boleh lebih dari 28
+        const today = new Date();
+        if (today.getDate() > 28) {
+            today.setDate(28);
+        }
+        document.getElementById('tanggalDaftar').value = today.toISOString().substring(0, 10);
+    }
+    
+    openModal('customerModal');
+}
+
+        // Fungsi untuk mereset form pelanggan
         function resetCustomerForm() {
             document.getElementById('customerForm').reset();
             document.getElementById('customerId').value = '';
             document.getElementById('customAmountGroup').style.display = 'none';
+            document.getElementById('packageDurationGroup').style.display = 'none';
+            document.getElementById('customAmount').value = '';
+            document.getElementById('discountAmount').value = '';
+            document.getElementById('packageDuration').value = '6';
+            document.getElementById('modalCustomerTitle').textContent = 'Tambah Pelanggan';
         }
         
-        // Customer functions
-        function saveCustomer() {
-            const customerId = document.getElementById('customerId').value;
-            const paket = document.getElementById('paket').value;
-            let tagihan = 0;
+        function updateDueDatesForCustomer(customerId, newRegistrationDate) {
+            // Update due date for all pending transactions
+            transactions.forEach(transaction => {
+                if (transaction.customerId === customerId && transaction.status === 'pending') {
+                    transaction.dueDate = calculateDueDate(new Date(transaction.monthYear + '-01'), newRegistrationDate);
+                }
+            });
             
-            if (paket === 'Lainnya') {
-                tagihan = parseInt(document.getElementById('customAmount').value) || 0;
-                if (tagihan <= 0) {
-                    alert('Nominal tagihan harus lebih dari 0');
-                    return;
-                }
-            } else {
-                tagihan = getPackagePrice(paket);
+            saveToLocalStorage();
+        }
+
+      // Fungsi untuk mengupdate transaksi yang terkait dengan pelanggan
+function updateCustomerTransactions(customerId) {
+    const customer = customers.find(c => c.id === customerId);
+    if (!customer || customer.paket === 'Paket 6/12') return;
+
+    // Update semua transaksi pending untuk pelanggan ini
+    transactions.forEach(transaction => {
+        if (transaction.customerId === customerId && transaction.status === 'pending') {
+            transaction.amount = customer.finalPrice;
+        }
+    });
+
+    saveToLocalStorage();
+}
+
+// Fungsi untuk menyimpan pelanggan (sudah diperbarui)
+function saveCustomer() {
+    try {
+        // Ambil nilai dari form
+        const customerId = document.getElementById('customerId').value;
+        const nama = document.getElementById('nama').value.trim();
+        const alamat = document.getElementById('alamat').value.trim();
+        const telepon = document.getElementById('telepon').value.trim();
+        const tanggalDaftar = document.getElementById('tanggalDaftar').value;
+        const paket = document.getElementById('paket').value;
+        const packageDuration = document.getElementById('packageDuration').value;
+        const discount = parseInt(document.getElementById('discountAmount').value) || 0;
+        
+        // Validasi dasar
+        if (!nama || !alamat || !telepon || !tanggalDaftar || !paket) {
+            alert('Harap lengkapi semua field!');
+            return false;
+        }
+        
+        // Validasi tanggal
+        if (!validateRegistrationDate(tanggalDaftar)) {
+            return false;
+        }
+        
+        // Hitung tagihan
+        let tagihan = 0;
+        let originalPrice = 0;
+        
+        if (paket === 'Lainnya') {
+            originalPrice = parseInt(document.getElementById('customAmount').value) || 0;
+            if (originalPrice <= 0) {
+                alert('Nominal tagihan harus lebih dari 0');
+                return false;
             }
-
-            const customerData = {
-                nama: document.getElementById('nama').value,
-                alamat: document.getElementById('alamat').value,
-                telepon: document.getElementById('telepon').value,
-                paket: paket === 'Lainnya' ? 'Paket Lain' : paket,
-                tanggalDaftar: document.getElementById('tanggalDaftar').value,
-                status: 'active',
-                tagihan: tagihan
-            };
-
-            if (customerId) {
-                // Update existing customer
-                const index = customers.findIndex(c => c.id === customerId);
-                if (index !== -1) {
-                    const oldTagihan = customers[index].tagihan;
-                    customers[index] = { ...customers[index], ...customerData };
-                    
-                    // Update semua transaksi yang belum dibayar dengan tagihan baru
-                    transactions.forEach(trans => {
-                        if (trans.customerId === customerId && trans.status === 'pending') {
-                            trans.amount = tagihan;
-                        }
-                    });
-                }
+            tagihan = originalPrice;
+        } else if (paket === 'Paket 6/12') {
+            const duration = parseInt(packageDuration);
+            const monthlyPrice = getPackagePrice('Standard');
+            
+            if (duration === 6) {
+                originalPrice = monthlyPrice * 6 * 0.85;
             } else {
-                // Add new customer
-                customerData.id = Date.now().toString();
-                customers.push(customerData);
+                originalPrice = monthlyPrice * 12 * 0.75;
+            }
+            
+            tagihan = originalPrice;
+        } else {
+            originalPrice = getPackagePrice(paket);
+            tagihan = originalPrice;
+        }
+        
+        // Apply discount
+        if (discount > 0) {
+            if (discount > tagihan) {
+                alert('Diskon tidak boleh melebihi tagihan');
+                return;
+            }
+            tagihan -= discount;
+        }
+        
+        // Cek apakah edit pelanggan yang sudah ada
+        const existingCustomer = customerId ? customers.find(c => c.id === customerId) : null;
+        
+        // Buat objek pelanggan
+        const customerData = {
+            id: customerId || Date.now().toString(),
+            nama: nama,
+            alamat: alamat,
+            telepon: telepon,
+            paket: paket === 'Lainnya' ? 'Paket Lain' : paket,
+            tanggalDaftar: tanggalDaftar,
+            status: 'active',
+            tagihan: tagihan,
+            discount: discount,
+            originalPrice: originalPrice,
+            finalPrice: tagihan,
+            packageDuration: paket === 'Paket 6/12' ? packageDuration : null
+        };
+        
+        // Simpan data
+        if (customerId) {
+            // Update existing customer
+            const index = customers.findIndex(c => c.id === customerId);
+            if (index !== -1) {
+                // Jika tanggal pendaftaran berubah, update jatuh tempo
+                if (existingCustomer && existingCustomer.tanggalDaftar !== tanggalDaftar) {
+                    updateDueDatesForCustomer(customerId, tanggalDaftar);
+                }
+                
+                customers[index] = customerData;
+                
+                // Update juga di packageCustomers jika ada
+                const packageIndex = packageCustomers.findIndex(p => p.customerId === customerId);
+                if (packageIndex !== -1) {
+                    packageCustomers[packageIndex] = {
+                        ...packageCustomers[packageIndex],
+                        packageDuration: packageDuration,
+                        amount: tagihan,
+                        endDate: calculatePackageEndDate(tanggalDaftar, packageDuration)
+                    };
+                }
+                
+                // Update transaksi yang terkait
+                updateCustomerTransactions(customerId);
+            }
+        } else {
+            // Add new customer
+            customers.push(customerData);
+            
+            // Jika paket 6/12, tambahkan ke packageCustomers
+            if (paket === 'Paket 6/12') {
+                packageCustomers.push({
+                    id: Date.now().toString(),
+                    customerId: customerData.id,
+                    customerName: customerData.nama,
+                    packageDuration: packageDuration,
+                    startDate: tanggalDaftar,
+                    endDate: calculatePackageEndDate(tanggalDaftar, packageDuration),
+                    amount: tagihan,
+                    status: 'active'
+                });
+                
+                // Catat sebagai pemasukan keuangan
+                finances.push({
+                    id: Date.now().toString(),
+                    type: 'income',
+                    date: tanggalDaftar,
+                    category: 'Paket ' + packageDuration + ' Bulan',
+                    amount: tagihan,
+                    description: 'Pembayaran paket ' + packageDuration + ' bulan untuk ' + nama
+                });
+            } else {
                 generateInitialTransactions(customerData);
             }
+        }
+        
+        saveToLocalStorage();
+        closeModal('customerModal');
+        renderCustomerList();
+        renderTransactionList();
+        renderPackageList();
+        generateReport();
+        
+        return true;
+        
+    } catch (error) {
+        console.error("Error saat menyimpan pelanggan:", error);
+        alert('Terjadi error saat menyimpan data');
+        return false;
+    }
+}
 
-            saveToLocalStorage();
-            closeModal('customerModal');
-            renderCustomerList();
-            renderTransactionList();
-            generateReport();
+
+        
+        // Hitung tanggal berakhir paket
+        function calculatePackageEndDate(startDate, duration) {
+            const date = new Date(startDate);
+            date.setMonth(date.getMonth() + parseInt(duration));
+            return date.toISOString().substring(0, 10);
         }
         
         function getPackagePrice(paket) {
@@ -1463,7 +2111,15 @@
         }
         
         function generateInitialTransactions(customer) {
+            // Skip jika pelanggan paket 6/12 bulan
+            if (customer.paket === 'Paket 6/12') return;
+            
             const startDate = new Date(customer.tanggalDaftar);
+            // Mulai dari bulan berikutnya
+            startDate.setMonth(startDate.getMonth() + 1);
+            // Set tanggal ke 1 untuk konsistensi
+            startDate.setDate(1);
+            
             const endDate = new Date(startDate);
             endDate.setMonth(endDate.getMonth() + 120); // Generate for next 120 months
             
@@ -1471,15 +2127,17 @@
             
             while (date <= endDate) {
                 const monthYear = date.toISOString().substring(0, 7);
+                const dueDate = calculateDueDate(date, customer.tanggalDaftar);
                 
                 transactions.push({
-                    id: generateTransactionId(customer),
+                    id: generateTransactionId(customer, monthYear),
                     customerId: customer.id,
                     customerName: customer.nama,
                     monthYear: monthYear,
-                    amount: customer.tagihan,
+                    amount: customer.finalPrice,
                     paid: 0,
                     paymentDate: '',
+                    dueDate: dueDate,
                     status: 'pending',
                     notes: ''
                 });
@@ -1490,21 +2148,30 @@
             saveToLocalStorage();
         }
         
-        function generateTransactionId(customer) {
-            const daftar = new Date(customer.tanggalDaftar);
-            const yyyy = daftar.getFullYear();
-            const mm = String(daftar.getMonth() + 1).padStart(2, '0');
-            const dd = String(daftar.getDate()).padStart(2, '0');
-            const prefix = `KH${mm}${dd}`;
+        // Hitung tanggal jatuh tempo berdasarkan tanggal pendaftaran
+        function calculateDueDate(monthDate, registrationDate) {
+            const regDate = new Date(registrationDate);
+            const day = regDate.getDate();
             
-            // Cari nomor urut terakhir yang sudah pakai prefix ini
-            const existing = transactions
-                .filter(t => t.id.startsWith(prefix))
-                .map(t => parseInt(t.id.slice(prefix.length)))
-                .sort((a, b) => a - b);
-
-            const next = existing.length > 0 ? existing[0] + 1 : 1;
-            return `${prefix}${String(next).padStart(3, '0')}`;
+            const dueDate = new Date(monthDate);
+            dueDate.setDate(day);
+            
+            return dueDate.toISOString().substring(0, 10);
+        }
+        
+        function generateTransactionId(customer, monthYear = null) {
+            // Jika monthYear tidak disediakan, gunakan bulan pendaftaran
+            if (!monthYear) {
+                const daftar = new Date(customer.tanggalDaftar);
+                const yyyy = daftar.getFullYear();
+                const mm = String(daftar.getMonth() + 1).padStart(2, '0');
+                const dd = String(daftar.getDate()).padStart(2, '0');
+                return `KH${mm}${dd}${customer.id.slice(-3)}`;
+            }
+            
+            // Jika monthYear disediakan (saat mengaktifkan pelanggan)
+            const yyyymm = monthYear.replace('-', '');
+            return `KH${yyyymm}${customer.id.slice(-3)}`;
         }
 
         function renderCustomerList(filter = '') {
@@ -1533,29 +2200,63 @@
             }
 
             // Calculate summary data
-            const activeCustomers = customers.filter(c => c.status === 'active').length;
-            const totalMonthlyBills = customers.reduce((sum, customer) => sum + customer.tagihan, 0);
+            const activeCustomers = customers.filter(c => c.status === 'active' && c.paket !== 'Paket 6/12').length;
+            const package6Customers = customers.filter(c => c.status === 'active' && c.paket === 'Paket 6/12' && c.packageDuration === '6').length;
+            const package12Customers = customers.filter(c => c.status === 'active' && c.paket === 'Paket 6/12' && c.packageDuration === '12').length;
+            
+            const totalMonthlyBills = customers.reduce((sum, customer) => {
+                return customer.status === 'active' && customer.paket !== 'Paket 6/12' ? sum + customer.finalPrice : sum;
+            }, 0);
             
             // Update summary cards
             document.getElementById('totalActiveCustomers').textContent = activeCustomers;
             document.getElementById('totalMonthlyBills').textContent = formatCurrency(totalMonthlyBills);
+            document.getElementById('totalPackage6Customers').textContent = package6Customers;
+            document.getElementById('totalPackage12Customers').textContent = package12Customers;
             
             filteredCustomers.forEach((customer, index) => {
                 const row = document.createElement('tr');
-                row.className = customer.status === 'active' ? 'active-row' : 'inactive-row';
+                
+                // Tentukan class row berdasarkan status dan jenis paket
+                if (customer.status === 'active') {
+                    if (customer.paket === 'Paket 6/12') {
+                        row.className = customer.packageDuration === '6' ? 'package6-row' : 'package12-row';
+                    } else {
+                        row.className = 'active-row';
+                    }
+                } else {
+                    row.className = 'inactive-row';
+                }
+
+                // Cek apakah pelanggan memiliki tagihan pending (kecuali untuk paket 6/12)
+                const hasPending = customer.paket !== 'Paket 6/12' && transactions.some(t => 
+                    t.customerId === customer.id && t.status === 'pending'
+                );
 
                 row.innerHTML = `
                     <td>${index + 1}</td>
                     <td>${customer.nama}</td>
-                    <td>${customer.paket}</td>
-                    <td>${formatCurrency(customer.tagihan)}</td>
+                    <td>${customer.paket}${customer.paket === 'Paket 6/12' ? ' (' + customer.packageDuration + ' Bulan)' : ''}</td>
                     <td>
-                        <span class="${customer.status === 'active' ? 'status-active' : 'status-inactive'}">
-                            ${customer.status === 'active' ? 'Aktif' : 'Nonaktif'}
+                        ${formatCurrency(customer.finalPrice)}
+                        ${customer.discount > 0 ? 
+                            `<br><small class="discount-info">(Diskon ${formatCurrency(customer.discount)})</small>` : 
+                            ''}
+                    </td>
+                    <td>
+                        <span class="${getStatusClass(customer)}">
+                            ${getStatusText(customer)}
                         </span>
                     </td>
                     <td>
                         <button class="action-btn btn-secondary" onclick="showCustomerDetail('${customer.id}')">Detail</button>
+                        ${customer.paket !== 'Paket 6/12' ? 
+                            `<button class="action-btn ${hasPending ? 'btn-primary' : 'btn-outline disabled'}" 
+                                    onclick="${hasPending ? `openPaymentModal('${customer.id}')` : 'return false'}" 
+                                    ${!hasPending ? 'disabled' : ''}>
+                                Bayar
+                            </button>` : 
+                            ''}
                     </td>
                 `;
 
@@ -1563,9 +2264,43 @@
             });
         }
         
+        function getStatusClass(customer) {
+            if (customer.status === 'inactive') return 'status-inactive';
+            if (customer.paket === 'Paket 6/12') {
+                return customer.packageDuration === '6' ? 'status-package6' : 'status-package12';
+            }
+            return 'status-active';
+        }
+        
+        function getStatusText(customer) {
+            if (customer.status === 'inactive') return 'Nonaktif';
+            if (customer.paket === 'Paket 6/12') {
+                return customer.packageDuration === '6' ? 'Paket 6 Bulan' : 'Paket 12 Bulan';
+            }
+            return 'Aktif';
+        }
+        
+        function getFirstPendingTransactionId(customerId) {
+            // Cari transaksi pending terdekat (bulan ini atau berikutnya)
+            const today = new Date().toISOString().substring(0, 7); // Format YYYY-MM
+            const pendingTransactions = transactions
+                .filter(t => t.customerId === customerId && t.status === 'pending')
+                .sort((a, b) => a.monthYear.localeCompare(b.monthYear));
+            
+            // Prioritaskan bulan ini atau bulan terdekat
+            const currentOrNext = pendingTransactions.find(t => t.monthYear >= today) || pendingTransactions[0];
+            
+            return currentOrNext ? currentOrNext.id : '';
+        }
+        
         function filterCustomers() {
             const filter = document.getElementById('searchCustomer').value;
             renderCustomerList(filter);
+        }
+        
+        function filterPackageCustomers() {
+            const filter = document.getElementById('searchPackageCustomer').value;
+            renderPackageList(filter);
         }
         
         // Fungsi untuk mendapatkan nama pelanggan (termasuk yang sudah dihapus)
@@ -1588,23 +2323,34 @@
             const detailContent = document.getElementById('customerDetailContent');
             detailContent.innerHTML = `
                 <div style="border: 1px solid #eee; border-radius: 8px; padding: 15px; margin-bottom: 20px; background-color: #fdfdfd;">
-    <h2 style="margin-top: 0; color: var(--header-bg); text-align: center;">${customer.nama.toUpperCase()}</h2>
-    <table style="width: 100%; font-size: 14px;">
-        <tr><td><strong>Alamat</strong></td><td>: ${customer.alamat}</td></tr>
-        <tr><td><strong>Telepon</strong></td><td>: ${customer.telepon || '-'}</td></tr>
-        <tr><td><strong>Paket</strong></td><td>: ${customer.paket}</td></tr>
-        <tr><td><strong>Tagihan</strong></td><td>: ${formatCurrency(customer.tagihan)}/bulan</td></tr>
-        <tr><td><strong>Tanggal Daftar</strong></td><td>: ${formatDate(customer.tanggalDaftar)}</td></tr>
-        <tr><td><strong>Status</strong></td>
-            <td>: 
-                <span class="${customer.status === 'active' ? 'status-active' : 'status-inactive'}">
-                    ${customer.status === 'active' ? 'Aktif' : 'Nonaktif'}
-                </span>
-            </td>
-        </tr>
-    </table>
-</div>
+                    <h2 style="margin-top: 0; color: var(--header-bg); text-align: center;">${customer.nama.toUpperCase()}</h2>
+                    <table style="width: 100%; font-size: 14px;">
+                        <tr><td><strong>Alamat</strong></td><td>: ${customer.alamat}</td></tr>
+                        <tr><td><strong>Telepon</strong></td><td>: ${customer.telepon || '-'}</td></tr>
+                        <tr><td><strong>Paket</strong></td><td>: ${customer.paket}${customer.paket === 'Paket 6/12' ? ' (' + customer.packageDuration + ' Bulan)' : ''}</td></tr>
+                        <tr><td><strong>Tagihan</strong></td>
+                            <td>: ${formatCurrency(customer.finalPrice)}${customer.paket === 'Paket 6/12' ? ' (sekali bayar)' : '/bulan'}
+                                ${customer.discount > 0 ? 
+                                    `<br><small style="color:#888">(Harga normal: ${formatCurrency(customer.originalPrice)}, Diskon: ${formatCurrency(customer.discount)})</small>` : 
+                                    ''}
+                            </td>
+                        </tr>
+                        <tr><td><strong>Tanggal Daftar</strong></td><td>: ${formatDate(customer.tanggalDaftar)}</td></tr>
+                        ${customer.paket === 'Paket 6/12' ? 
+                            `<tr><td><strong>Tanggal Berakhir</strong></td>
+                             <td>: ${formatDate(calculatePackageEndDate(customer.tanggalDaftar, customer.packageDuration))}</td></tr>` : 
+                            ''}
+                        <tr><td><strong>Status</strong></td>
+                            <td>: 
+                                <span class="${getStatusClass(customer)}">
+                                    ${getStatusText(customer)}
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
                 
+                ${customer.paket !== 'Paket 6/12' ? `
                 <h3 style="margin-top: 25px; color: var(--header-bg);">Riwayat Transaksi</h3>
                 <div style="max-height: 250px; overflow-y: auto; margin-top: 10px;">
                     <table style="width: 100%; font-size: 13px; border-collapse: collapse;">
@@ -1620,31 +2366,33 @@
                             <!-- Transactions will be loaded here -->
                         </tbody>
                     </table>
-                </div>
+                </div>` : ''}
             `;
             
-            // Load customer transactions - diurutkan dari yang terbaru ke terlama
-            const customerTransactions = transactions
-                .filter(t => t.customerId === customerId)
-                .sort((a, b) => a.monthYear.localeCompare(b.monthYear)); // Urutkan dari bulan baru ke lama
-            
-            const transactionsTable = document.getElementById('customerTransactions');
-            transactionsTable.innerHTML = '';
-            
-            if (customerTransactions.length === 0) {
-                transactionsTable.innerHTML = '<tr><td colspan="4" class="text-center">Tidak ada transaksi</td></tr>';
-            } else {
-                customerTransactions.forEach(trans => {
-                    const row = document.createElement('tr');
-                    row.style.borderBottom = '1px solid #eee';
-                    row.innerHTML = `
-                        <td style="padding: 10px;">${formatMonthYear(trans.monthYear)}</td>
-                        <td style="padding: 10px;">${formatCurrency(trans.amount)}</td>
-                        <td style="padding: 10px;">${getStatusBadge(trans.status)}</td>
-                        <td style="padding: 10px;">${trans.paid ? formatCurrency(trans.paid) : '-'}</td>
-                    `;
-                    transactionsTable.appendChild(row);
-                });
+            // Load customer transactions - diurutkan dari yang terbaru ke terlama (kecuali untuk paket 6/12)
+            if (customer.paket !== 'Paket 6/12') {
+                const customerTransactions = transactions
+                    .filter(t => t.customerId === customerId)
+                    .sort((a, b) => a.monthYear.localeCompare(b.monthYear));
+                
+                const transactionsTable = document.getElementById('customerTransactions');
+                transactionsTable.innerHTML = '';
+                
+                if (customerTransactions.length === 0) {
+                    transactionsTable.innerHTML = '<tr><td colspan="4" class="text-center">Tidak ada transaksi</td></tr>';
+                } else {
+                    customerTransactions.forEach(trans => {
+                        const row = document.createElement('tr');
+                        row.style.borderBottom = '1px solid #eee';
+                        row.innerHTML = `
+                            <td style="padding: 10px;">${formatMonthYear(trans.monthYear)}</td>
+                            <td style="padding: 10px;">${formatCurrency(trans.amount)}</td>
+                            <td style="padding: 10px;">${getStatusBadge(trans.status)}</td>
+                            <td style="padding: 10px;">${trans.paid ? formatCurrency(trans.paid) : '-'}</td>
+                        `;
+                        transactionsTable.appendChild(row);
+                    });
+                }
             }
             
             // Set up buttons
@@ -1667,12 +2415,15 @@
             
             openModal('detailModal');
         }
-        
+
         // Fungsi hapus pelanggan (tanpa menghapus transaksi yang sudah ada)
         function deleteCustomer(customerId) {
             if (confirm('Apakah Anda yakin ingin menghapus pelanggan ini? Semua data tagihan bulan ini dan berikutnya akan dihapus.')) {
                 // Hapus pelanggan dari array
                 customers = customers.filter(c => c.id !== customerId);
+                
+                // Hapus juga dari packageCustomers jika ada
+                packageCustomers = packageCustomers.filter(p => p.customerId !== customerId);
                 
                 const today = new Date();
                 const currentMonthYear = today.toISOString().substring(0, 7);
@@ -1685,198 +2436,223 @@
                 saveToLocalStorage();
                 renderCustomerList();
                 renderTransactionList();
+                renderPackageList();
                 generateReport();
                 closeModal('detailModal');
             }
         }
         
-        function toggleCustomerStatus(customerId) {
-            const customer = customers.find(c => c.id === customerId);
-            if (!customer) return;
-            
-            customer.status = customer.status === 'active' ? 'inactive' : 'active';
-            
-            if (customer.status === 'inactive') {
-                const today = new Date();
-                const currentMonthYear = today.toISOString().substring(0, 7);
-                
-                // Hapus transaksi mendatang (bulan ini dan seterusnya)
-                transactions = transactions.filter(trans => {
-                    return !(trans.customerId === customerId && trans.monthYear >= currentMonthYear && trans.status === 'pending');
-                });
-            } else {
-                // Jika diaktifkan kembali, buat transaksi untuk 12 bulan ke depan
-                const today = new Date();
-                const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-                const endDate = new Date(startDate);
-                endDate.setMonth(endDate.getMonth() + 120); // Generate for next 120 months
-                
-                // Hapus dulu transaksi yang mungkin sudah ada untuk bulan-bulan mendatang
-                transactions = transactions.filter(trans => 
-                    !(trans.customerId === customerId && trans.monthYear >= startDate.toISOString().substring(0, 7))
-                );
-                
-                // Buat transaksi baru untuk 12 bulan ke depan
-                let date = new Date(startDate);
-                while (date <= endDate) {
-                    const monthYear = date.toISOString().substring(0, 7);
-                    
-                    // Cek apakah transaksi untuk bulan ini sudah ada (misalnya sudah ada yang dibayar)
-                    const existingTransaction = transactions.find(
-                        t => t.customerId === customerId && t.monthYear === monthYear
-                    );
-                    
-                    if (!existingTransaction) {
-                        transactions.push({
-                            id: `t${customerId}-${monthYear}`,
-                            customerId: customerId,
-                            customerName: customer.nama,
-                            monthYear: monthYear,
-                            amount: customer.tagihan,
-                            paid: 0,
-                            paymentDate: '',
-                            status: 'pending',
-                            notes: ''
-                        });
-                    }
-                    
-                    date.setMonth(date.getMonth() + 1);
-                }
-            }
-            
-            saveToLocalStorage();
-            renderCustomerList();
-            renderTransactionList();
-            generateReport();
+        // Fungsi untuk toggle status pelanggan (sudah diperbarui)
+function toggleCustomerStatus(customerId) {
+    const customer = customers.find(c => c.id === customerId);
+    if (!customer) return;
+
+    const isActivating = customer.status === 'inactive';
+    customer.status = isActivating ? 'active' : 'inactive';
+
+    if (isActivating) {
+        /*** LOGIKA AKTIFKAN KEMBALI ***/
+        // Pastikan tanggal aktivasi tidak melebihi 28
+        const today = new Date();
+        let activationDate = new Date(today);
+        
+        if (today.getDate() > 28) {
+            activationDate.setDate(28);
+            alert('Tanggal aktivasi disesuaikan ke 28 (maksimal)');
         }
         
-        // Transaction functions
-        function renderTransactionList(filterMonth = '', paymentStatus = '', customerFilter = '') {
-    const transactionList = document.getElementById('transactionList');
-    transactionList.innerHTML = '';
+        // Validasi ekstra
+        if (activationDate.getDate() > 28) {
+            activationDate.setMonth(activationDate.getMonth() + 1);
+            activationDate.setDate(28);
+        }
 
-    let filteredTransactions = [...transactions];
+        customer.tanggalDaftar = activationDate.toISOString().substring(0, 10);
 
-    // Filter by month
-    if (filterMonth) {
-        filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === filterMonth);
+        // Hanya buat transaksi baru jika bukan paket 6/12
+        if (customer.paket !== 'Paket 6/12') {
+            // Hapus dulu transaksi pending yang mungkin tersisa
+            transactions = transactions.filter(t => 
+                !(t.customerId === customerId && t.status === 'pending')
+            );
+            
+            // Buat transaksi baru mulai bulan depan
+            let startDate = new Date(activationDate);
+            startDate.setMonth(startDate.getMonth() + 1);
+            startDate.setDate(1); // Pastikan tanggal 1
+            
+            for (let i = 0; i < 120; i++) { // 10 tahun
+                const monthYear = startDate.toISOString().substring(0, 7);
+                const dueDate = new Date(startDate);
+                dueDate.setDate(Math.min(28, activationDate.getDate()));
+                
+                transactions.push({
+                    id: generateTransactionId(customer, monthYear),
+                    customerId: customer.id,
+                    customerName: customer.nama,
+                    monthYear: monthYear,
+                    amount: customer.finalPrice,
+                    paid: 0,
+                    paymentDate: '',
+                    dueDate: dueDate.toISOString().substring(0, 10),
+                    status: 'pending',
+                    notes: ''
+                });
+                
+                startDate.setMonth(startDate.getMonth() + 1);
+            }
+        }
+
+        alert(`Pelanggan diaktifkan. Tanggal: ${formatDate(customer.tanggalDaftar)}`);
     } else {
-        // Default to current month
-        const currentMonth = new Date().toISOString().substring(0, 7);
-        filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === currentMonth);
-        document.getElementById('filterMonth').value = currentMonth;
-    }
-
-    // Filter by payment status
-    if (paymentStatus) {
-        filteredTransactions = filteredTransactions.filter(trans => trans.status === paymentStatus);
-    }
-
-    // Filter by customer name
-    if (customerFilter) {
-        const searchTerm = customerFilter.toLowerCase();
-        filteredTransactions = filteredTransactions.filter(trans => {
-            const customerName = getCustomerName(trans.customerId).toLowerCase();
-            return customerName.includes(searchTerm);
-        });
-    }
-
-    // Sort transactions to match customer list order
-    // Pertama, buat array pelanggan yang diurutkan seperti di tab pelanggan
-    const sortedCustomers = [...customers].sort((a, b) => {
-        // Urutkan berdasarkan tanggal daftar (terbaru dulu)
-        return new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar);
-    });
-
-    // Kemudian urutkan transaksi sesuai urutan pelanggan
-    filteredTransactions.sort((a, b) => {
-        // Cari index pelanggan di array yang sudah diurutkan
-        const indexA = sortedCustomers.findIndex(c => c.id === a.customerId);
-        const indexB = sortedCustomers.findIndex(c => c.id === b.customerId);
+        /*** LOGIKA NONAKTIFKAN ***/
+        // Hanya hapus transaksi PENDING, biarkan yang sudah dibayar
+        transactions = transactions.filter(t => 
+            !(t.customerId === customerId && t.status === 'pending')
+        );
         
-        // Jika pelanggan tidak ditemukan (mungkin sudah dihapus), taruh di akhir
-        if (indexA === -1) return 1;
-        if (indexB === -1) return -1;
-        
-        // Urutkan berdasarkan urutan pelanggan
-        return indexA - indexB;
-    });
-
-    // Calculate summary data
-    const totalPaid = filteredTransactions
-        .filter(trans => trans.status === 'paid')
-        .reduce((sum, trans) => sum + (trans.paid || trans.amount), 0);
-    
-    const totalUnpaid = filteredTransactions
-        .filter(trans => trans.status === 'pending')
-        .reduce((sum, trans) => sum + trans.amount, 0);
-    
-    // Update summary cards
-    document.getElementById('totalPaidAmount').textContent = formatCurrency(totalPaid);
-    document.getElementById('totalUnpaidAmount').textContent = formatCurrency(totalUnpaid);
-
-    if (filteredTransactions.length === 0) {
-        const row = document.createElement('tr');
-        row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data transaksi</td>`;
-        transactionList.appendChild(row);
-        return;
+        alert('Pelanggan dinonaktifkan. Tagihan pending dihapus.');
     }
 
-    filteredTransactions.forEach((transaction, index) => {
-        const row = document.createElement('tr');
-        row.className = transaction.status === 'paid' ? 'active-row' :
-                        transaction.status === 'canceled' ? 'inactive-row' : '';
-
-        const customerName = getCustomerName(transaction.customerId);
-        const isCustomerDeleted = !customers.find(c => c.id === transaction.customerId);
-        const dueNote = getDueStatus(transaction.customerId, transaction.status, transaction.monthYear);
-
-        row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${isCustomerDeleted ? `<span class="deleted-customer">${customerName}</span>` : customerName}</td>
-            <td>${formatMonthYear(transaction.monthYear)}</td>
-            <td>${formatCurrency(transaction.amount)}</td>
-            <td>
-                ${(dueNote && transaction.status === 'pending') 
-                    ? `<span class="badge badge-danger">${dueNote}</span>` 
-                    : getStatusBadge(transaction.status)}
-            </td>
-            <td>
-                ${transaction.status === 'pending' ? 
-                    `<button class="action-btn btn-primary" onclick="openPaymentModal('${transaction.id}')">Bayar</button>` : 
-                    `
-                    <button class="action-btn btn-secondary" onclick="viewTransactionDetail('${transaction.id}')">Detail</button>
-                    <button class="action-btn btn-primary" onclick="openReceiptModal('${transaction.id}')">Bukti</button>
-                    `
-                }
-            </td>
-        `;
-
-        transactionList.appendChild(row);
-    });
+    saveToLocalStorage();
+    renderCustomerList();
+    renderTransactionList();
+    renderPackageList();
+    generateReport();
 }
 
-        function getDueStatus(customerId, status, trxMonth) {
-            const customer = customers.find(c => c.id === customerId);
-            if (!customer || status !== 'pending') return '';
+        // Transaction functions
+        function renderTransactionList(filterMonth = '', paymentStatus = '', customerFilter = '') {
+            const transactionList = document.getElementById('transactionList');
+            transactionList.innerHTML = '';
 
-            const today = new Date();
-            const daftarDate = new Date(customer.tanggalDaftar);
-            const trxDate = new Date(trxMonth + '-01');
+            let filteredTransactions = [...transactions];
 
-            // Transaksi bulan sekarang
-            const isThisMonth = trxDate.getFullYear() === today.getFullYear() && trxDate.getMonth() === today.getMonth();
-
-            if (trxDate < new Date(today.getFullYear(), today.getMonth(), 1)) {
-                return '🔴 Telat Bayar!'; // Bulan lalu masih pending
-            } else if (isThisMonth) {
-                if (today.getDate() === daftarDate.getDate()) {
-                    return '⏰ Jatuh Tempo Hari Ini';
-                } else if (today.getDate() > daftarDate.getDate()) {
-                    return '🔴 Telat Bayar!';
-                } 
+            // Filter by month
+            if (filterMonth) {
+                filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === filterMonth);
+            } else {
+                // Default to current month
+                const currentMonth = new Date().toISOString().substring(0, 7);
+                filteredTransactions = filteredTransactions.filter(trans => trans.monthYear === currentMonth);
+                document.getElementById('filterMonth').value = currentMonth;
             }
 
+            // Filter by payment status
+            if (paymentStatus) {
+                filteredTransactions = filteredTransactions.filter(trans => trans.status === paymentStatus);
+            }
+
+            // Filter by customer name
+            if (customerFilter) {
+                const searchTerm = customerFilter.toLowerCase();
+                filteredTransactions = filteredTransactions.filter(trans => {
+                    const customerName = getCustomerName(trans.customerId).toLowerCase();
+                    return customerName.includes(searchTerm);
+                });
+            }
+
+            // Sort transactions to match customer list order
+            // Pertama, buat array pelanggan yang diurutkan seperti di tab pelanggan
+            const sortedCustomers = [...customers].sort((a, b) => {
+                // Urutkan berdasarkan tanggal daftar (terbaru dulu)
+                return new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar);
+            });
+
+            // Kemudian urutkan transaksi sesuai urutan pelanggan
+            filteredTransactions.sort((a, b) => {
+                // Cari index pelanggan di array yang sudah diurutkan
+                const indexA = sortedCustomers.findIndex(c => c.id === a.customerId);
+                const indexB = sortedCustomers.findIndex(c => c.id === b.customerId);
+                
+                // Jika pelanggan tidak ditemukan (mungkin sudah dihapus), taruh di akhir
+                if (indexA === -1) return 1;
+                if (indexB === -1) return -1;
+                
+                // Urutkan berdasarkan urutan pelanggan
+                return indexA - indexB;
+            });
+
+            // Calculate summary data
+            const totalPaid = filteredTransactions
+                .filter(trans => trans.status === 'paid')
+                .reduce((sum, trans) => sum + (trans.paid || trans.amount), 0);
+            
+            const totalUnpaid = filteredTransactions
+                .filter(trans => trans.status === 'pending')
+                .reduce((sum, trans) => sum + trans.amount, 0);
+            
+            // Update summary cards
+            document.getElementById('totalPaidAmount').textContent = formatCurrency(totalPaid);
+            document.getElementById('totalUnpaidAmount').textContent = formatCurrency(totalUnpaid);
+
+            if (filteredTransactions.length === 0) {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td colspan="6" class="text-center">Tidak ada data transaksi</td>`;
+                transactionList.appendChild(row);
+                return;
+            }
+
+            filteredTransactions.forEach((transaction, index) => {
+                const row = document.createElement('tr');
+                row.className = transaction.status === 'paid' ? 'active-row' :
+                                transaction.status === 'canceled' ? 'inactive-row' : '';
+
+                const customerName = getCustomerName(transaction.customerId);
+                const isCustomerDeleted = !customers.find(c => c.id === transaction.customerId);
+                const dueNote = getDueStatus(transaction);
+
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${isCustomerDeleted ? `<span class="deleted-customer">${customerName}</span>` : customerName}</td>
+                    <td>${formatMonthYear(transaction.monthYear)}</td>
+                    <td>${formatCurrency(transaction.amount)}</td>
+                    <td>
+                        ${(dueNote && transaction.status === 'pending') 
+                            ? `<span class="badge badge-danger">${dueNote}</span>` 
+                            : getStatusBadge(transaction.status)}
+                    </td>
+                    <td>
+                        ${transaction.status === 'pending' ? 
+                            `<button class="action-btn btn-primary" onclick="openPaymentModal('${transaction.customerId}', '${transaction.id}')">Bayar</button>
+                             <button class="action-btn btn-warning" onclick="openReceiptModal('${transaction.id}', true)">Cetak Tagihan</button>
+                            ` : 
+                            `
+                            <button class="action-btn btn-secondary" onclick="viewTransactionDetail('${transaction.id}')">Detail</button>
+                            <button class="action-btn btn-primary" onclick="openReceiptModal('${transaction.id}')">Bukti</button>
+                            `
+                        }
+                    </td>
+                `;
+
+                transactionList.appendChild(row);
+            });
+        }
+
+        function getDueStatus(transaction) {
+            if (transaction.status !== 'pending') return '';
+            
+            const today = new Date();
+            const dueDate = new Date(transaction.dueDate);
+            
+            // Jika sudah lewat jatuh tempo
+            if (today > dueDate) {
+                return '🔴 Telat Bayar!';
+            }
+            
+            // Jika hari ini adalah jatuh tempo
+            if (today.toDateString() === dueDate.toDateString()) {
+                return '⏰ Jatuh Tempo Hari Ini';
+            }
+            
+            // Jika jatuh tempo dalam 3 hari ke depan
+            const threeDaysFromNow = new Date();
+            threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 3);
+            
+            if (today < dueDate && dueDate <= threeDaysFromNow) {
+                return '⚠️ Jatuh Tempo ' + formatDate(transaction.dueDate);
+            }
+            
             return '';
         }
         
@@ -1887,37 +2663,81 @@
             renderTransactionList(month, paymentStatus, customerFilter);
         }
         
-        function openPaymentModal(transactionId) {
-            const transaction = transactions.find(t => t.id === transactionId);
-            if (!transaction) return;
+        function openPaymentModal(customerId) {
+            const customer = customers.find(c => c.id === customerId);
+            if (!customer) return;
+
+            // Skip jika pelanggan paket 6/12
+            if (customer.paket === 'Paket 6/12') {
+                alert('Pelanggan dengan paket 6/12 bulan tidak memiliki tagihan bulanan');
+                return;
+            }
+
+            // Dapatkan semua tagihan pending pelanggan
+            const pendingTransactions = transactions.filter(t => 
+                t.customerId === customerId && t.status === 'pending'
+            ).sort((a, b) => a.monthYear.localeCompare(b.monthYear));
+
+            // Isi dropdown bulan
+            const monthSelect = document.getElementById('paymentMonthSelect');
+            monthSelect.innerHTML = '';
             
-            document.getElementById('paymentTransactionId').value = transactionId;
-            document.getElementById('paymentCustomerName').textContent = getCustomerName(transaction.customerId);
-            document.getElementById('paymentMonth').textContent = formatMonthYear(transaction.monthYear);
-            document.getElementById('paymentAmount').textContent = formatCurrency(transaction.amount);
+            pendingTransactions.forEach(trans => {
+                const option = document.createElement('option');
+                option.value = trans.id;
+                option.textContent = `${formatMonthYear(trans.monthYear)} - Rp ${trans.amount.toLocaleString('id-ID')}`;
+                monthSelect.appendChild(option);
+            });
+
+            // Set data default
+            document.getElementById('paymentCustomerId').value = customerId;
+            document.getElementById('paymentCustomerName').textContent = customer.nama;
+            
+            if (pendingTransactions.length > 0) {
+                const firstTransaction = pendingTransactions[0];
+                document.getElementById('paymentAmount').textContent = formatCurrency(firstTransaction.amount);
+            }
+            
             document.getElementById('paymentDate').value = new Date().toISOString().substring(0, 10);
             document.getElementById('paymentNotes').value = '';
-            
+
+            // Event listener saat pilihan bulan berubah
+            monthSelect.addEventListener('change', function() {
+                const selectedTransId = this.value;
+                const selectedTrans = transactions.find(t => t.id === selectedTransId);
+                if (selectedTrans) {
+                    document.getElementById('paymentAmount').textContent = formatCurrency(selectedTrans.amount);
+                }
+            });
+
             openModal('paymentModal');
         }
-        
+
         function processPayment() {
-            const transactionId = document.getElementById('paymentTransactionId').value;
+            const customerId = document.getElementById('paymentCustomerId').value;
+            const transactionId = document.getElementById('paymentMonthSelect').value;
             const paymentDate = document.getElementById('paymentDate').value;
             const paymentNotes = document.getElementById('paymentNotes').value;
-            
-            const transactionIndex = transactions.findIndex(t => t.id === transactionId);
-            if (transactionIndex === -1) return;
-            
-            transactions[transactionIndex].status = 'paid';
-            transactions[transactionIndex].paid = transactions[transactionIndex].amount;
-            transactions[transactionIndex].paymentDate = paymentDate;
-            transactions[transactionIndex].notes = paymentNotes || 'Pembayaran tagihan internet';
-            
+
+            const transaction = transactions.find(t => t.id === transactionId);
+            if (!transaction) return;
+
+            // Update transaksi
+            transaction.status = 'paid';
+            transaction.paid = transaction.amount;
+            transaction.paymentDate = paymentDate;
+            transaction.notes = paymentNotes || `Pembayaran tagihan ${formatMonthYear(transaction.monthYear)}`;
+
             saveToLocalStorage();
             closeModal('paymentModal');
-            renderTransactionList(document.getElementById('filterMonth').value);
+            
+            // Refresh tampilan
+            renderCustomerList();
+            renderTransactionList();
             generateReport();
+            
+            // Tampilkan bukti pembayaran
+            openReceiptModal(transactionId);
         }
         
         function viewTransactionDetail(transactionId) {
@@ -1955,6 +2775,10 @@
                         <tr>
                             <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Tanggal Bayar</strong></td>
                             <td style="padding: 10px; border-bottom: 1px solid #eee;">${transaction.paymentDate ? formatDate(transaction.paymentDate) : '-'}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Jatuh Tempo</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${formatDate(transaction.dueDate)}</td>
                         </tr>
                         <tr>
                             <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Status</strong></td>
@@ -2077,7 +2901,7 @@
             }
             
             // Sort by date (newest first)
-            filteredFinances.sort((a, b) => a.date.localeCompare(b.date));
+            filteredFinances.sort((a, b) => b.date.localeCompare(a.date));
             
             if (filteredFinances.length === 0) {
                 const row = document.createElement('tr');
@@ -2085,7 +2909,7 @@
                 financeList.appendChild(row);
                 return;
             }
-            
+                      
             filteredFinances.forEach((finance, index) => {
                 const row = document.createElement('tr');
                 row.className = finance.type === 'income' ? 'income-row' : 'expense-row';
@@ -2096,7 +2920,7 @@
                     <td>${finance.category}</td>
                     <td>${finance.description || '-'}</td>
                     <td class="${finance.type === 'income' ? 'income-text' : 'expense-text'}">
-                        ${finance.type === 'income' ? '+' : '-'} ${formatCurrency(finance.amount)}
+                        ${formatCurrency(finance.amount)}
                     </td>
                     <td>
                         <button class="action-btn btn-secondary" onclick="openFinanceForm('${finance.type}', '${finance.id}')">Edit</button>
@@ -2117,6 +2941,187 @@
             }
         }
         
+        // Package 6/12 functions
+        function renderPackageList(filter = '') {
+    const packageList = document.getElementById('packageList');
+    packageList.innerHTML = '';
+    
+    let filteredPackages = [...packageCustomers];
+    
+    // Filter by package type
+    if (currentPackageTab === '6') {
+        filteredPackages = filteredPackages.filter(p => p.packageDuration === '6');
+    } else if (currentPackageTab === '12') {
+        filteredPackages = filteredPackages.filter(p => p.packageDuration === '12');
+    }
+    
+    // Filter by search term
+    if (filter) {
+        const searchTerm = filter.toLowerCase();
+        filteredPackages = filteredPackages.filter(p => 
+            p.customerName.toLowerCase().includes(searchTerm)
+        );
+    }
+    
+    // Sort by end date (closest first)
+    filteredPackages.sort((a, b) => new Date(a.endDate) - new Date(b.endDate));
+    
+    // Hitung total paket dan pendapatan
+    const totalPackage6 = packageCustomers.filter(p => p.packageDuration === '6').length;
+    const totalRevenue6 = packageCustomers.filter(p => p.packageDuration === '6')
+        .reduce((sum, p) => sum + p.amount, 0);
+    
+    const totalPackage12 = packageCustomers.filter(p => p.packageDuration === '12').length;
+    const totalRevenue12 = packageCustomers.filter(p => p.packageDuration === '12')
+        .reduce((sum, p) => sum + p.amount, 0);
+    
+    // Update summary cards
+    document.getElementById('totalPackage6').textContent = totalPackage6;
+    document.getElementById('totalRevenue6').textContent = formatCurrency(totalRevenue6);
+    document.getElementById('totalPackage12').textContent = totalPackage12;
+    document.getElementById('totalRevenue12').textContent = formatCurrency(totalRevenue12);
+    
+    if (filteredPackages.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="8" class="text-center">Tidak ada data pelanggan paket</td>`;
+        packageList.appendChild(row);
+        return;
+    }
+    
+    filteredPackages.forEach((pkg, index) => {
+        const customer = customers.find(c => c.id === pkg.customerId);
+        const isActive = customer ? customer.status === 'active' : false;
+        const isExpired = new Date(pkg.endDate) < new Date();
+        
+        const row = document.createElement('tr');
+        row.className = pkg.packageDuration === '6' ? 'package6-row' : 'package12-row';
+        
+        row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${pkg.customerName}</td>
+            <td>Paket ${pkg.packageDuration} Bulan</td>
+            <td>${formatCurrency(pkg.amount)}</td>
+            <td>${formatDate(pkg.startDate)}</td>
+            <td>${formatDate(pkg.endDate)}</td>
+            <td>
+                <span class="${isActive ? (pkg.packageDuration === '6' ? 'status-package6' : 'status-package12') : 'status-inactive'}">
+                    ${isActive ? (isExpired ? 'Kadaluarsa' : 'Aktif') : 'Nonaktif'}
+                </span>
+            </td>
+            <td>
+                <button class="action-btn btn-secondary" onclick="showPackageDetail('${pkg.id}')">Detail</button>
+                ${isExpired && isActive ? 
+                    `<button class="action-btn btn-primary" onclick="renewPackage('${pkg.id}')">Perpanjang</button>` : 
+                    ''}
+            </td>
+        `;
+        
+        packageList.appendChild(row);
+    });
+}
+        
+        function showPackageDetail(packageId) {
+            const pkg = packageCustomers.find(p => p.id === packageId);
+            if (!pkg) return;
+            
+            const customer = customers.find(c => c.id === pkg.customerId);
+            const isExpired = new Date(pkg.endDate) < new Date();
+            
+            const detailHtml = `
+                <div style="max-width: 500px; margin: 0 auto;">
+                    <h3 style="text-align: center; color: var(--header-bg);">Detail Paket</h3>
+                    <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                        <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Pelanggan</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${pkg.customerName}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Paket</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${pkg.packageDuration} Bulan</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Jumlah</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${formatCurrency(pkg.amount)}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Tanggal Mulai</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${formatDate(pkg.startDate)}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Tanggal Berakhir</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">${formatDate(pkg.endDate)}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;"><strong>Status</strong></td>
+                            <td style="padding: 10px; border-bottom: 1px solid #eee;">
+                                <span class="${customer && customer.status === 'active' ? 
+                                    (pkg.packageDuration === '6' ? 'status-package6' : 'status-package12') : 
+                                    'status-inactive'}">
+                                    ${customer && customer.status === 'active' ? 
+                                        (isExpired ? 'Kadaluarsa' : 'Aktif') : 
+                                        'Nonaktif'}
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        ${isExpired && customer && customer.status === 'active' ? 
+                            `<button class="btn-primary" onclick="renewPackage('${pkg.id}')">Perpanjang Paket</button>` : 
+                            ''}
+                        <button class="btn-outline" onclick="closeModal('detailModal')" style="margin-left: 10px;">Tutup</button>
+                    </div>
+                </div>
+            `;
+            
+            // Buka modal detail dengan konten baru
+            const detailModal = document.getElementById('detailModal');
+            const detailContent = document.getElementById('customerDetailContent');
+            detailContent.innerHTML = detailHtml;
+            
+            // Sembunyikan tombol default di modal detail
+            document.querySelector('.button-group').style.display = 'none';
+            
+            openModal('detailModal');
+        }
+        
+        function renewPackage(packageId) {
+            const pkg = packageCustomers.find(p => p.id === packageId);
+            if (!pkg) return;
+            
+            const customer = customers.find(c => c.id === pkg.customerId);
+            if (!customer) return;
+            
+            if (confirm(`Perpanjang paket ${pkg.packageDuration} bulan untuk ${customer.nama}?`)) {
+                // Hitung tanggal mulai baru (hari ini atau tanggal berakhir paket, mana yang lebih baru)
+                const today = new Date();
+                const endDate = new Date(pkg.endDate);
+                const newStartDate = today > endDate ? today : endDate;
+                
+                // Perpanjang paket
+                pkg.startDate = newStartDate.toISOString().substring(0, 10);
+                pkg.endDate = calculatePackageEndDate(pkg.startDate, pkg.packageDuration);
+                
+                // Catat sebagai pemasukan keuangan
+                finances.push({
+                    id: Date.now().toString(),
+                    type: 'income',
+                    date: newStartDate.toISOString().substring(0, 10),
+                    category: 'Paket ' + pkg.packageDuration + ' Bulan',
+                    amount: pkg.amount,
+                    description: 'Perpanjangan paket ' + pkg.packageDuration + ' bulan untuk ' + customer.nama
+                });
+                
+                saveToLocalStorage();
+                renderPackageList();
+                renderFinanceList();
+                generateReport();
+                closeModal('detailModal');
+                
+                alert(`Paket ${pkg.packageDuration} bulan untuk ${customer.nama} telah diperpanjang hingga ${formatDate(pkg.endDate)}`);
+            }
+        }
+        
         // Report functions
         function generateReport() {
             const year = document.getElementById('reportYear').value;
@@ -2134,7 +3139,9 @@
                     totalIncome: 0,
                     totalExpense: 0,
                     newCustomers: 0,
-                    churnedCustomers: 0
+                    churnedCustomers: 0,
+                    package6: 0,
+                    package12: 0
                 };
             }
             
@@ -2206,6 +3213,24 @@
                 }
             });
             
+            // Process package customers
+            packageCustomers.forEach(pkg => {
+                const startDate = new Date(pkg.startDate);
+                const startYear = startDate.getFullYear();
+                const startMonth = (startDate.getMonth() + 1).toString().padStart(2, '0');
+                
+                if (startYear.toString() === year) {
+                    const monthKey = `${year}-${startMonth}`;
+                    if (monthlyData[monthKey]) {
+                        if (pkg.packageDuration === '6') {
+                            monthlyData[monthKey].package6++;
+                        } else {
+                            monthlyData[monthKey].package12++;
+                        }
+                    }
+                }
+            });
+            
             // Render report
             renderReportTable(monthlyData);
             renderAnnualSummary(monthlyData, year);
@@ -2242,9 +3267,13 @@
             const totalIncome = Object.values(monthlyData).reduce((sum, month) => sum + month.totalIncome, 0);
             const totalExpense = Object.values(monthlyData).reduce((sum, month) => sum + month.totalExpense, 0);
             const totalNewCustomers = Object.values(monthlyData).reduce((sum, month) => sum + month.newCustomers, 0);
+            const totalPackage6 = Object.values(monthlyData).reduce((sum, month) => sum + month.package6, 0);
+            const totalPackage12 = Object.values(monthlyData).reduce((sum, month) => sum + month.package12, 0);
             
-            const activeCustomersCount = customers.filter(c => c.status === 'active').length;
+            const activeCustomersCount = customers.filter(c => c.status === 'active' && c.paket !== 'Paket 6/12').length;
             const inactiveCustomersCount = customers.filter(c => c.status === 'inactive').length;
+            const package6Count = customers.filter(c => c.status === 'active' && c.paket === 'Paket 6/12' && c.packageDuration === '6').length;
+            const package12Count = customers.filter(c => c.status === 'active' && c.paket === 'Paket 6/12' && c.packageDuration === '12').length;
             const balance = totalPaid + totalIncome - totalExpense;
             
             // Update summary cards
@@ -2256,42 +3285,30 @@
             document.getElementById('total-income').textContent = formatCurrency(totalIncome);
             document.getElementById('total-expense').textContent = formatCurrency(totalExpense);
             document.getElementById('balance').textContent = formatCurrency(balance);
+            document.getElementById('annual-package6').textContent = package6Count;
+            document.getElementById('annual-package12').textContent = package12Count;
         }
         
         // Utility functions
         function formatDate(dateString) {
             if (!dateString) return '';
             const date = new Date(dateString);
-            return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            return date.toLocaleDateString('id-ID', { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            });
         }
-        
+
         function formatMonthYear(monthYear) {
-            // Pastikan monthYear dalam format YYYY-MM
             const [year, month] = monthYear.split('-');
             const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
                               'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-            
-            // Pastikan month adalah angka antara 1-12
-            const monthIndex = parseInt(month) - 1;
-            if (monthIndex >= 0 && monthIndex < 12) {
-                return `${monthNames[monthIndex]} ${year}`;
-            }
-            return 'Bulan tidak valid';
+            return `${monthNames[parseInt(month)-1]} ${year}`;
         }
 
         function formatCurrency(amount) {
             return 'Rp ' + (amount || 0).toLocaleString('id-ID');
-        }
-
-        function getPreviousMonthYear(monthYear) {
-            let [year, month] = monthYear.split('-').map(Number);
-            if (month === 1) {
-                month = 12;
-                year -= 1;
-            } else {
-                month -= 1;
-            }
-            return `${year}-${month.toString().padStart(2, '0')}`;
         }
 
         function getStatusBadge(status) {
@@ -2299,7 +3316,7 @@
                 case 'paid':
                     return '<span class="badge badge-success">Lunas</span>';
                 case 'pending':
-                    return '<span class="badge badge-warning">Belum Bayar</span>';
+                    return '<span class="badge badge-danger">BELUM LUNAS</span>';
                 case 'canceled':
                     return '<span class="badge badge-danger">Dibatalkan</span>';
                 default:
@@ -2311,6 +3328,7 @@
             localStorage.setItem('customers', JSON.stringify(customers));
             localStorage.setItem('transactions', JSON.stringify(transactions));
             localStorage.setItem('finances', JSON.stringify(finances));
+            localStorage.setItem('packageCustomers', JSON.stringify(packageCustomers));
         }
         
         function openBackupMenu() {
@@ -2321,7 +3339,8 @@
             const data = {
                 customers,
                 transactions,
-                finances
+                finances,
+                packageCustomers
             };
 
             const dataStr = JSON.stringify(data, null, 2);
@@ -2350,14 +3369,16 @@
             reader.onload = function(e) {
                 try {
                     const importedData = JSON.parse(e.target.result);
-                    if (importedData.customers && importedData.transactions && importedData.finances) {
+                    if (importedData.customers && importedData.transactions && importedData.finances && importedData.packageCustomers) {
                         customers = importedData.customers;
                         transactions = importedData.transactions;
                         finances = importedData.finances;
+                        packageCustomers = importedData.packageCustomers;
                         saveToLocalStorage();
                         renderCustomerList();
                         renderTransactionList();
                         renderFinanceList();
+                        renderPackageList();
                         generateReport();
                         closeModal("backupModal");
                         alert("Data berhasil diimpor!");
@@ -2372,23 +3393,54 @@
         }
 
         // Fungsi untuk membuka modal bukti pembayaran
-        function openReceiptModal(transactionId) {
+        function openReceiptModal(transactionId, isInvoice = false) {
+            console.log('Membuka modal bukti pembayaran untuk transaksi:', transactionId);
+            
             const transaction = transactions.find(t => t.id === transactionId);
-            if (!transaction) return;
+            if (!transaction) {
+                console.error('Transaksi tidak ditemukan');
+                alert('Transaksi tidak ditemukan');
+                return;
+            }
             
             const customer = customers.find(c => c.id === transaction.customerId);
             
             // Isi data ke dalam modal
             document.getElementById('receiptTrxId').textContent = transaction.id;
-            document.getElementById('receiptDate').textContent = formatDate(transaction.paymentDate);
-            document.getElementById('receiptStatus').textContent = transaction.status === 'paid' ? 'LUNAS' : 'PENDING';
-            document.getElementById('receiptStatus').className = transaction.status === 'paid' ? 'badge badge-success' : 'badge badge-warning';
+            document.getElementById('receiptDate').textContent = isInvoice ? formatDate(new Date().toISOString().substring(0, 10)) : formatDate(transaction.paymentDate);
+            
+            if (isInvoice) {
+                document.getElementById('receiptTitle').textContent = 'TAGIHAN INTERNET';
+                document.getElementById('receiptSubtitle').textContent = 'Tagihan Bulanan Internet';
+                document.getElementById('receiptStatus').textContent = 'BELUM LUNAS';
+                document.getElementById('receiptStatus').className = 'badge badge-danger';
+                document.getElementById('paymentInstructions').style.display = 'block';
+                document.getElementById('dueDateText').textContent = formatDate(transaction.dueDate);
+                
+                // Sembunyikan elemen yang tidak perlu untuk tagihan
+                document.getElementById('receiptStamp').classList.add('no-print');
+                document.querySelector('#receiptContent p[style*="opacity: 0.8"]').classList.add('no-print'); // Nama suroso
+                document.querySelector('#receiptContent div[style*="margin-top: 20px; font-size: 12px"]').classList.add('no-print'); // Info terima kasih
+            } else {
+                document.getElementById('receiptTitle').textContent = 'Bukti Pembayaran';
+                document.getElementById('receiptSubtitle').textContent = 'Bukti Pembayaran Internet';
+                document.getElementById('receiptStatus').textContent = transaction.status === 'paid' ? 'LUNAS' : 'PENDING';
+                document.getElementById('receiptStatus').className = transaction.status === 'paid' ? 'badge badge-success' : 'badge badge-warning';
+                document.getElementById('paymentInstructions').style.display = 'none';
+                
+                // Tampilkan kembali elemen jika bukan tagihan
+                document.getElementById('receiptStamp').classList.remove('no-print');
+                document.querySelector('#receiptContent p[style*="opacity: 0.8"]').classList.remove('no-print');
+                document.querySelector('#receiptContent div[style*="margin-top: 20px; font-size: 12px"]').classList.remove('no-print');
+            }
             
             if (customer) {
                 document.getElementById('receiptCustomer').textContent = customer.nama;
                 document.getElementById('receiptAddress').textContent = customer.alamat;
                 document.getElementById('receiptPhone').textContent = customer.telepon;
-                document.getElementById('receiptPackage').textContent = customer.paket + ' - ' + formatCurrency(customer.tagihan) + '/bulan';
+                document.getElementById('receiptPackage').textContent = 
+                    customer.paket + ' - ' + formatCurrency(customer.finalPrice) + (customer.paket === 'Paket 6/12' ? ' (sekali bayar)' : '/bulan') + 
+                    (customer.discount > 0 ? ` (Diskon ${formatCurrency(customer.discount)})` : '');
             } else {
                 document.getElementById('receiptCustomer').textContent = transaction.customerName;
                 document.getElementById('receiptAddress').textContent = 'Pelanggan sudah dihapus';
@@ -2398,28 +3450,64 @@
             
             document.getElementById('receiptPeriod').textContent =
                 `${formatMonthYear(getPreviousMonthYear(transaction.monthYear))} - ${formatMonthYear(transaction.monthYear)}`;
-            document.getElementById('receiptAmount').textContent = formatCurrency(transaction.paid);
-            document.getElementById('receiptNotes').textContent = transaction.notes || 'Jasa Layanan Internet';
+            document.getElementById('receiptDueDate').textContent = formatDate(transaction.dueDate);
+            document.getElementById('receiptAmount').textContent = formatCurrency(transaction.amount);
+            document.getElementById('receiptNotes').textContent = isInvoice ? 'Tagihan Jasa Layanan Internet' : (transaction.notes || 'Jasa Layanan Internet');
             
-            // Tampilkan stempel hanya untuk transaksi yang sudah dibayar
-            if (transaction.status === 'paid') {
-                document.getElementById('receiptStamp').style.display = 'block';
-            } else {
+            // Sembunyikan stempel untuk tagihan
+            if (isInvoice || transaction.status !== 'paid') {
                 document.getElementById('receiptStamp').style.display = 'none';
+            } else {
+                document.getElementById('receiptStamp').style.display = 'block';
             }
+            
+            // Ubah teks tombol download
+            const downloadBtn = document.querySelector('#receiptModal .btn-primary');
+            downloadBtn.querySelector('span').textContent = isInvoice ? 'Download Tagihan' : 'Download Bukti';
             
             openModal('receiptModal');
         }
 
+        // Helper function untuk mendapatkan bulan sebelumnya
+        function getPreviousMonthYear(monthYear) {
+            const [year, month] = monthYear.split('-').map(Number);
+            let prevMonth = month - 1;
+            let prevYear = year;
+            
+            if (prevMonth < 1) {
+                prevMonth = 12;
+                prevYear--;
+            }
+            
+            return `${prevYear}-${String(prevMonth).padStart(2, '0')}`;
+        }
+
         // Fungsi untuk download bukti sebagai gambar
-         function downloadReceiptImage() {
+        function downloadReceiptImage() {
             const transactionId = document.getElementById('receiptTrxId').textContent;
             const customerName = document.getElementById('receiptCustomer').textContent;
             const period = document.getElementById('receiptPeriod').textContent;
+            const isInvoice = document.getElementById('paymentInstructions').style.display !== 'none';
             
-            // Format nama file: Bukti_Bayar(nama pelanggan)(BulanTahun)
-            const fileName = `Bukti_Bayar_${customerName.replace(/[^a-zA-Z0-9]/g, '_')}_${period.replace(/ /g, '_')}.png`;
-            
+            // Format nama file yang berbeda untuk bukti bayar dan tagihan
+            const fileName = isInvoice 
+                ? `Tagihan_${customerName.replace(/[^a-zA-Z0-9]/g, '_')}_${formatMonthYearForFilename(period)}.png`
+                : `Bukti_Bayar_${customerName.replace(/[^a-zA-Z0-9]/g, '_')}_${formatMonthYearForFilename(period)}.png`;
+                
+            // Fungsi untuk memformat bulan tahun menjadi format filename
+            function formatMonthYearForFilename(periodText) {
+                // Contoh periodText: "Januari 2025 - Februari 2025"
+                const parts = periodText.split(' - ');
+                if (parts.length === 2) {
+                    const [bulanAwal, bulanAkhir] = parts;
+                    const bulanAkhirParts = bulanAkhir.split(' ');
+                    if (bulanAkhirParts.length === 2) {
+                        return `${bulanAkhirParts[0]}_${bulanAkhirParts[1]}`;
+                    }
+                }
+                return new Date().toISOString().substring(0, 7).replace('-', '_');
+            }
+
             // Tampilkan loading
             const downloadBtnText = document.getElementById('downloadBtnText');
             const originalText = downloadBtnText.textContent;
@@ -2452,7 +3540,7 @@
             const options = {
                 scale: 2,
                 width: 600,
-                height: optimalHeight,
+                height: 1080,
                 backgroundColor: '#FFFFFF',
                 useCORS: true,
                 allowTaint: true,
@@ -2488,16 +3576,6 @@
         }
         
         
-  const dateInput = document.getElementById("tanggalDaftar");
-
-  // Batasi maksimal tanggal yang bisa dipilih adalah tanggal 28 bulan ini
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const maxDate = `${year}-${month}-28`;
-
-  dateInput.setAttribute("max", maxDate);
-
     </script>
 </body>
 </html>
