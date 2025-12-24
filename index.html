@@ -1349,7 +1349,8 @@
                 
                 <div class="form-group" id="customAmountGroup">
                     <label for="customAmount">Nominal Tagihan:</label>
-                    <input type="number" id="customAmount" placeholder="Masukkan nominal tagihan">
+                    <input type="number" id="customAmount" placeholder="Masukkan nominal tagihan" min="0">
+                    <small class="text-muted">Isi dengan nominal pembayaran paket</small>
                 </div>
                 
                 <div class="form-group" id="discountGroup">
@@ -1769,12 +1770,14 @@
             
             if (paket === 'Paket 6/12') {
                 packageDurationGroup.style.display = 'block';
-                customAmountGroup.style.display = 'none';
-                document.getElementById('customAmount').required = false;
+                customAmountGroup.style.display = 'block'; // Tampilkan input manual
+                document.getElementById('customAmount').required = true; // Wajib diisi
+                document.getElementById('customAmount').placeholder = 'Masukkan nominal paket 6/12 bulan';
             } else if (paket === 'Lainnya') {
                 packageDurationGroup.style.display = 'none';
                 customAmountGroup.style.display = 'block';
                 document.getElementById('customAmount').required = true;
+                document.getElementById('customAmount').placeholder = 'Masukkan nominal tagihan';
             } else {
                 packageDurationGroup.style.display = 'none';
                 customAmountGroup.style.display = 'none';
@@ -1879,6 +1882,8 @@ function validateRegistrationDate(dateString) {
             if (customer.paket === 'Paket 6/12') {
                 document.getElementById('packageDuration').value = customer.packageDuration || '6';
                 document.getElementById('packageDurationGroup').style.display = 'block';
+                document.getElementById('customAmountGroup').style.display = 'block';
+                document.getElementById('customAmount').value = customer.originalPrice || customer.tagihan;
             }
             
             // Jika paket custom
@@ -1953,6 +1958,7 @@ function saveCustomer() {
         const tanggalDaftar = document.getElementById('tanggalDaftar').value;
         const paket = document.getElementById('paket').value;
         const packageDuration = document.getElementById('packageDuration').value;
+        const customAmount = parseInt(document.getElementById('customAmount').value) || 0;
         const discount = parseInt(document.getElementById('discountAmount').value) || 0;
         
         // Validasi dasar
@@ -1966,27 +1972,30 @@ function saveCustomer() {
             return false;
         }
         
+        // Validasi khusus untuk paket 6/12
+        if (paket === 'Paket 6/12' && customAmount <= 0) {
+            alert('Nominal tagihan untuk paket 6/12 bulan harus diisi!');
+            return false;
+        }
+        
         // Hitung tagihan
         let tagihan = 0;
         let originalPrice = 0;
         
         if (paket === 'Lainnya') {
-            originalPrice = parseInt(document.getElementById('customAmount').value) || 0;
+            originalPrice = customAmount;
             if (originalPrice <= 0) {
                 alert('Nominal tagihan harus lebih dari 0');
                 return false;
             }
             tagihan = originalPrice;
         } else if (paket === 'Paket 6/12') {
-            const duration = parseInt(packageDuration);
-            const monthlyPrice = getPackagePrice('Standard');
-            
-            if (duration === 6) {
-                originalPrice = monthlyPrice * 6 * 0.85;
-            } else {
-                originalPrice = monthlyPrice * 12 * 0.75;
+            // Gunakan nilai input manual
+            originalPrice = customAmount;
+            if (originalPrice <= 0) {
+                alert('Nominal tagihan harus lebih dari 0');
+                return false;
             }
-            
             tagihan = originalPrice;
         } else {
             originalPrice = getPackagePrice(paket);
@@ -2082,6 +2091,7 @@ function saveCustomer() {
         closeModal('customerModal');
         renderCustomerList();
         renderTransactionList();
+        renderFinanceList();
         renderPackageList();
         generateReport();
         
