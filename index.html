@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    <title>Manajemen Pelanggan & Tagihan - KH1992</title>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js">
+    </script>
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-gray: #f5f5f5;
+            --dark-gray: #333;
+            --medium-gray: #ddd;
+            --income-color: #27ae60;
+            --expense-color: #c0392b;
+            --header-bg: #2c3e50;
+            --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --package6-color: #9b59b6;
+            --package12-color: #34495e;
+            --savings-color: #1abc9c;
+            --need-color: #e67e22;
+            --want-color: #8e44ad;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f6f9;
+            color: var(--dark-gray);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            padding-bottom: 70px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .header-container {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background: #008055;
+            color: white;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .logo {
+            width: 100%;
+            cursor: pointer;
+        }
+        .info-bar {
+            background: #f0f8f0;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            border-bottom: 2px solid #d4e8d4;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+        }
+        .info-item .info-value {
+            font-weight: 700;
+        }
+        .info-balance {
+            color: #27ae60;
+        }
+        .info-customers {
+            color: #2980b9;
+        }
+        .info-pending {
+            color: #e74c3c;
+        }
+        .info-savings {
+            color: #1abc9c;
+        }
+        button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #2980b9;
+        }
+        .btn-secondary {
+            background: #2ecc71;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #27ae60;
+        }
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+        .btn-warning {
+            background: #f39c12;
+            color: white;
+        }
+        .btn-warning:hover {
+            background: #e67e22;
+        }
+        .btn-savings {
+            background: var(--savings-color);
+            color: white;
+        }
+        .btn-savings:hover {
+            background: #16a085;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #ddd;
+            color: #333;
+        }
+        .btn-outline:hover {
+            background: #f9f9f9;
+        }
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 11px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .button-group button {
+            flex: 1 1 auto;
+            min-width: 100px;
+        }
+        .action-btn {
+            padding: 6px 10px;
+            margin: 2px;
+            font-size: 11px;
+            border-radius: 5px;
+            cursor: pointer;
+            border: none;
+        }
+        h2 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        h3 {
+            font-size: 1rem;
+            margin-bottom: 12px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #555;
+            font-size: 13px;
+        }
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 13px;
+        }
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th,
+        td {
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #444;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        tr:hover {
+            background: #f1f1f1;
+        }
+        .active-row {
+            background: #e8f4fd;
+        }
+        .inactive-row {
+            background: #fde8e8;
+            color: #999;
+        }
+        .package6-row {
+            background: rgba(155, 89, 182, 0.08);
+        }
+        .package12-row {
+            background: rgba(52, 73, 94, 0.08);
+        }
+        .income-row {
+            background: rgba(46, 204, 113, 0.08);
+        }
+        .expense-row {
+            background: rgba(231, 76, 60, 0.08);
+        }
+        .savings-row {
+            background: rgba(26, 188, 156, 0.08);
+        }
+        .need-row {
+            background: rgba(230, 126, 34, 0.05);
+        }
+        .want-row {
+            background: rgba(142, 68, 173, 0.05);
+        }
+        .status-active {
+            color: #2ecc71;
+            font-weight: 600;
+        }
+        .status-inactive {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        .status-package6 {
+            color: #9b59b6;
+            font-weight: 600;
+        }
+        .status-package12 {
+            color: #34495e;
+            font-weight: 600;
+        }
+        .income-text {
+            color: #27ae60;
+            font-weight: 600;
+        }
+        .expense-text {
+            color: #c0392b;
+            font-weight: 600;
+        }
+        .savings-text {
+            color: var(--savings-color);
+            font-weight: 600;
+        }
+        .need-text {
+            color: var(--need-color);
+            font-weight: 600;
+        }
+        .want-text {
+            color: var(--want-color);
+            font-weight: 600;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .badge-success {
+            background: #e6ffe6;
+            color: #2ecc71;
+        }
+        .badge-warning {
+            background: #fff2cc;
+            color: #f39c12;
+        }
+        .badge-danger {
+            background: #ffe6e6;
+            color: #e74c3c;
+        }
+        .badge-info {
+            background: #e6f3ff;
+            color: #3498db;
+        }
+        .badge-need {
+            background: #fef5e7;
+            color: #e67e22;
+        }
+        .badge-want {
+            background: #f4ecf7;
+            color: #8e44ad;
+        }
+        .summary-container {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .summary-card {
+            flex: 1;
+            min-width: 130px;
+            background: #fff;
+            padding: 12px;
+            border-radius: 10px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+        }
+        .summary-card h3 {
+            margin: 0 0 8px;
+            font-size: 12px;
+            color: #666;
+        }
+        .summary-card p {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        .progress-bar-container {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #1abc9c, #2ecc71);
+            border-radius: 10px;
+            transition: width 0.5s;
+        }
+        /* ANALISA */
+        .health-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+        }
+        .health-score {
+            font-size: 48px;
+            font-weight: 700;
+        }
+        .health-sehat {
+            color: #27ae60;
+        }
+        .health-waspada {
+            color: #f39c12;
+        }
+        .health-bahaya {
+            color: #e74c3c;
+        }
+        .health-bar {
+            width: 100%;
+            height: 30px;
+            background: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .health-bar-fill {
+            height: 100%;
+            border-radius: 15px;
+            transition: width 0.8s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 12px;
+        }
+        .saran-card {
+            background: #fffbf0;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .saran-card.baik {
+            background: #f0fff0;
+            border-left: 4px solid #27ae60;
+        }
+        .saran-card.buruk {
+            background: #fff0f0;
+            border-left: 4px solid #e74c3c;
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .search-box {
+            margin-bottom: 15px;
+        }
+        .search-box input {
+            padding: 10px 18px;
+            border-radius: 25px;
+            border: 1px solid #ddd;
+            width: 100%;
+            background: #f9f9f9;
+        }
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 6px 0;
+        }
+        .nav-item {
+            padding: 6px 3px;
+            text-align: center;
+            flex: 1;
+            cursor: pointer;
+            color: #666;
+            font-size: 10px;
+        }
+        .nav-item.active {
+            color: #3498db;
+            border-top: 3px solid #3498db;
+        }
+        .nav-icon {
+            font-size: 18px;
+            margin-bottom: 1px;
+        }
+        .nav-label {
+            font-size: 9px;
+        }
+        .submenu-modal {
+            display: none;
+            position: fixed;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            width: 95%;
+            max-width: 400px;
+            padding: 20px;
+            animation: slideUp 0.3s;
+        }
+        .submenu-modal.active {
+            display: block;
+        }
+        @keyframes slideUp {
+            from {
+                transform: translateX(-50%) translateY(100%);
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+        .submenu-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+        }
+        .submenu-overlay.active {
+            display: block;
+        }
+        .submenu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .submenu-item:hover {
+            background: #f5f5f5;
+        }
+        .submenu-item .submenu-icon {
+            font-size: 20px;
+            width: 30px;
+            text-align: center;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 3000;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 20px;
+        }
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .close-modal {
+            font-size: 22px;
+            cursor: pointer;
+            color: #999;
+        }
+        .close-modal:hover {
+            color: #e74c3c;
+        }
+        .responsive-table {
+            overflow-x: auto;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .filter-group select,
+        .filter-group input {
+            flex: 1 1 auto;
+            min-width: 130px;
+        }
+        .chart-container {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        .chart-container canvas {
+            max-height: 300px;
+        }
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        @media (max-width: 768px) {
+            .two-columns {
+                grid-template-columns: 1fr;
+            }
+        }
+        .text-center {
+            text-align: center;
+        }
+        #customAmountGroup,
+        #packageDurationGroup {
+            display: none;
+            margin-top: 10px;
+        }
+        .package-tab {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .package-tab.active {
+            border-bottom: 2px solid #3498db;
+            color: #3498db;
+            font-weight: 600;
+        }
+        #receiptContent {
+            width: 100%;
+            max-width: 600px;
+            padding: 25px;
+            margin: 0 auto;
+            background: white;
+            position: relative;
+            border: 1px solid #eee;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        #receiptContent::after {
+            content: "";
+            background-image: url('https://i.postimg.cc/kMVBzpx1/Nt-U-watermark.png');
+            background-size: 100px;
+            background-repeat: repeat;
+            opacity: 0.04;
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            right: -50%;
+            bottom: -50%;
+            z-index: 0;
+            pointer-events: none;
+            transform: rotate(-25deg);
+        }
+        #receiptContent>* {
+            position: relative;
+            z-index: 1;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #receiptContent,
+            #receiptContent * {
+                visibility: visible;
+            }
+            #receiptContent {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                padding: 20px;
+                box-shadow: none;
+                border: none;
+            }
+        }
+        #paket-tab,
+        #tabungan-tab,
+        #analisa-tab {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: white;
+            z-index: 2000;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 80px;
+        }
+        #pelanggan-tab.active,
+        #transaksi-tab.active,
+        #keuangan-tab.active,
+        #dashboard-tab.active {
+            display: block !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-container">
+            <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9MlltS8Z9gDyRUe09dh6vmIye6mjgzi0a4-94BaOVSeIpa-7Dp7qjns6t_1dSwvuZF4mi0P998TolhFJS2DT9Ge_aXL1qdO9FnbscN5ZgJoDuPHYX4ekJgVwttL7q9ChXExhizmZ9rx44pDB4rdy1EVnADyfZ6q3HZzY2CJ8aEhxLa_zA6z9xPfpKWRo/s16000/text.gif" alt="Logo" class="logo" id="logoImg">
+        </div>
+        <div class="info-bar">
+            <div class="info-item">💵 <strong>Saldo:</strong> <span class="info-value info-balance" id="infoBalance">Rp 0</span></div>
+            <div class="info-item">👥 <strong>Aktif:</strong> <span class="info-value info-customers" id="infoActiveCustomers">0</span></div>
+            <div class="info-item">⚠️ <strong>Pending:</strong> <span class="info-value info-pending" id="infoPendingBills">Rp 0</span></div>
+            <div class="info-item">🏦 <strong>Tabungan:</strong> <span class="info-value info-savings" id="infoSavings">Rp 0</span></div>
+        </div>
+        <div class="content">
+            <!-- TAB PELANGGAN -->
+            <div id="pelanggan-tab" class="tab-content active">
+                <div class="search-box"><input type="text" id="searchCustomer" placeholder="Cari pelanggan..." oninput="filterCustomers()"></div>
+                <button class="btn-primary" onclick="openCustomerForm()">+ Tambah Pelanggan</button>
+                <div class="summary-container">
+                    <div class="summary-card"><h3>Total Aktif</h3><p id="totalActiveCustomers">0</p></div>
+                    <div class="summary-card"><h3>Total Bulanan</h3><p id="totalMonthlyBills">Rp 0</p></div>
+                    <div class="summary-card"><h3>Paket 6 Bln</h3><p id="totalPackage6Customers">0</p></div>
+                    <div class="summary-card"><h3>Paket 12 Bln</h3><p id="totalPackage12Customers">0</p></div>
+                </div>
+                <div class="responsive-table"><table><thead><tr><th>No</th><th>Nama</th><th>Paket</th><th>Desa</th><th>Tagihan</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="customerList"></tbody></table></div>
+            </div>
+
+            <!-- TAB TRANSAKSI -->
+            <div id="transaksi-tab" class="tab-content">
+                <div class="filter-group">
+                    <input type="month" id="filterMonth" onchange="filterTransactions()">
+                    <select id="filterPaymentStatus" onchange="filterTransactions()"><option value="">Semua</option><option value="paid">Lunas</option><option value="pending">Belum Bayar</option></select>
+                    <input type="text" id="searchTransactionCustomer" placeholder="Cari..." oninput="filterTransactions()">
+                </div>
+                <div class="summary-container">
+                    <div class="summary-card"><h3>Sudah Dibayar</h3><p id="totalPaidAmount">Rp 0</p></div>
+                    <div class="summary-card"><h3>Belum Dibayar</h3><p id="totalUnpaidAmount">Rp 0</p></div>
+                </div>
+                <div class="responsive-table"><table><thead><tr><th>No</th><th>Pelanggan</th><th>Bulan</th><th>Tagihan</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="transactionList"></tbody></table></div>
+            </div>
+
+            <!-- TAB KEUANGAN -->
+            <div id="keuangan-tab" class="tab-content">
+                <div style="display:flex;gap:8px;margin-bottom:15px;"><button class="btn-primary" onclick="openFinanceForm('income')">+ Pemasukan</button><button class="btn-danger" onclick="openFinanceForm('expense')">+ Pengeluaran</button></div>
+                <div class="filter-group"><input type="month" id="filterFinanceMonth" onchange="renderFinanceList(this.value)"></div>
+                <div class="responsive-table"><table><thead><tr><th>No</th><th>Tgl</th><th>Kategori</th><th>Jenis</th><th>Keterangan</th><th>Jumlah</th><th>Aksi</th></tr></thead><tbody id="financeList"></tbody></table></div>
+            </div>
+
+            <!-- TAB DASHBOARD -->
+            <div id="dashboard-tab" class="tab-content">
+                <h2>📊 Dashboard</h2>
+                <div class="two-columns">
+                    <div class="chart-container"><h3>Harga Paket</h3><canvas id="packagePriceChart"></canvas></div>
+                    <div class="chart-container"><h3>Pelanggan/Paket</h3><canvas id="packageCountChart"></canvas></div>
+                </div>
+                <div class="chart-container"><h3>Top 10 Desa</h3><canvas id="villageChart"></canvas></div>
+                <h3 style="margin-top:20px;">📋 Laporan Tahunan</h3>
+                <div class="form-group"><label>Tahun:</label><select id="reportYear" onchange="generateReport()"><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option></select></div>
+                <div class="summary-container" id="annualSummary"></div>
+                <br>
+                <div class="responsive-table"><table><thead><tr><th>Bulan</th><th>Tagihan</th><th>Dibayar</th><th>Pemasukan</th><th>Pengeluaran</th><th>Kebutuhan</th><th>Keinginan</th><th>Saldo</th></tr></thead><tbody id="reportList"></tbody></table></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM NAV -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('pelanggan')"><div class="nav-icon">👤</div><div class="nav-label">Pelanggan</div></div>
+        <div class="nav-item" onclick="switchTab('transaksi')"><div class="nav-icon">💰</div><div class="nav-label">Transaksi</div></div>
+        <div class="nav-item" onclick="switchTab('keuangan')"><div class="nav-icon">💵</div><div class="nav-label">Keuangan</div></div>
+        <div class="nav-item" onclick="switchTab('dashboard')"><div class="nav-icon">📊</div><div class="nav-label">Dashboard</div></div>
+        <div class="nav-item" onclick="toggleSubmenu()"><div class="nav-icon">📦</div><div class="nav-label">Lainnya</div></div>
+    </div>
+
+    <!-- SUBMENU -->
+    <div class="submenu-overlay" id="submenuOverlay" onclick="toggleSubmenu()"></div>
+    <div class="submenu-modal" id="submenuModal">
+        <h3 style="text-align:center;margin-bottom:15px;">Menu Lainnya</h3>
+        <div class="submenu-item" onclick="toggleSubmenu();openTabContent('paket')"><span class="submenu-icon">📦</span> Paket 6/12 Bulan</div>
+        <div class="submenu-item" onclick="toggleSubmenu();openTabContent('tabungan')"><span class="submenu-icon">🏦</span> Tabungan</div>
+        <div class="submenu-item" onclick="toggleSubmenu();openTabContent('analisa')"><span class="submenu-icon">📈</span> Analisa Keuangan</div>
+        <div class="submenu-item" onclick="toggleSubmenu();openModal('kategoriModal')"><span class="submenu-icon">🗂️</span> Kategori (Master Data)</div>
+        <div class="submenu-item" onclick="toggleSubmenu();openModal('backupModal')"><span class="submenu-icon">💾</span> Backup & Restore</div>
+        <div style="text-align:center;margin-top:15px;"><button class="btn-outline btn-sm" onclick="toggleSubmenu()">Tutup</button></div>
+    </div>
+
+    <!-- HIDDEN TABS -->
+    <div id="paket-tab" class="tab-content" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:white;z-index:2000;overflow-y:auto;padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+            <h2 style="margin:0;border:none;">📦 Paket 6/12 Bulan</h2>
+            <button class="btn-outline btn-sm" onclick="closeTabContent('paket')">✕ Tutup</button>
+        </div>
+        <div style="display:flex;margin-bottom:15px;border-bottom:1px solid #ddd;">
+            <div class="package-tab active" onclick="switchPackageTab('all')">Semua</div>
+            <div class="package-tab" onclick="switchPackageTab('6')">6 Bulan</div>
+            <div class="package-tab" onclick="switchPackageTab('12')">12 Bulan</div>
+        </div>
+        <div class="search-box"><input type="text" id="searchPackageCustomer" placeholder="Cari..." oninput="filterPackageCustomers()"></div>
+        <div class="responsive-table"><table><thead><tr><th>No</th><th>Nama</th><th>Paket</th><th>Jumlah</th><th>Mulai</th><th>Akhir</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="packageList"></tbody></table></div>
+    </div>
+
+    <div id="tabungan-tab" class="tab-content" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:white;z-index:2000;overflow-y:auto;padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+            <h2 style="margin:0;border:none;">💰 Tabungan & Target</h2>
+            <button class="btn-outline btn-sm" onclick="closeTabContent('tabungan')">✕ Tutup</button>
+        </div>
+        <div class="summary-container">
+            <div class="summary-card" style="border-left:4px solid #1abc9c;"><h3>Total Tabungan</h3><p id="totalSavings" style="color:#1abc9c;">Rp 0</p></div>
+            <div class="summary-card" style="border-left:4px solid #f39c12;"><h3>Target</h3><p id="savingsTarget">Rp 0</p></div>
+            <div class="summary-card" style="border-left:4px solid #e74c3c;"><h3>Kekurangan</h3><p id="savingsRemaining" style="color:#e74c3c;">Rp 0</p></div>
+            <div class="summary-card" style="border-left:4px solid #3498db;"><h3>Progress</h3><p id="savingsPercent">0%</p><div class="progress-bar-container"><div class="progress-bar" id="savingsProgressBar" style="width:0%;"></div></div></div>
+        </div>
+        <div style="display:flex;gap:8px;margin:20px 0;"><button class="btn-savings" onclick="openSavingsForm()">+ Tambah Tabungan</button><button class="btn-warning" onclick="openSavingsTargetForm()">🎯 Set Target</button><button class="btn-primary" onclick="openTransferToSavingsForm()">💸 Transfer dari Saldo</button></div>
+        <div class="responsive-table"><table><thead><tr><th>No</th><th>Tanggal</th><th>Jumlah</th><th>Sumber</th><th>Keterangan</th><th>Aksi</th></tr></thead><tbody id="savingsList"></tbody></table></div>
+    </div>
+
+    <!-- TAB ANALISA KEUANGAN -->
+    <div id="analisa-tab" class="tab-content" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:white;z-index:2000;overflow-y:auto;padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+            <h2 style="margin:0;border:none;">📈 Analisa Keuangan</h2>
+            <button class="btn-outline btn-sm" onclick="closeTabContent('analisa')">✕ Tutup</button>
+        </div>
+        <div class="filter-group">
+            <select id="analisaPeriod" onchange="renderAnalisa()">
+                <option value="thisMonth">Bulan Ini</option>
+                <option value="lastMonth">Bulan Lalu</option>
+                <option value="thisYear">Tahun Ini</option>
+                <option value="lastYear">Tahun Lalu</option>
+            </select>
+        </div>
+        <!-- HEALTH SCORE -->
+        <div class="health-card" id="healthCard">
+            <h3>🩺 Kesehatan Keuangan</h3>
+            <div class="health-score" id="healthScore">0%</div>
+            <div class="health-bar"><div class="health-bar-fill" id="healthBar" style="width:0%;background:#27ae60;">0%</div></div>
+            <p id="healthLabel" style="font-weight:600;">-</p>
+        </div>
+        <!-- RINGKASAN -->
+        <div class="summary-container" id="analisaSummary"></div>
+        <!-- CHARTS -->
+        <div class="two-columns" style="margin-top:20px;">
+            <div class="chart-container"><h3>📊 Perbandingan Keuangan</h3><canvas id="comparisonDonutChart"></canvas></div>
+            <div class="chart-container"><h3>📊 Kebutuhan vs Keinginan</h3><canvas id="needWantChart"></canvas></div>
+        </div>
+        <div class="chart-container" style="margin-top:20px;"><h3>📊 Pemasukan vs Pengeluaran</h3><canvas id="incomeExpenseBarChart"></canvas></div>
+        <!-- TABEL KEBUTUHAN VS KEINGINAN -->
+        <h3 style="margin-top:20px;">📋 Rincian Kebutuhan vs Keinginan</h3>
+        <div class="responsive-table"><table><thead><tr><th>Kategori</th><th>Jumlah</th><th>Persentase</th></tr></thead><tbody id="needWantTable"></tbody></table></div>
+        <!-- SARAN CERDAS -->
+        <h3 style="margin-top:20px;">💡 Saran & Analisa</h3>
+        <div id="saranContainer"></div>
+    </div>
+
+    <!-- MODALS -->
+    <div id="customerModal" class="modal"><div class="modal-content" style="max-width:500px;"><div class="modal-header"><h2 id="modalCustomerTitle">Tambah Pelanggan</h2><span class="close-modal" onclick="closeModal('customerModal')">&times;</span></div><form id="customerForm" onsubmit="return false;"><input type="hidden" id="customerId"><div class="form-group"><label>Nama</label><input type="text" id="nama" required></div><div class="form-group"><label>Kecamatan</label><select id="kecamatan" required onchange="loadDesaOptions()"><option value="">Pilih</option></select></div><div class="form-group"><label>Desa</label><select id="desa" required onchange="loadDusunOptions()"><option value="">Pilih</option></select></div><div class="form-group"><label>Dusun</label><select id="dusun" required><option value="">Pilih</option></select></div><div class="form-group"><label>Detail Alamat</label><textarea id="alamat" rows="2" placeholder="RT/RW"></textarea></div><div class="form-group"><label>Telepon</label><input type="tel" id="telepon" required></div><div class="form-group"><label>Paket</label><select id="paket" required onchange="togglePackageOptions()"><option value="">Pilih</option><option value="Basic">Basic - Rp 100rb</option><option value="Basic Plus">Basic Plus - Rp 120rb</option><option value="Standard">Standard - Rp 150rb</option><option value="Premium">Premium - Rp 200rb</option><option value="Premium Plus">Premium Plus - Rp 300rb</option><option value="Paket 6/12">Paket 6/12 Bulan</option><option value="Lainnya">Lainnya</option></select></div><div class="form-group" id="packageDurationGroup"><label>Durasi</label><select id="packageDuration"><option value="6">6 Bulan</option><option value="12">12 Bulan</option></select></div><div class="form-group" id="customAmountGroup"><label>Nominal</label><input type="number" id="customAmount"></div><div class="form-group"><label>Diskon</label><input type="number" id="discountAmount" placeholder="Opsional"></div><div class="form-group"><label>Tgl Daftar (maks 28)</label><input type="date" id="tanggalDaftar" required></div><div class="button-group"><button type="submit" class="btn-primary" id="btnSaveCustomer">Simpan</button><button type="button" class="btn-outline" onclick="closeModal('customerModal')">Batal</button></div></form></div></div>
+
+    <div id="paymentModal" class="modal"><div class="modal-content"><div class="modal-header"><h2>Pembayaran</h2><span class="close-modal" onclick="closeModal('paymentModal')">&times;</span></div><form id="paymentForm" onsubmit="return false;"><input type="hidden" id="paymentCustomerId"><div class="form-group"><label>Pelanggan</label><p id="paymentCustomerName" style="font-weight:bold;"></p></div><div class="form-group"><label>Bulan</label><select id="paymentMonthSelect" required></select></div><div class="form-group"><label>Jumlah</label><p id="paymentAmount" style="font-weight:bold;"></p></div><div class="form-group"><label>Tgl Bayar</label><input type="date" id="paymentDate" required></div><div class="form-group"><label>Keterangan</label><textarea id="paymentNotes" rows="2"></textarea></div><div class="button-group"><button type="submit" class="btn-primary" id="btnProcessPayment">Konfirmasi</button><button type="button" class="btn-outline" onclick="closeModal('paymentModal')">Batal</button></div></form></div></div>
+
+    <div id="detailModal" class="modal"><div class="modal-content" style="max-width:500px;"><div class="modal-header"><h2>Detail</h2><span class="close-modal" onclick="closeModal('detailModal')">&times;</span></div><div id="customerDetailContent"></div><div class="button-group" id="detailButtons"></div></div></div>
+
+    <div id="financeModal" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="modalFinanceTitle">Tambah</h2><span class="close-modal" onclick="closeModal('financeModal')">&times;</span></div><form id="financeForm" onsubmit="return false;"><input type="hidden" id="financeId"><input type="hidden" id="financeType"><div class="form-group"><label>Tanggal</label><input type="date" id="financeDate" required></div><div class="form-group"><label>Kategori</label><select id="financeCategory" required></select></div><div class="form-group" id="expenseCategoryGroup" style="display:none;"><label>Kategori Pengeluaran</label><select id="expenseCategoryType"><option value="KEBUTUHAN">KEBUTUHAN</option><option value="KEINGINAN">KEINGINAN</option></select></div><div class="form-group"><label>Jumlah</label><input type="number" id="financeAmount" required></div><div class="form-group"><label>Keterangan</label><textarea id="financeDescription" rows="2"></textarea></div><div class="button-group"><button type="submit" class="btn-primary" id="btnSaveFinance">Simpan</button><button type="button" class="btn-outline" onclick="closeModal('financeModal')">Batal</button></div></form></div></div>
+
+    <div id="kategoriModal" class="modal"><div class="modal-content" style="max-width:750px;"><div class="modal-header"><h2>Kategori (Master Data)</h2><span class="close-modal" onclick="closeModal('kategoriModal')">&times;</span></div><h3>Kategori Alamat</h3><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:20px;"><div><h4>Kecamatan</h4><input type="text" id="newKecamatan" placeholder="Nama"><button class="btn-primary btn-sm" onclick="addKecamatan()" style="width:100%;margin-top:5px;">Tambah</button><select id="kecamatanList" size="4" style="width:100%;margin-top:5px;"></select><button class="btn-danger btn-sm" onclick="deleteKecamatan()" style="width:100%;margin-top:3px;">Hapus</button></div><div><h4>Desa</h4><select id="selectKecamatanForDesa" onchange="loadDesaList()"><option value="">Pilih Kec</option></select><input type="text" id="newDesa" placeholder="Nama"><button class="btn-primary btn-sm" onclick="addDesa()" style="width:100%;margin-top:5px;">Tambah</button><select id="desaList" size="4" style="width:100%;margin-top:5px;"></select><button class="btn-danger btn-sm" onclick="deleteDesa()" style="width:100%;margin-top:3px;">Hapus</button></div><div><h4>Dusun</h4><select id="selectDesaForDusun" onchange="loadDusunList()"><option value="">Pilih Desa</option></select><input type="text" id="newDusun" placeholder="Nama"><button class="btn-primary btn-sm" onclick="addDusun()" style="width:100%;margin-top:5px;">Tambah</button><select id="dusunList" size="4" style="width:100%;margin-top:5px;"></select><button class="btn-danger btn-sm" onclick="deleteDusun()" style="width:100%;margin-top:3px;">Hapus</button></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;"><div><h3>Pemasukan</h3><input type="text" id="newIncomeCategory" placeholder="Kategori baru"><button class="btn-primary btn-sm" onclick="addCategory('income')" style="margin-top:5px;">+ Tambah</button><select id="incomeCategoryList" size="4" style="width:100%;margin-top:5px;"></select><button class="btn-danger btn-sm" onclick="deleteCategory('income')" style="width:100%;margin-top:3px;">Hapus</button></div><div><h3>Pengeluaran</h3><input type="text" id="newExpenseCategory" placeholder="Kategori baru"><button class="btn-primary btn-sm" onclick="addCategory('expense')" style="margin-top:5px;">+ Tambah</button><select id="expenseCategoryList" size="4" style="width:100%;margin-top:5px;"></select><button class="btn-danger btn-sm" onclick="deleteCategory('expense')" style="width:100%;margin-top:3px;">Hapus</button></div></div><div class="button-group"><button class="btn-outline" onclick="closeModal('kategoriModal')">Tutup</button></div></div></div>
+
+    <div id="backupModal" class="modal"><div class="modal-content"><div class="modal-header"><h2>Backup & Restore</h2><span class="close-modal" onclick="closeModal('backupModal')">&times;</span></div><div style="background:#f9f9f9;padding:15px;border-radius:8px;margin-bottom:20px;"><button class="btn-primary" onclick="exportData()">📥 Export Data</button><button class="btn-secondary" onclick="document.getElementById('importFile').click()">📤 Import Data</button><input type="file" id="importFile" accept=".json" style="display:none;" onchange="importData(this)"></div><div class="button-group"><button class="btn-outline" onclick="closeModal('backupModal')">Tutup</button></div></div></div>
+
+    <div id="savingsModal" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="savingsModalTitle">Tambah Tabungan</h2><span class="close-modal" onclick="closeModal('savingsModal')">&times;</span></div><form id="savingsForm" onsubmit="return false;"><input type="hidden" id="savingsId"><div class="form-group"><label>Tanggal</label><input type="date" id="savingsDate" required></div><div class="form-group"><label>Jumlah</label><input type="number" id="savingsAmount" required></div><div class="form-group"><label>Keterangan</label><textarea id="savingsDescription" rows="2"></textarea></div><div class="button-group"><button type="submit" class="btn-savings" id="btnSaveSavings">Simpan</button><button type="button" class="btn-outline" onclick="closeModal('savingsModal')">Batal</button></div></form></div></div>
+
+    <div id="savingsTargetModal" class="modal"><div class="modal-content"><div class="modal-header"><h2>Set Target Tabungan</h2><span class="close-modal" onclick="closeModal('savingsTargetModal')">&times;</span></div><form id="savingsTargetForm" onsubmit="return false;"><div class="form-group"><label>Target (Rp)</label><input type="number" id="targetAmount" required></div><div class="form-group"><label>Keterangan</label><input type="text" id="targetDescription" placeholder="Contoh: Beli Mobil"></div><div class="button-group"><button type="submit" class="btn-warning" id="btnSaveTarget">Simpan</button><button type="button" class="btn-outline" onclick="closeModal('savingsTargetModal')">Batal</button></div></form></div></div>
+
+    <div id="transferToSavingsModal" class="modal"><div class="modal-content"><div class="modal-header"><h2>Transfer ke Tabungan</h2><span class="close-modal" onclick="closeModal('transferToSavingsModal')">&times;</span></div><form id="transferForm" onsubmit="return false;"><div class="form-group"><label>Saldo Tersedia</label><p id="availableBalance" style="font-weight:bold;font-size:16px;color:#2ecc71;">Rp 0</p></div><div class="form-group"><label>Jumlah (maks: <span id="maxTransfer">Rp 0</span>)</label><input type="number" id="transferAmount" required></div><div class="form-group"><label>Keterangan</label><input type="text" id="transferDescription" value="Transfer ke tabungan"></div><div class="button-group"><button type="submit" class="btn-savings" id="btnProcessTransfer">Transfer</button><button type="button" class="btn-outline" onclick="closeModal('transferToSavingsModal')">Batal</button></div></form></div></div>
+
+    <div id="receiptModal" class="modal"><div class="modal-content" style="max-width:750px;"><div class="modal-header"><h2 id="receiptTitle">Bukti Pembayaran</h2><span class="close-modal" onclick="closeModal('receiptModal')">&times;</span></div><div id="receiptContent"><div style="text-align:center;margin-bottom:20px;"><h2 style="color:#2c3e50;">BILLING KH1992</h2><p style="color:#666;" id="receiptSubtitle">Bukti Pembayaran Internet</p></div><div style="display:flex;justify-content:space-between;margin-bottom:15px;"><div><p><strong>No:</strong> <span id="receiptTrxId"></span></p><p><strong>Tgl:</strong> <span id="receiptDate"></span></p></div><div><span id="receiptStatus" class="badge badge-success">LUNAS</span></div></div><table style="width:100%;border-collapse:collapse;margin-bottom:20px;box-shadow:none;"><tr><td style="padding:8px;border-bottom:1px solid #eee;"><strong>Pelanggan</strong></td><td style="padding:8px;border-bottom:1px solid #eee;" id="receiptCustomer"></td></tr><tr><td style="padding:8px;border-bottom:1px solid #eee;"><strong>Alamat</strong></td><td style="padding:8px;border-bottom:1px solid #eee;" id="receiptAddress"></td></tr><tr><td style="padding:8px;border-bottom:1px solid #eee;"><strong>Telepon</strong></td><td style="padding:8px;border-bottom:1px solid #eee;" id="receiptPhone"></td></tr><tr><td style="padding:8px;border-bottom:1px solid #eee;"><strong>Paket</strong></td><td style="padding:8px;border-bottom:1px solid #eee;" id="receiptPackage"></td></tr><tr><td style="padding:8px;border-bottom:1px solid #eee;"><strong>Periode</strong></td><td style="padding:8px;border-bottom:1px solid #eee;" id="receiptPeriod"></td></tr><tr><td style="padding:8px;border-bottom:1px solid #eee;"><strong>Jatuh Tempo</strong></td><td style="padding:8px;border-bottom:1px solid #eee;" id="receiptDueDate"></td></tr><tr><td style="padding:8px;border-bottom:1px solid #eee;"><strong>Jumlah</strong></td><td style="padding:8px;border-bottom:1px solid #eee;" id="receiptAmount"></td></tr><tr><td style="padding:8px;border-bottom:1px solid #eee;"><strong>Keterangan</strong></td><td style="padding:8px;border-bottom:1px solid #eee;" id="receiptNotes"></td></tr></table><div id="paymentInstructions" style="margin-top:20px;padding:15px;background:#f9f9f9;border-radius:8px;display:none;"><h4 style="margin-top:0;">Instruksi Pembayaran:</h4><div style="text-align:center;"><img src="https://i.postimg.cc/G2hCPXLZ/file-00000000c69461f9a7d407e0da794c3a.png" style="max-width:250px;height:280px;"><br>Batas pembayaran: <strong id="dueDateText"></strong></div></div><div style="text-align:center;margin-top:40px;"><div style="display:inline-block;position:relative;"><div id="receiptStamp" style="position:absolute;top:-90px;right:-55px;opacity:0.9;display:none;"><img src="https://iili.io/Fwnvp2I.png" style="height:140px;transform:rotate(-9deg);"></div><p style="opacity:0.8;">(suroso)</p></div></div><div style="text-align:center;margin-top:20px;font-size:12px;color:#666;"><p>Terima kasih - Pembayaran tepat waktu</p><p>Hubungi: 085850651102</p></div></div><div class="button-group"><button class="btn-primary" onclick="downloadReceiptImage()"><span id="downloadBtnText">Download Bukti</span></button><button class="btn-outline" onclick="closeModal('receiptModal')">Tutup</button></div></div></div>
+
+    <script>
+        // ==================== DATA STORAGE ====================
+        var customers = JSON.parse(localStorage.getItem('customers')) || [];
+        var transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+        var finances = JSON.parse(localStorage.getItem('finances')) || [];
+        var packageCustomers = JSON.parse(localStorage.getItem('packageCustomers')) || [];
+        var savings = JSON.parse(localStorage.getItem('savings')) || [];
+        var savingsTarget = JSON.parse(localStorage.getItem('savingsTarget')) || { amount: 0, description: '' };
+        var kecamatans = JSON.parse(localStorage.getItem('kecamatans')) || [];
+        var desas = JSON.parse(localStorage.getItem('desas')) || [];
+        var dusuns = JSON.parse(localStorage.getItem('dusuns')) || [];
+        var incomeCategories = JSON.parse(localStorage.getItem('incomeCategories')) || [];
+        var expenseCategories = JSON.parse(localStorage.getItem('expenseCategories')) || [];
+        var currentTab = 'pelanggan';
+        var currentPackageTab = 'all';
+        var chartInstances = {};
+        var analisaCharts = {};
+
+        // ==================== UTILITY FUNCTIONS ====================
+        function formatDate(ds) { if (!ds) return ''; var d = new Date(ds); if (isNaN(d.getTime())) return ds; return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }); }
+
+        function formatMonthYear(my) { if (!my) return ''; var p = my.split('-'); var mn = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']; return mn[parseInt(p[1]) - 1] + ' ' + p[0]; }
+
+        function formatCurrency(a) { return 'Rp ' + (a || 0).toLocaleString('id-ID'); }
+
+        function getStatusBadge(s) { if (s === 'paid') return '<span class="badge badge-success">Lunas</span>'; if (s === 'pending') return '<span class="badge badge-danger">BELUM LUNAS</span>'; return s; }
+
+        function saveMasterData() { localStorage.setItem('kecamatans', JSON.stringify(kecamatans)); localStorage.setItem('desas', JSON.stringify(desas)); localStorage.setItem('dusuns', JSON.stringify(dusuns)); localStorage.setItem('incomeCategories', JSON.stringify(incomeCategories)); localStorage.setItem('expenseCategories', JSON.stringify(expenseCategories)); }
+
+        function saveToLocalStorage() { localStorage.setItem('customers', JSON.stringify(customers)); localStorage.setItem('transactions', JSON.stringify(transactions)); localStorage.setItem('finances', JSON.stringify(finances)); localStorage.setItem('packageCustomers', JSON.stringify(packageCustomers)); localStorage.setItem('savings', JSON.stringify(savings)); localStorage.setItem('savingsTarget', JSON.stringify(savingsTarget)); }
+
+        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+        function togglePackageOptions() { var p = document.getElementById('paket').value; document.getElementById('customAmountGroup').style.display = p === 'Lainnya' ? 'block' : 'none'; document.getElementById('packageDurationGroup').style.display = p === 'Paket 6/12' ? 'block' : 'none'; }
+
+        function setMaxRegistrationDate() { var t = new Date(); if (t.getDate() > 28) t.setDate(28); var el = document.getElementById('tanggalDaftar'); if (el) { el.max = t.toISOString().substring(0, 10);
+                el.value = t.toISOString().substring(0, 10); } }
+
+        function getPackagePrice(p) { switch (p) { case 'Basic': return 100000;
+                case 'Basic Plus': return 120000;
+                case 'Standard': return 150000;
+                case 'Premium': return 200000;
+                case 'Premium Plus': return 300000; default: return 0; } }
+
+        function calculatePackageEndDate(sd, dur) { var d = new Date(sd);
+            d.setMonth(d.getMonth() + parseInt(dur)); return d.toISOString().substring(0, 10); }
+
+        function calculateDueDate(md, rd) { var r = new Date(rd); var day = Math.min(r.getDate(), 28); var d = new Date(md);
+            d.setDate(day); return d.toISOString().substring(0, 10); }
+
+        function generateTransactionId(c, my) { if (!my) { var d = new Date(c.tanggalDaftar); return 'KH' + String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0') + c.id.slice(-3); } return 'KH' + my.replace('-', '') + c.id.slice(-3); }
+
+        function generateInitialTransactions(c) { if (c.paket === 'Paket 6/12') return; var sd = new Date(c.tanggalDaftar);
+            sd.setMonth(sd.getMonth() + 1);
+            sd.setDate(1); var ed = new Date(sd);
+            ed.setMonth(ed.getMonth() + 12); var d = new Date(sd); while (d <= ed) { var my = d.toISOString().substring(0, 7);
+                transactions.push({ id: generateTransactionId(c, my), customerId: c.id, customerName: c.nama, monthYear: my, amount: c.finalPrice, paid: 0, paymentDate: '', dueDate: calculateDueDate(d, c.tanggalDaftar), status: 'pending', notes: '' });
+                d.setMonth(d.getMonth() + 1); }
+            saveToLocalStorage(); }
+
+        function switchPackageTab(tn) { currentPackageTab = tn;
+            document.querySelectorAll('.package-tab').forEach(function(t, i) { t.classList.remove('active'); if ((tn === 'all' && i === 0) || (tn === '6' && i === 1) || (tn === '12' && i === 2)) t.classList.add('active'); });
+            renderPackageList(); }
+
+        function filterCustomers() { renderCustomerList(document.getElementById('searchCustomer').value); }
+
+        function filterPackageCustomers() { renderPackageList(document.getElementById('searchPackageCustomer').value); }
+
+        function getCustomerName(cid) { var c = customers.find(function(x) { return x.id === cid; }); if (c) return c.nama; var t = transactions.find(function(x) { return x.customerId === cid; }); return t ? t.customerName : 'Pelanggan Terhapus'; }
+
+        // ==================== UPDATE INFO BAR ====================
+        function updateInfoBar() {
+            var totalIncome = finances.reduce(function(s, f) { return s + (f.type === 'income' ? f.amount : 0); }, 0);
+            var totalExpense = finances.reduce(function(s, f) { return s + (f.type === 'expense' ? f.amount : 0); }, 0);
+            var balance = totalIncome - totalExpense;
+            var activeCustomers = customers.filter(function(c) { return c.status === 'active'; }).length;
+            var currentMonth = new Date().toISOString().substring(0, 7);
+            var pendingBills = transactions.filter(function(t) { return t.monthYear === currentMonth && t.status === 'pending'; }).reduce(function(s, t) { return s + t.amount; }, 0);
+            var totalSavings = savings.reduce(function(s, x) { return s + x.amount; }, 0);
+            var elBalance = document.getElementById('infoBalance'); if (elBalance) elBalance.textContent = formatCurrency(balance);
+            var elCustomers = document.getElementById('infoActiveCustomers'); if (elCustomers) elCustomers.textContent = activeCustomers;
+            var elPending = document.getElementById('infoPendingBills'); if (elPending) elPending.textContent = formatCurrency(pendingBills);
+            var elSavings = document.getElementById('infoSavings'); if (elSavings) elSavings.textContent = formatCurrency(totalSavings);
+        }
+
+        // ==================== SUBMENU & TAB NAVIGATION ====================
+        function toggleSubmenu() {
+            var overlay = document.getElementById('submenuOverlay');
+            var modal = document.getElementById('submenuModal');
+            if (overlay.classList.contains('active')) {
+                overlay.classList.remove('active');
+                modal.classList.remove('active');
+            } else {
+                overlay.classList.add('active');
+                modal.classList.add('active');
+            }
+        }
+
+        function openTabContent(tabName) {
+            toggleSubmenu();
+            if (document.getElementById('submenuOverlay').classList.contains('active')) {
+                document.getElementById('submenuOverlay').classList.remove('active');
+                document.getElementById('submenuModal').classList.remove('active');
+            }
+            var mainTabs = ['pelanggan', 'transaksi', 'keuangan', 'dashboard'];
+            mainTabs.forEach(function(t) {
+                var el = document.getElementById(t + '-tab');
+                if (el) el.classList.remove('active');
+            });
+            var el = document.getElementById(tabName + '-tab');
+            if (el) {
+                el.style.display = 'block';
+                el.classList.add('active');
+            }
+            currentTab = tabName;
+            if (tabName === 'paket') renderPackageList();
+            else if (tabName === 'tabungan') { renderSavingsList();
+                updateSavingsSummary(); } else if (tabName === 'analisa') renderAnalisa();
+            updateInfoBar();
+        }
+
+        function closeTabContent(tabName) {
+            var el = document.getElementById(tabName + '-tab');
+            if (el) {
+                el.style.display = 'none';
+                el.classList.remove('active');
+            }
+            var pelangganTab = document.getElementById('pelanggan-tab');
+            if (pelangganTab) pelangganTab.classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+            var navItems = document.querySelectorAll('.nav-item');
+            if (navItems[0]) navItems[0].classList.add('active');
+            currentTab = 'pelanggan';
+            renderCustomerList();
+            updateInfoBar();
+        }
+
+        function switchTab(tabName) {
+            var overlayTabs = ['paket-tab', 'tabungan-tab', 'analisa-tab'];
+            overlayTabs.forEach(function(id) {
+                var el = document.getElementById(id);
+                if (el) {
+                    el.style.display = 'none';
+                    el.classList.remove('active');
+                }
+            });
+            var mainTabs = ['pelanggan', 'transaksi', 'keuangan', 'dashboard'];
+            mainTabs.forEach(function(t) {
+                var el = document.getElementById(t + '-tab');
+                if (el) el.classList.remove('active');
+            });
+            var el = document.getElementById(tabName + '-tab');
+            if (el) el.classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+            var idx = mainTabs.indexOf(tabName);
+            if (idx >= 0) {
+                var navItems = document.querySelectorAll('.nav-item');
+                if (navItems[idx]) navItems[idx].classList.add('active');
+            }
+            currentTab = tabName;
+            if (tabName === 'pelanggan') renderCustomerList();
+            else if (tabName === 'transaksi') renderTransactionList();
+            else if (tabName === 'keuangan') renderFinanceList();
+            else if (tabName === 'dashboard') { renderCharts();
+                generateReport(); }
+            updateInfoBar();
+        }
+
+        // ==================== ANALISA KEUANGAN ====================
+        function renderAnalisa() {
+            var period = document.getElementById('analisaPeriod').value;
+            var now = new Date();
+            var startDate, endDate, periodLabel;
+            if (period === 'thisMonth') {
+                startDate = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().substring(0, 10);
+                endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0).toISOString().substring(0, 10);
+                periodLabel = 'Bulan Ini (' + formatMonthYear(now.toISOString().substring(0, 7)) + ')';
+            } else if (period === 'lastMonth') {
+                startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1).toISOString().substring(0, 10);
+                endDate = new Date(now.getFullYear(), now.getMonth(), 0).toISOString().substring(0, 10);
+                periodLabel = 'Bulan Lalu';
+            } else if (period === 'thisYear') {
+                startDate = now.getFullYear() + '-01-01';
+                endDate = now.getFullYear() + '-12-31';
+                periodLabel = 'Tahun ' + now.getFullYear();
+            } else if (period === 'lastYear') {
+                startDate = (now.getFullYear() - 1) + '-01-01';
+                endDate = (now.getFullYear() - 1) + '-12-31';
+                periodLabel = 'Tahun ' + (now.getFullYear() - 1);
+            }
+            var filteredFinances = finances.filter(function(f) { return f.date >= startDate && f.date <= endDate; });
+            var totalIncome = filteredFinances.filter(function(f) { return f.type === 'income'; }).reduce(function(s, f) { return s + f.amount; }, 0);
+            var totalExpense = filteredFinances.filter(function(f) { return f.type === 'expense'; }).reduce(function(s, f) { return s + f.amount; }, 0);
+            var totalNeed = filteredFinances.filter(function(f) { return f.type === 'expense' && f.expenseCategory === 'KEBUTUHAN'; }).reduce(function(s, f) { return s + f.amount; }, 0);
+            var totalWant = filteredFinances.filter(function(f) { return f.type === 'expense' && f.expenseCategory === 'KEINGINAN'; }).reduce(function(s, f) { return s + f.amount; }, 0);
+            var balance = totalIncome - totalExpense;
+            var savingsInPeriod = savings.filter(function(s) { return s.date >= startDate && s.date <= endDate; }).reduce(function(s, x) { return s + x.amount; }, 0);
+            var healthScore = totalIncome > 0 ? Math.round((balance / totalIncome) * 100) : 0;
+            var healthStatus = healthScore >= 30 ? 'SEHAT' : (healthScore >= 10 ? 'WASPADA' : 'BAHAYA');
+            var healthClass = healthScore >= 30 ? 'health-sehat' : (healthScore >= 10 ? 'health-waspada' : 'health-bahaya');
+            var healthColor = healthScore >= 30 ? '#27ae60' : (healthScore >= 10 ? '#f39c12' : '#e74c3c');
+            document.getElementById('healthScore').textContent = healthScore + '%';
+            document.getElementById('healthScore').className = 'health-score ' + healthClass;
+            document.getElementById('healthBar').style.width = Math.max(5, healthScore) + '%';
+            document.getElementById('healthBar').style.background = healthColor;
+            document.getElementById('healthBar').textContent = healthScore + '%';
+            document.getElementById('healthLabel').textContent = 'Status: ' + healthStatus;
+            document.getElementById('healthLabel').className = healthClass;
+            var summaryHTML = '<div class="summary-card"><h3>💵 Pemasukan</h3><p style="color:#27ae60;">' + formatCurrency(totalIncome) + '</p></div>';
+            summaryHTML += '<div class="summary-card"><h3>💸 Pengeluaran</h3><p style="color:#e74c3c;">' + formatCurrency(totalExpense) + '</p></div>';
+            summaryHTML += '<div class="summary-card"><h3>🟠 Kebutuhan</h3><p style="color:#e67e22;">' + formatCurrency(totalNeed) + '</p></div>';
+            summaryHTML += '<div class="summary-card"><h3>🟣 Keinginan</h3><p style="color:#8e44ad;">' + formatCurrency(totalWant) + '</p></div>';
+            summaryHTML += '<div class="summary-card"><h3>🏦 Ditabung</h3><p style="color:#1abc9c;">' + formatCurrency(savingsInPeriod) + '</p></div>';
+            summaryHTML += '<div class="summary-card"><h3>💰 Sisa</h3><p>' + formatCurrency(balance) + '</p></div>';
+            document.getElementById('analisaSummary').innerHTML = summaryHTML;
+            // Perbandingan Donut
+            if (analisaCharts.comparisonDonut) analisaCharts.comparisonDonut.destroy();
+            var ctxComp = document.getElementById('comparisonDonutChart');
+            if (ctxComp) {
+                analisaCharts.comparisonDonut = new Chart(ctxComp.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Pemasukan', 'Pengeluaran', 'Ditabung'],
+                        datasets: [{ data: [totalIncome, totalExpense, savingsInPeriod], backgroundColor: ['#27ae60', '#e74c3c', '#1abc9c'] }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'bottom', labels: { font: { size: 11 } } },
+                            tooltip: { callbacks: { label: function(ctx) { return ctx.label + ': ' + formatCurrency(ctx.raw) + ' (' + Math.round((ctx.raw / (totalIncome || 1)) * 100) + '%)'; } } }
+                        }
+                    }
+                });
+            }
+            // Need vs Want Chart
+            if (analisaCharts.needWantChart) analisaCharts.needWantChart.destroy();
+            var ctxNeedWant = document.getElementById('needWantChart');
+            if (ctxNeedWant) {
+                analisaCharts.needWantChart = new Chart(ctxNeedWant.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['KEBUTUHAN', 'KEINGINAN'],
+                        datasets: [{
+                            data: [totalNeed, totalWant],
+                            backgroundColor: ['#e67e22', '#8e44ad']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true, ticks: { callback: function(v) { return formatCurrency(v); } } } }
+                    }
+                });
+            }
+            // Tabel Need Want
+            var totalExpenseForCalc = totalNeed + totalWant;
+            var needPercent = totalExpenseForCalc > 0 ? Math.round((totalNeed / totalExpenseForCalc) * 100) : 0;
+            var wantPercent = totalExpenseForCalc > 0 ? Math.round((totalWant / totalExpenseForCalc) * 100) : 0;
+            var tableHTML = '<tr><td><span class="need-text">KEBUTUHAN</span></td><td>' + formatCurrency(totalNeed) + '</td><td>' + needPercent + '%</td></tr>';
+            tableHTML += '<tr><td><span class="want-text">KEINGINAN</span></td><td>' + formatCurrency(totalWant) + '</td><td>' + wantPercent + '%</td></tr>';
+            document.getElementById('needWantTable').innerHTML = tableHTML;
+            // Income vs Expense Bar Chart
+            if (analisaCharts.incomeExpenseBar) analisaCharts.incomeExpenseBar.destroy();
+            var ctx2 = document.getElementById('incomeExpenseBarChart');
+            if (ctx2) {
+                analisaCharts.incomeExpenseBar = new Chart(ctx2.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Pemasukan', 'Pengeluaran', 'Kebutuhan', 'Keinginan', 'Ditabung', 'Sisa'],
+                        datasets: [{
+                            data: [totalIncome, totalExpense, totalNeed, totalWant, savingsInPeriod, Math.max(0, balance)],
+                            backgroundColor: ['#27ae60', '#e74c3c', '#e67e22', '#8e44ad', '#1abc9c', '#3498db']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true, ticks: { callback: function(v) { return formatCurrency(v); } } } }
+                    }
+                });
+            }
+            // Smart suggestions
+            var saranHTML = '';
+            var tabunganRate = totalIncome > 0 ? Math.round((savingsInPeriod / totalIncome) * 100) : 0;
+            if (totalIncome === 0 && totalExpense === 0) {
+                saranHTML = '<div class="saran-card">📝 Belum ada data keuangan untuk periode ini.</div>';
+            } else {
+                if (totalNeed > totalWant) {
+                    saranHTML += '<div class="saran-card baik">✅ <strong>Pengeluaran Kebutuhan (' + formatCurrency(totalNeed) + ')</strong> lebih besar dari Keinginan (' + formatCurrency(totalWant) + '). Keuangan Anda bijak!</div>';
+                } else if (totalWant > totalNeed && totalWant > 0) {
+                    saranHTML += '<div class="saran-card buruk">⚠️ <strong>Pengeluaran Keinginan (' + formatCurrency(totalWant) + ')</strong> lebih besar dari Kebutuhan (' + formatCurrency(totalNeed) + '). Kurangi pengeluaran tidak penting!</div>';
+                }
+                if (healthScore < 0) {
+                    saranHTML += '<div class="saran-card buruk">🚨 <strong>DEFISIT!</strong> Pengeluaran lebih besar dari pemasukan. Segera kurangi pengeluaran!</div>';
+                } else if (healthScore < 20) {
+                    saranHTML += '<div class="saran-card">⚠️ <strong>Keuangan WASPADA.</strong> Sisa hanya ' + healthScore + '%. Kurangi pengeluaran tidak penting.</div>';
+                } else if (healthScore < 40) {
+                    saranHTML += '<div class="saran-card baik">👍 <strong>Keuangan CUKUP SEHAT.</strong> Sisa ' + healthScore + '% dari pemasukan.</div>';
+                } else {
+                    saranHTML += '<div class="saran-card baik">🎉 <strong>Keuangan SANGAT SEHAT!</strong> Sisa ' + healthScore + '% (Rp ' + formatCurrency(balance) + '). Pertahankan!</div>';
+                }
+            }
+            document.getElementById('saranContainer').innerHTML = saranHTML;
+        }
+
+        // ==================== EXPORT/IMPORT ====================
+        function exportData() {
+            var data = { customers, transactions, finances, packageCustomers, savings, savingsTarget, kecamatans, desas, dusuns, incomeCategories, expenseCategories };
+            var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            var a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'KH1992_' + new Date().toISOString().substring(0, 10) + '.json';
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        function importData(input) {
+            var file = input.files[0]; if (!file) return alert('Pilih file');
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    var data = JSON.parse(e.target.result);
+                    if (data.customers && confirm('Data akan ditimpa. Lanjutkan?')) {
+                        customers = data.customers || [];
+                        transactions = data.transactions || [];
+                        finances = data.finances || [];
+                        packageCustomers = data.packageCustomers || [];
+                        savings = data.savings || [];
+                        savingsTarget = data.savingsTarget || { amount: 0, description: '' };
+                        kecamatans = data.kecamatans || [];
+                        desas = data.desas || [];
+                        dusuns = data.dusuns || [];
+                        incomeCategories = data.incomeCategories || [];
+                        expenseCategories = data.expenseCategories || [];
+                        saveToLocalStorage();
+                        saveMasterData();
+                        closeModal('backupModal');
+                        renderCustomerList();
+                        renderTransactionList();
+                        renderFinanceList();
+                        renderPackageList();
+                        renderSavingsList();
+                        updateSavingsSummary();
+                        updateInfoBar();
+                        alert('Data berhasil diimpor!');
+                    }
+                } catch (err) { alert('Gagal membaca file'); }
+            };
+            reader.readAsText(file);
+            input.value = '';
+        }
+
+        // ==================== MASTER DATA ====================
+        function addKecamatan() { var n = document.getElementById('newKecamatan').value.trim(); if (!n) return alert('Masukkan nama'); if (kecamatans.indexOf(n) !== -1) return alert('Sudah ada');
+            kecamatans.push(n);
+            saveMasterData();
+            document.getElementById('newKecamatan').value = '';
+            loadKecamatanList();
+            loadKecamatanOptions();
+            loadKecamatanForDesaSelect(); }
+
+        function deleteKecamatan() { var s = document.getElementById('kecamatanList').value; if (!s) return alert('Pilih'); if (!confirm('Hapus ' + s + '?')) return;
+            kecamatans = kecamatans.filter(function(k) { return k !== s; });
+            desas = desas.filter(function(d) { return d.kecamatan !== s; });
+            dusuns = dusuns.filter(function(d) { var dd = desas.find(function(ds) { return ds.nama === d.desa; }); return !dd || dd.kecamatan !== s; });
+            saveMasterData();
+            loadKecamatanList();
+            loadKecamatanOptions();
+            loadKecamatanForDesaSelect();
+            loadDesaList();
+            loadDusunList(); }
+
+        function addDesa() { var k = document.getElementById('selectKecamatanForDesa').value; var n = document.getElementById('newDesa').value.trim(); if (!k) return alert('Pilih kecamatan'); if (!n) return alert('Masukkan nama'); if (desas.find(function(d) { return d.nama === n && d.kecamatan === k; })) return alert('Sudah ada');
+            desas.push({ id: Date.now(), nama: n, kecamatan: k });
+            saveMasterData();
+            document.getElementById('newDesa').value = '';
+            loadDesaList();
+            loadDesaForDusunSelect(); }
+
+        function deleteDesa() { var k = document.getElementById('selectKecamatanForDesa').value; var s = document.getElementById('desaList').value; if (!s) return alert('Pilih'); if (!confirm('Hapus ' + s + '?')) return;
+            desas = desas.filter(function(d) { return !(d.nama === s && d.kecamatan === k); });
+            dusuns = dusuns.filter(function(d) { return d.desa !== s; });
+            saveMasterData();
+            loadDesaList();
+            loadDusunList();
+            loadDesaForDusunSelect(); }
+
+        function addDusun() { var d = document.getElementById('selectDesaForDusun').value; var n = document.getElementById('newDusun').value.trim(); if (!d) return alert('Pilih desa'); if (!n) return alert('Masukkan nama'); if (dusuns.find(function(x) { return x.nama === n && x.desa === d; })) return alert('Sudah ada');
+            dusuns.push({ id: Date.now(), nama: n, desa: d });
+            saveMasterData();
+            document.getElementById('newDusun').value = '';
+            loadDusunList(); }
+
+        function deleteDusun() { var d = document.getElementById('selectDesaForDusun').value; var s = document.getElementById('dusunList').value; if (!s) return alert('Pilih'); if (!confirm('Hapus ' + s + '?')) return;
+            dusuns = dusuns.filter(function(x) { return !(x.nama === s && x.desa === d); });
+            saveMasterData();
+            loadDusunList(); }
+
+        function addCategory(type) { var id = type === 'income' ? 'newIncomeCategory' : 'newExpenseCategory'; var n = document.getElementById(id).value.trim(); if (!n) return alert('Masukkan nama'); var list = type === 'income' ? incomeCategories : expenseCategories; if (list.indexOf(n) !== -1) return alert('Sudah ada');
+            list.push(n);
+            document.getElementById(id).value = '';
+            saveMasterData(); if (type === 'income') loadIncomeCategoryList(); else loadExpenseCategoryList(); }
+
+        function deleteCategory(type) { var sid = type === 'income' ? 'incomeCategoryList' : 'expenseCategoryList'; var s = document.getElementById(sid).value; if (!s) return alert('Pilih'); if (!confirm('Hapus ' + s + '?')) return; if (type === 'income') { incomeCategories = incomeCategories.filter(function(c) { return c !== s; });
+                loadIncomeCategoryList(); } else { expenseCategories = expenseCategories.filter(function(c) { return c !== s; });
+                loadExpenseCategoryList(); }
+            saveMasterData(); }
+
+        // ==================== LOAD OPTIONS ====================
+        function loadKecamatanOptions() { var s = document.getElementById('kecamatan'); if (!s) return;
+            s.innerHTML = '<option value="">Pilih Kecamatan</option>';
+            kecamatans.forEach(function(k) { var o = document.createElement('option');
+                o.value = k;
+                o.textContent = k;
+                s.appendChild(o); }); }
+
+        function loadDesaOptions() { var k = document.getElementById('kecamatan').value; var s = document.getElementById('desa'); if (!s) return;
+            s.innerHTML = '<option value="">Pilih Desa</option>'; if (!k) return;
+            desas.filter(function(d) { return d.kecamatan === k; }).forEach(function(d) { var o = document.createElement('option');
+                o.value = d.nama;
+                o.textContent = d.nama;
+                s.appendChild(o); });
+            loadDusunOptions(); }
+
+        function loadDusunOptions() { var d = document.getElementById('desa').value; var s = document.getElementById('dusun'); if (!s) return;
+            s.innerHTML = '<option value="">Pilih Dusun</option>'; if (!d) return;
+            dusuns.filter(function(x) { return x.desa === d; }).forEach(function(x) { var o = document.createElement('option');
+                o.value = x.nama;
+                o.textContent = x.nama;
+                s.appendChild(o); }); }
+
+        function loadKecamatanList() { var s = document.getElementById('kecamatanList'); if (!s) return;
+            s.innerHTML = '';
+            kecamatans.forEach(function(k) { var o = document.createElement('option');
+                o.value = k;
+                o.textContent = k;
+                s.appendChild(o); }); }
+
+        function loadDesaList() { var k = document.getElementById('selectKecamatanForDesa').value; var s = document.getElementById('desaList'); if (!s) return;
+            s.innerHTML = ''; if (!k) return;
+            desas.filter(function(d) { return d.kecamatan === k; }).forEach(function(d) { var o = document.createElement('option');
+                o.value = d.nama;
+                o.textContent = d.nama;
+                s.appendChild(o); }); }
+
+        function loadDusunList() { var d = document.getElementById('selectDesaForDusun').value; var s = document.getElementById('dusunList'); if (!s) return;
+            s.innerHTML = ''; if (!d) return;
+            dusuns.filter(function(x) { return x.desa === d; }).forEach(function(x) { var o = document.createElement('option');
+                o.value = x.nama;
+                o.textContent = x.nama;
+                s.appendChild(o); }); }
+
+        function loadKecamatanForDesaSelect() { var s = document.getElementById('selectKecamatanForDesa'); if (!s) return;
+            s.innerHTML = '<option value="">Pilih Kecamatan</option>';
+            kecamatans.forEach(function(k) { var o = document.createElement('option');
+                o.value = k;
+                o.textContent = k;
+                s.appendChild(o); }); }
+
+        function loadDesaForDusunSelect() { var s = document.getElementById('selectDesaForDusun'); if (!s) return;
+            s.innerHTML = '<option value="">Pilih Desa</option>';
+            desas.forEach(function(d) { var o = document.createElement('option');
+                o.value = d.nama;
+                o.textContent = d.nama + ' (' + d.kecamatan + ')';
+                s.appendChild(o); }); }
+
+        function loadIncomeCategoryList() { var s = document.getElementById('incomeCategoryList'); if (!s) return;
+            s.innerHTML = '';
+            incomeCategories.forEach(function(c) { var o = document.createElement('option');
+                o.value = c;
+                o.textContent = c;
+                s.appendChild(o); }); }
+
+        function loadExpenseCategoryList() { var s = document.getElementById('expenseCategoryList'); if (!s) return;
+            s.innerHTML = '';
+            expenseCategories.forEach(function(c) { var o = document.createElement('option');
+                o.value = c;
+                o.textContent = c;
+                s.appendChild(o); }); }
+
+        // ==================== INIT ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            if (kecamatans.length === 0) {
+                kecamatans = ['Kaliwungu', 'Kota Kendal', 'Brangsong', 'Patebon', 'Pegandon', 'Weleri', 'Rowosari', 'Cepiring', 'Gemuh', 'Ringinarum'];
+                desas = [{ id: 1, nama: 'Protomulyo', kecamatan: 'Kaliwungu' }, { id: 2, nama: 'Kutoharjo', kecamatan: 'Kaliwungu' }, { id: 3, nama: 'Karangtengah', kecamatan: 'Kaliwungu' }];
+                dusuns = [{ id: 1, nama: 'Krajan', desa: 'Protomulyo' }, { id: 2, nama: 'Pilang', desa: 'Protomulyo' }];
+                incomeCategories = ['Pembayaran Tagihan', 'Pemasukan Lain'];
+                expenseCategories = ['Biaya Operasional', 'Biaya Perbaikan', 'Biaya Internet', 'Biaya Listrik', 'Lainnya'];
+                saveMasterData();
+            }
+            setMaxRegistrationDate();
+            loadKecamatanOptions();
+            renderCustomerList();
+            renderTransactionList();
+            renderFinanceList();
+            renderPackageList();
+            renderSavingsList();
+            updateSavingsSummary();
+            updateInfoBar();
+            var yearSelect = document.getElementById('reportYear'); if (yearSelect) yearSelect.value = new Date().getFullYear();
+            document.getElementById('btnSaveCustomer').addEventListener('click', function() { saveCustomer();
+                updateInfoBar(); });
+            document.getElementById('btnProcessPayment').addEventListener('click', function() { processPayment();
+                updateInfoBar(); });
+            document.getElementById('btnSaveFinance').addEventListener('click', function() { saveFinance();
+                updateInfoBar(); });
+            document.getElementById('btnSaveSavings').addEventListener('click', function() { saveSavings();
+                updateInfoBar(); });
+            document.getElementById('btnSaveTarget').addEventListener('click', function() { saveSavingsTarget();
+                updateInfoBar(); });
+            document.getElementById('btnProcessTransfer').addEventListener('click', function() { processTransfer();
+                updateInfoBar(); });
+        });
+
+        // ==================== CUSTOMER FUNCTIONS ====================
+        function openCustomerForm(cid) {
+            document.getElementById('customerForm').reset();
+            document.getElementById('customerId').value = '';
+            document.getElementById('customAmountGroup').style.display = 'none';
+            document.getElementById('packageDurationGroup').style.display = 'none';
+            document.getElementById('desa').innerHTML = '<option value="">Pilih Desa</option>';
+            document.getElementById('dusun').innerHTML = '<option value="">Pilih Dusun</option>';
+            document.getElementById('modalCustomerTitle').textContent = 'Tambah Pelanggan';
+            setMaxRegistrationDate();
+            loadKecamatanOptions();
+            if (cid) {
+                var c = customers.find(function(x) { return x.id === cid; });
+                if (c) {
+                    document.getElementById('customerId').value = c.id;
+                    document.getElementById('nama').value = c.nama;
+                    document.getElementById('alamat').value = c.alamat || '';
+                    document.getElementById('telepon').value = c.telepon;
+                    document.getElementById('paket').value = c.paket === 'Paket Lain' ? 'Lainnya' : c.paket;
+                    document.getElementById('tanggalDaftar').value = c.tanggalDaftar;
+                    document.getElementById('discountAmount').value = c.discount || 0;
+                    if (c.kecamatan) { document.getElementById('kecamatan').value = c.kecamatan;
+                        loadDesaOptions(); if (c.desa) { document.getElementById('desa').value = c.desa;
+                            loadDusunOptions(); if (c.dusun) document.getElementById('dusun').value = c.dusun; } }
+                    togglePackageOptions();
+                    if (c.paket === 'Paket 6/12') document.getElementById('packageDuration').value = c.packageDuration || '6';
+                    if (c.paket === 'Paket Lain') document.getElementById('customAmount').value = c.originalPrice || c.tagihan;
+                    document.getElementById('modalCustomerTitle').textContent = 'Edit Pelanggan';
+                }
+            }
+            openModal('customerModal');
+        }
+
+        function saveCustomer() {
+            var cid = document.getElementById('customerId').value;
+            var nama = document.getElementById('nama').value.trim();
+            var kec = document.getElementById('kecamatan').value;
+            var des = document.getElementById('desa').value;
+            var dus = document.getElementById('dusun').value;
+            var alamat = document.getElementById('alamat').value.trim();
+            var telp = document.getElementById('telepon').value.trim();
+            var tgl = document.getElementById('tanggalDaftar').value;
+            var paket = document.getElementById('paket').value;
+            var dur = document.getElementById('packageDuration').value;
+            var disc = parseInt(document.getElementById('discountAmount').value) || 0;
+            if (!nama || !kec || !des || !dus || !telp || !tgl || !paket) return alert('Lengkapi semua field wajib!');
+            var tagihan = 0,
+                op = 0;
+            if (paket === 'Lainnya') { op = parseInt(document.getElementById('customAmount').value) || 0; if (op <= 0) return alert('Nominal > 0');
+                tagihan = op; } else if (paket === 'Paket 6/12') { var mp = getPackagePrice('Standard');
+                op = dur === '6' ? mp * 6 * 0.85 : mp * 12 * 0.75;
+                tagihan = op; } else { op = getPackagePrice(paket);
+                tagihan = op; }
+            if (disc > tagihan) return alert('Diskon tidak boleh melebihi tagihan');
+            tagihan -= disc;
+            var cd = { id: cid || Date.now().toString(), nama, kecamatan: kec, desa: des, dusun: dus, alamat, telepon: telp, paket: paket === 'Lainnya' ? 'Paket Lain' : paket, tanggalDaftar: tgl, status: 'active', tagihan, discount: disc, originalPrice: op, finalPrice: tagihan, packageDuration: paket === 'Paket 6/12' ? dur : null };
+            if (cid) { var idx = customers.findIndex(function(x) { return x.id === cid; }); if (idx !== -1) { customers[idx] = cd; } } else { customers.push(cd); if (paket === 'Paket 6/12') { packageCustomers.push({ id: Date.now().toString(), customerId: cd.id, customerName: nama, packageDuration: dur, startDate: tgl, endDate: calculatePackageEndDate(tgl, dur), amount: tagihan, status: 'active' });
+                    finances.push({ id: Date.now().toString(), type: 'income', date: tgl, category: 'Pembayaran Tagihan', amount: tagihan, description: 'Pembayaran paket ' + dur + ' bulan - ' + nama }); } else generateInitialTransactions(cd); }
+            saveToLocalStorage();
+            closeModal('customerModal');
+            renderCustomerList();
+            renderTransactionList();
+            renderPackageList();
+            renderFinanceList();
+            updateInfoBar();
+        }
+
+        function renderCustomerList(filter) {
+            var list = document.getElementById('customerList'); if (!list) return;
+            list.innerHTML = '';
+            var filtered = customers;
+            if (filter) { var t = filter.toLowerCase();
+                filtered = customers.filter(function(c) { return c.nama.toLowerCase().indexOf(t) !== -1 || c.desa.toLowerCase().indexOf(t) !== -1 || c.kecamatan.toLowerCase().indexOf(t) !== -1; }); }
+            filtered.sort(function(a, b) { return new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar); });
+            document.getElementById('totalActiveCustomers').textContent = customers.filter(function(c) { return c.status === 'active' && c.paket !== 'Paket 6/12'; }).length;
+            document.getElementById('totalMonthlyBills').textContent = formatCurrency(customers.reduce(function(s, c) { return c.status === 'active' && c.paket !== 'Paket 6/12' ? s + c.finalPrice : s; }, 0));
+            document.getElementById('totalPackage6Customers').textContent = customers.filter(function(c) { return c.status === 'active' && c.paket === 'Paket 6/12' && c.packageDuration === '6'; }).length;
+            document.getElementById('totalPackage12Customers').textContent = customers.filter(function(c) { return c.status === 'active' && c.paket === 'Paket 6/12' && c.packageDuration === '12'; }).length;
+            if (filtered.length === 0) { list.innerHTML = '<tr><td colspan="7" class="text-center">Tidak ada data</td></tr>'; return; }
+            filtered.forEach(function(c, i) {
+                var row = document.createElement('tr');
+                if (c.status === 'active') row.className = c.paket === 'Paket 6/12' ? (c.packageDuration === '6' ? 'package6-row' : 'package12-row') : 'active-row';
+                else row.className = 'inactive-row';
+                var hp = c.paket !== 'Paket 6/12' && transactions.some(function(t) { return t.customerId === c.id && t.status === 'pending'; });
+                var sc = c.status === 'inactive' ? 'status-inactive' : (c.paket === 'Paket 6/12' ? (c.packageDuration === '6' ? 'status-package6' : 'status-package12') : 'status-active');
+                var st = c.status === 'inactive' ? 'Nonaktif' : (c.paket === 'Paket 6/12' ? 'Paket ' + c.packageDuration + ' Bln' : 'Aktif');
+                row.innerHTML = '<td>' + (i + 1) + '</td><td>' + c.nama + '</td><td>' + c.paket + (c.paket === 'Paket 6/12' ? ' (' + c.packageDuration + ' Bln)' : '') + '</td><td>' + c.desa + '</td><td>' + formatCurrency(c.finalPrice) + '</td><td><span class="' + sc + '">' + st + '</span></td><td><button class="action-btn btn-secondary" onclick="showCustomerDetail(\'' + c.id + '\')">Detail</button>' + (c.paket !== 'Paket 6/12' ? '<button class="action-btn ' + (hp ? 'btn-primary' : 'btn-outline') + '" ' + (hp ? 'onclick="openPaymentModal(\'' + c.id + '\')"' : 'disabled') + '>Bayar</button>' : '') + '</td>';
+                list.appendChild(row);
+            });
+        }
+
+        function showCustomerDetail(cid) { var c = customers.find(function(x) { return x.id === cid; }); if (!c) return alert('Tidak ditemukan');
+            document.getElementById('customerDetailContent').innerHTML = '<div style="border:1px solid #eee;border-radius:8px;padding:15px;"><h3 style="text-align:center;">' + c.nama.toUpperCase() + '</h3><table style="width:100%;box-shadow:none;"><tr><td><strong>Alamat</strong></td><td>: ' + c.dusun + ', ' + c.desa + ', ' + c.kecamatan + (c.alamat ? ' - ' + c.alamat : '') + '</td></tr><tr><td><strong>Telepon</strong></td><td>: ' + c.telepon + '</td></tr><tr><td><strong>Paket</strong></td><td>: ' + c.paket + (c.paket === 'Paket 6/12' ? ' (' + c.packageDuration + ' Bln)' : '') + '</td></tr><tr><td><strong>Tagihan</strong></td><td>: ' + formatCurrency(c.finalPrice) + (c.paket === 'Paket 6/12' ? ' (sekali bayar)' : '/bulan') + '</td></tr><tr><td><strong>Tgl Daftar</strong></td><td>: ' + formatDate(c.tanggalDaftar) + '</td></tr><tr><td><strong>Status</strong></td><td>: ' + (c.status === 'active' ? '<span style="color:#2ecc71;">Aktif</span>' : '<span style="color:#e74c3c;">Nonaktif</span>') + '</td></tr></table></div>';
+            var btnGroup = document.getElementById('detailButtons');
+            btnGroup.innerHTML = '';
+            var editBtn = document.createElement('button');
+            editBtn.className = 'btn-secondary';
+            editBtn.textContent = 'Edit';
+            editBtn.onclick = function() { closeModal('detailModal');
+                openCustomerForm(cid); };
+            btnGroup.appendChild(editBtn);
+            var delBtn = document.createElement('button');
+            delBtn.className = 'btn-danger';
+            delBtn.textContent = 'Hapus';
+            delBtn.onclick = function() { if (confirm('Hapus?')) { customers = customers.filter(function(x) { return x.id !== cid; });
+                    packageCustomers = packageCustomers.filter(function(x) { return x.customerId !== cid; });
+                    saveToLocalStorage();
+                    closeModal('detailModal');
+                    renderCustomerList();
+                    renderTransactionList();
+                    renderPackageList();
+                    updateInfoBar(); } };
+            btnGroup.appendChild(delBtn);
+            var toggleBtn = document.createElement('button');
+            toggleBtn.className = c.status === 'active' ? 'btn-warning' : 'btn-primary';
+            toggleBtn.textContent = c.status === 'active' ? 'Nonaktifkan' : 'Aktifkan';
+            toggleBtn.onclick = function() { c.status = c.status === 'active' ? 'inactive' : 'active';
+                saveToLocalStorage();
+                closeModal('detailModal');
+                renderCustomerList();
+                renderTransactionList();
+                renderPackageList();
+                updateInfoBar(); };
+            btnGroup.appendChild(toggleBtn);
+            var closeBtn = document.createElement('button');
+            closeBtn.className = 'btn-outline';
+            closeBtn.textContent = 'Tutup';
+            closeBtn.onclick = function() { closeModal('detailModal'); };
+            btnGroup.appendChild(closeBtn);
+            openModal('detailModal'); }
+
+        // ==================== TRANSACTION FUNCTIONS ====================
+        function renderTransactionList(fm, ps, cf) { var list = document.getElementById('transactionList'); if (!list) return;
+            list.innerHTML = ''; var filtered = transactions.slice(); if (fm) filtered = filtered.filter(function(t) { return t.monthYear === fm; }); else { var cm = new Date().toISOString().substring(0, 7);
+                filtered = filtered.filter(function(t) { return t.monthYear === cm; });
+                document.getElementById('filterMonth').value = cm; } if (ps) filtered = filtered.filter(function(t) { return t.status === ps; }); if (cf) { var term = cf.toLowerCase();
+                filtered = filtered.filter(function(t) { return getCustomerName(t.customerId).toLowerCase().indexOf(term) !== -1; }); }
+            document.getElementById('totalPaidAmount').textContent = formatCurrency(filtered.filter(function(t) { return t.status === 'paid'; }).reduce(function(s, t) { return s + (t.paid || t.amount); }, 0));
+            document.getElementById('totalUnpaidAmount').textContent = formatCurrency(filtered.filter(function(t) { return t.status === 'pending'; }).reduce(function(s, t) { return s + t.amount; }, 0)); if (filtered.length === 0) { list.innerHTML = '<tr><td colspan="6" class="text-center">Tidak ada data</td></tr>'; return; }
+            filtered.forEach(function(t, i) { var row = document.createElement('tr');
+                row.className = t.status === 'paid' ? 'active-row' : '';
+                row.innerHTML = '<td>' + (i + 1) + '</td><td>' + getCustomerName(t.customerId) + '</td><td>' + formatMonthYear(t.monthYear) + '</td><td>' + formatCurrency(t.amount) + '</td><td>' + getStatusBadge(t.status) + '</td><td>' + (t.status === 'pending' ? '<button class="action-btn btn-primary" onclick="openPaymentModal(\'' + t.customerId + '\')">Bayar</button> <button class="action-btn btn-warning" onclick="openReceiptModal(\'' + t.id + '\',true)">Cetak Tagihan</button>' : '<button class="action-btn btn-secondary" onclick="viewTransactionDetail(\'' + t.id + '\')">Detail</button> <button class="action-btn btn-primary" onclick="openReceiptModal(\'' + t.id + '\')">Bukti</button>') + '</td>';
+                list.appendChild(row); }); }
+
+        function filterTransactions() { renderTransactionList(document.getElementById('filterMonth').value, document.getElementById('filterPaymentStatus').value, document.getElementById('searchTransactionCustomer').value); }
+
+        function openPaymentModal(cid) { var c = customers.find(function(x) { return x.id === cid; }); if (!c || c.paket === 'Paket 6/12') return; var pending = transactions.filter(function(t) { return t.customerId === cid && t.status === 'pending'; }).sort(function(a, b) { return a.monthYear.localeCompare(b.monthYear); }); var sel = document.getElementById('paymentMonthSelect');
+            sel.innerHTML = '';
+            pending.forEach(function(t) { var o = document.createElement('option');
+                o.value = t.id;
+                o.textContent = formatMonthYear(t.monthYear) + ' - Rp ' + t.amount.toLocaleString('id-ID');
+                sel.appendChild(o); });
+            document.getElementById('paymentCustomerId').value = cid;
+            document.getElementById('paymentCustomerName').textContent = c.nama; if (pending.length > 0) document.getElementById('paymentAmount').textContent = formatCurrency(pending[0].amount);
+            document.getElementById('paymentDate').value = new Date().toISOString().substring(0, 10);
+            document.getElementById('paymentNotes').value = '';
+            sel.onchange = function() { var t = transactions.find(function(x) { return x.id === this.value; }); if (t) document.getElementById('paymentAmount').textContent = formatCurrency(t.amount); };
+            openModal('paymentModal'); }
+
+        function processPayment() { var tid = document.getElementById('paymentMonthSelect').value; var pd = document.getElementById('paymentDate').value; var pn = document.getElementById('paymentNotes').value; var t = transactions.find(function(x) { return x.id === tid; }); if (!t) return alert('Transaksi tidak ditemukan');
+            t.status = 'paid';
+            t.paid = t.amount;
+            t.paymentDate = pd;
+            t.notes = pn || 'Pembayaran tagihan ' + formatMonthYear(t.monthYear);
+            finances.push({ id: Date.now().toString(), type: 'income', date: pd, category: 'Pembayaran Tagihan', amount: t.amount, description: t.customerName + ' - ' + formatMonthYear(t.monthYear) });
+            saveToLocalStorage();
+            closeModal('paymentModal');
+            renderCustomerList();
+            renderTransactionList();
+            renderFinanceList();
+            updateInfoBar();
+            openReceiptModal(tid); }
+
+        function viewTransactionDetail(tid) { var t = transactions.find(function(x) { return x.id === tid; }); if (!t) return;
+            document.getElementById('customerDetailContent').innerHTML = '<h3 style="text-align:center;">Detail Transaksi</h3><table style="width:100%;box-shadow:none;"><tr><td><strong>Pelanggan</strong></td><td>: ' + getCustomerName(t.customerId) + '</td></tr><tr><td><strong>Bulan</strong></td><td>: ' + formatMonthYear(t.monthYear) + '</td></tr><tr><td><strong>Tagihan</strong></td><td>: ' + formatCurrency(t.amount) + '</td></tr><tr><td><strong>Dibayar</strong></td><td>: ' + formatCurrency(t.paid) + '</td></tr><tr><td><strong>Tgl Bayar</strong></td><td>: ' + (t.paymentDate ? formatDate(t.paymentDate) : '-') + '</td></tr><tr><td><strong>Jatuh Tempo</strong></td><td>: ' + formatDate(t.dueDate) + '</td></tr><tr><td><strong>Status</strong></td><td>: ' + getStatusBadge(t.status) + '</td></tr></table>';
+            document.getElementById('detailButtons').innerHTML = '<button class="btn-outline" onclick="closeModal(\'detailModal\')">Tutup</button>';
+            openModal('detailModal'); }
+
+        // ==================== FINANCE FUNCTIONS ====================
+        function openFinanceForm(type, fid) {
+            document.getElementById('financeType').value = type;
+            document.getElementById('modalFinanceTitle').textContent = type === 'income' ? 'Tambah Pemasukan' : 'Tambah Pengeluaran';
+            document.getElementById('financeDate').value = new Date().toISOString().substring(0, 10);
+            var sel = document.getElementById('financeCategory');
+            sel.innerHTML = '';
+            var cats = type === 'income' ? incomeCategories : expenseCategories;
+            cats.forEach(function(c) { var o = document.createElement('option');
+                o.value = c;
+                o.textContent = c;
+                sel.appendChild(o); });
+            // Tampilkan/sembunyikan dropdown kebutuhan/keinginan
+            var expGroup = document.getElementById('expenseCategoryGroup');
+            if (type === 'expense') {
+                expGroup.style.display = 'block';
+            } else {
+                expGroup.style.display = 'none';
+            }
+            if (fid) {
+                var f = finances.find(function(x) { return x.id === fid; });
+                if (f) {
+                    document.getElementById('financeId').value = fid;
+                    document.getElementById('financeDate').value = f.date;
+                    document.getElementById('financeCategory').value = f.category;
+                    document.getElementById('financeAmount').value = f.amount;
+                    document.getElementById('financeDescription').value = f.description || '';
+                    if (f.expenseCategory) {
+                        document.getElementById('expenseCategoryType').value = f.expenseCategory;
+                    }
+                }
+            } else {
+                document.getElementById('financeId').value = '';
+                document.getElementById('financeAmount').value = '';
+                document.getElementById('financeDescription').value = '';
+                document.getElementById('expenseCategoryType').value = 'KEBUTUHAN';
+            }
+            openModal('financeModal');
+        }
+
+        function saveFinance() {
+            var fid = document.getElementById('financeId').value;
+            var type = document.getElementById('financeType').value;
+            var amt = parseFloat(document.getElementById('financeAmount').value);
+            if (amt <= 0) return alert('Jumlah > 0');
+            var data = {
+                type: type,
+                date: document.getElementById('financeDate').value,
+                category: document.getElementById('financeCategory').value,
+                amount: amt,
+                description: document.getElementById('financeDescription').value
+            };
+            // Simpan kategori pengeluaran jika tipe expense
+            if (type === 'expense') {
+                data.expenseCategory = document.getElementById('expenseCategoryType').value;
+            }
+            if (fid) {
+                var idx = finances.findIndex(function(x) { return x.id === fid; });
+                if (idx !== -1) finances[idx] = Object.assign({}, finances[idx], data);
+            } else {
+                data.id = Date.now().toString();
+                finances.push(data);
+            }
+            saveToLocalStorage();
+            closeModal('financeModal');
+            renderFinanceList();
+            updateInfoBar();
+        }
+
+        function renderFinanceList(fm) {
+            var list = document.getElementById('financeList'); if (!list) return;
+            list.innerHTML = '';
+            var filtered = finances.slice();
+            if (fm) filtered = filtered.filter(function(f) { return f.date.startsWith(fm); });
+            else { var cm = new Date().toISOString().substring(0, 7);
+                filtered = filtered.filter(function(f) { return f.date.startsWith(cm); });
+                document.getElementById('filterFinanceMonth').value = cm; }
+            filtered.sort(function(a, b) { return b.date.localeCompare(a.date); });
+            if (filtered.length === 0) { list.innerHTML = '<tr><td colspan="7" class="text-center">Tidak ada data</td></tr>'; return; }
+            filtered.forEach(function(f, i) {
+                var row = document.createElement('tr');
+                var rowClass = f.type === 'income' ? 'income-row' : 'expense-row';
+                if (f.expenseCategory === 'KEBUTUHAN') rowClass += ' need-row';
+                else if (f.expenseCategory === 'KEINGINAN') rowClass += ' want-row';
+                row.className = rowClass;
+                var expenseTypeText = f.type === 'expense' ? (f.expenseCategory || '-') : '-';
+                var expenseTypeClass = f.expenseCategory === 'KEBUTUHAN' ? 'need-text' : (f.expenseCategory === 'KEINGINAN' ? 'want-text' : '');
+                row.innerHTML = '<td>' + (i + 1) + '</td><td>' + formatDate(f.date) + '</td><td>' + f.category + '</td><td class="' + expenseTypeClass + '">' + expenseTypeText + '</td><td>' + (f.description || '-') + '</td><td class="' + (f.type === 'income' ? 'income-text' : 'expense-text') + '">' + formatCurrency(f.amount) + '</td><td><button class="action-btn btn-secondary" onclick="openFinanceForm(\'' + f.type + '\',\'' + f.id + '\')">Edit</button> <button class="action-btn btn-danger" onclick="deleteFinance(\'' + f.id + '\')">Hapus</button></td>';
+                list.appendChild(row);
+            });
+        }
+
+        function deleteFinance(fid) { if (confirm('Hapus?')) { finances = finances.filter(function(x) { return x.id !== fid; });
+                saveToLocalStorage();
+                renderFinanceList();
+                updateInfoBar(); } }
+
+        // ==================== PACKAGE FUNCTIONS ====================
+        function renderPackageList(filter) { var list = document.getElementById('packageList'); if (!list) return;
+            list.innerHTML = ''; var filtered = packageCustomers.slice(); if (currentPackageTab === '6') filtered = filtered.filter(function(p) { return p.packageDuration === '6'; }); else if (currentPackageTab === '12') filtered = filtered.filter(function(p) { return p.packageDuration === '12'; }); if (filter) { var t = filter.toLowerCase();
+                filtered = filtered.filter(function(p) { return p.customerName.toLowerCase().indexOf(t) !== -1; }); }
+            filtered.sort(function(a, b) { return new Date(a.endDate) - new Date(b.endDate); }); if (filtered.length === 0) { list.innerHTML = '<tr><td colspan="8" class="text-center">Tidak ada data</td></tr>'; return; }
+            filtered.forEach(function(p, i) { var c = customers.find(function(x) { return x.id === p.customerId; }); var isActive = c ? c.status === 'active' : false; var isExpired = new Date(p.endDate) < new Date(); var row = document.createElement('tr');
+                row.className = p.packageDuration === '6' ? 'package6-row' : 'package12-row';
+                row.innerHTML = '<td>' + (i + 1) + '</td><td>' + p.customerName + '</td><td>Paket ' + p.packageDuration + ' Bln</td><td>' + formatCurrency(p.amount) + '</td><td>' + formatDate(p.startDate) + '</td><td>' + formatDate(p.endDate) + '</td><td><span class="' + (p.packageDuration === '6' ? 'status-package6' : 'status-package12') + '">' + (isActive ? (isExpired ? 'Kadaluarsa' : 'Aktif') : 'Nonaktif') + '</span></td><td><button class="action-btn btn-secondary" onclick="showPackageDetail(\'' + p.id + '\')">Detail</button>' + (isExpired && isActive ? '<button class="action-btn btn-primary" onclick="renewPackage(\'' + p.id + '\')">Perpanjang</button>' : '') + '</td>';
+                list.appendChild(row); }); }
+
+        function showPackageDetail(pid) { var p = packageCustomers.find(function(x) { return x.id === pid; }); if (!p) return; var c = customers.find(function(x) { return x.id === p.customerId; }); var isExpired = new Date(p.endDate) < new Date();
+            document.getElementById('customerDetailContent').innerHTML = '<h3 style="text-align:center;">Detail Paket</h3><table style="width:100%;box-shadow:none;"><tr><td><strong>Pelanggan</strong></td><td>: ' + p.customerName + '</td></tr><tr><td><strong>Paket</strong></td><td>: ' + p.packageDuration + ' Bulan</td></tr><tr><td><strong>Jumlah</strong></td><td>: ' + formatCurrency(p.amount) + '</td></tr><tr><td><strong>Tgl Mulai</strong></td><td>: ' + formatDate(p.startDate) + '</td></tr><tr><td><strong>Tgl Berakhir</strong></td><td>: ' + formatDate(p.endDate) + '</td></tr></table>';
+            document.getElementById('detailButtons').innerHTML = (isExpired && c && c.status === 'active' ? '<button class="btn-primary" onclick="renewPackage(\'' + p.id + '\')">Perpanjang</button> ' : '') + '<button class="btn-outline" onclick="closeModal(\'detailModal\')">Tutup</button>';
+            openModal('detailModal'); }
+
+        function renewPackage(pid) { var p = packageCustomers.find(function(x) { return x.id === pid; }); if (!p) return; var c = customers.find(function(x) { return x.id === p.customerId; }); if (!c) return; if (confirm('Perpanjang?')) { var today = new Date(); var ed = new Date(p.endDate); var nsd = today > ed ? today : ed;
+                p.startDate = nsd.toISOString().substring(0, 10);
+                p.endDate = calculatePackageEndDate(p.startDate, p.packageDuration);
+                finances.push({ id: Date.now().toString(), type: 'income', date: nsd.toISOString().substring(0, 10), category: 'Pembayaran Tagihan', amount: p.amount, description: 'Perpanjangan paket ' + p.packageDuration + ' bulan - ' + c.nama });
+                saveToLocalStorage();
+                renderPackageList();
+                renderFinanceList();
+                closeModal('detailModal');
+                updateInfoBar();
+                alert('Diperpanjang hingga ' + formatDate(p.endDate)); } }
+
+        // ==================== SAVINGS FUNCTIONS ====================
+        function openSavingsForm(sid) { document.getElementById('savingsId').value = '';
+            document.getElementById('savingsDate').value = new Date().toISOString().substring(0, 10);
+            document.getElementById('savingsAmount').value = '';
+            document.getElementById('savingsDescription').value = '';
+            document.getElementById('savingsModalTitle').textContent = 'Tambah Tabungan Manual'; if (sid) { var s = savings.find(function(x) { return x.id === sid; }); if (s) { document.getElementById('savingsId').value = s.id;
+                    document.getElementById('savingsDate').value = s.date;
+                    document.getElementById('savingsAmount').value = s.amount;
+                    document.getElementById('savingsDescription').value = s.description || '';
+                    document.getElementById('savingsModalTitle').textContent = 'Edit Tabungan'; } }
+            openModal('savingsModal'); }
+
+        function saveSavings() { var sid = document.getElementById('savingsId').value; var amount = parseFloat(document.getElementById('savingsAmount').value); if (!amount || amount <= 0) return alert('Jumlah > 0'); var data = { date: document.getElementById('savingsDate').value, amount: amount, source: 'Manual', description: document.getElementById('savingsDescription').value }; if (sid) { var idx = savings.findIndex(function(x) { return x.id === sid; }); if (idx !== -1) savings[idx] = Object.assign({}, savings[idx], data); } else { data.id = Date.now().toString();
+                savings.push(data); }
+            saveToLocalStorage();
+            closeModal('savingsModal');
+            renderSavingsList();
+            updateSavingsSummary();
+            updateInfoBar(); }
+
+        function deleteSavings(sid) { if (confirm('Hapus?')) { savings = savings.filter(function(x) { return x.id !== sid; });
+                saveToLocalStorage();
+                renderSavingsList();
+                updateSavingsSummary();
+                updateInfoBar(); } }
+
+        function renderSavingsList() { var list = document.getElementById('savingsList'); if (!list) return;
+            list.innerHTML = ''; var filtered = savings.slice().sort(function(a, b) { return b.date.localeCompare(a.date); }); if (filtered.length === 0) { list.innerHTML = '<tr><td colspan="6" class="text-center">Belum ada tabungan</td></tr>'; return; }
+            filtered.forEach(function(s, i) { var row = document.createElement('tr');
+                row.className = 'savings-row';
+                row.innerHTML = '<td>' + (i + 1) + '</td><td>' + formatDate(s.date) + '</td><td class="savings-text">' + formatCurrency(s.amount) + '</td><td>' + (s.source || 'Manual') + '</td><td>' + (s.description || '-') + '</td><td><button class="action-btn btn-secondary" onclick="openSavingsForm(\'' + s.id + '\')">Edit</button> <button class="action-btn btn-danger" onclick="deleteSavings(\'' + s.id + '\')">Hapus</button></td>';
+                list.appendChild(row); }); }
+
+        function updateSavingsSummary() { var total = savings.reduce(function(s, x) { return s + x.amount; }, 0); var target = savingsTarget.amount || 0; var remaining = Math.max(0, target - total); var percent = target > 0 ? Math.min(100, Math.round((total / target) * 100)) : 0;
+            document.getElementById('totalSavings').textContent = formatCurrency(total);
+            document.getElementById('savingsTarget').textContent = formatCurrency(target) + (savingsTarget.description ? ' (' + savingsTarget.description + ')' : '');
+            document.getElementById('savingsRemaining').textContent = formatCurrency(remaining);
+            document.getElementById('savingsPercent').textContent = percent + '%';
+            document.getElementById('savingsProgressBar').style.width = percent + '%'; }
+
+        function openSavingsTargetForm() { document.getElementById('targetAmount').value = savingsTarget.amount || '';
+            document.getElementById('targetDescription').value = savingsTarget.description || '';
+            openModal('savingsTargetModal'); }
+
+        function saveSavingsTarget() { var amt = parseFloat(document.getElementById('targetAmount').value); if (!amt || amt <= 0) return alert('Target > 0');
+            savingsTarget = { amount: amt, description: document.getElementById('targetDescription').value };
+            saveToLocalStorage();
+            closeModal('savingsTargetModal');
+            updateSavingsSummary();
+            updateInfoBar(); }
+
+        function openTransferToSavingsForm() { var totalIncome = finances.filter(function(f) { return f.type === 'income'; }).reduce(function(s, f) { return s + f.amount; }, 0); var totalExpense = finances.filter(function(f) { return f.type === 'expense'; }).reduce(function(s, f) { return s + f.amount; }, 0); var balance = Math.max(0, totalIncome - totalExpense);
+            document.getElementById('availableBalance').textContent = formatCurrency(balance);
+            document.getElementById('maxTransfer').textContent = formatCurrency(balance);
+            document.getElementById('transferAmount').value = '';
+            document.getElementById('transferAmount').max = balance;
+            openModal('transferToSavingsModal'); }
+
+        function processTransfer() { var amt = parseFloat(document.getElementById('transferAmount').value); if (!amt || amt <= 0) return alert('Jumlah > 0'); var totalIncome = finances.filter(function(f) { return f.type === 'income'; }).reduce(function(s, f) { return s + f.amount; }, 0); var totalExpense = finances.filter(function(f) { return f.type === 'expense'; }).reduce(function(s, f) { return s + f.amount; }, 0); var balance = totalIncome - totalExpense; if (amt > balance) return alert('Saldo tidak cukup! Maks: ' + formatCurrency(balance));
+            finances.push({ id: Date.now().toString(), type: 'expense', date: new Date().toISOString().substring(0, 10), category: 'Transfer Tabungan', amount: amt, description: document.getElementById('transferDescription').value || 'Transfer ke tabungan' });
+            savings.push({ id: Date.now().toString() + '_s', date: new Date().toISOString().substring(0, 10), amount: amt, source: 'Transfer Saldo', description: document.getElementById('transferDescription').value || 'Transfer dari saldo' });
+            saveToLocalStorage();
+            closeModal('transferToSavingsModal');
+            renderFinanceList();
+            renderSavingsList();
+            updateSavingsSummary();
+            updateInfoBar(); }
+
+        // ==================== RECEIPT ====================
+        function openReceiptModal(tid, isInvoice) { var t = transactions.find(function(x) { return x.id === tid; }); if (!t) return alert('Tidak ditemukan'); var c = customers.find(function(x) { return x.id === t.customerId; });
+            document.getElementById('receiptTrxId').textContent = t.id;
+            document.getElementById('receiptDate').textContent = isInvoice ? formatDate(new Date().toISOString().substring(0, 10)) : formatDate(t.paymentDate); if (isInvoice) { document.getElementById('receiptTitle').textContent = 'TAGIHAN INTERNET';
+                document.getElementById('receiptSubtitle').textContent = 'Tagihan Bulanan';
+                document.getElementById('receiptStatus').textContent = 'BELUM LUNAS';
+                document.getElementById('receiptStatus').className = 'badge badge-danger';
+                document.getElementById('paymentInstructions').style.display = 'block';
+                document.getElementById('dueDateText').textContent = formatDate(t.dueDate);
+                document.getElementById('receiptStamp').style.display = 'none'; } else { document.getElementById('receiptTitle').textContent = 'BUKTI PEMBAYARAN';
+                document.getElementById('receiptSubtitle').textContent = 'Bukti Pembayaran';
+                document.getElementById('receiptStatus').textContent = t.status === 'paid' ? 'LUNAS' : 'PENDING';
+                document.getElementById('receiptStatus').className = t.status === 'paid' ? 'badge badge-success' : 'badge badge-warning';
+                document.getElementById('paymentInstructions').style.display = 'none';
+                document.getElementById('receiptStamp').style.display = t.status === 'paid' ? 'block' : 'none'; } if (c) { document.getElementById('receiptCustomer').textContent = c.nama;
+                document.getElementById('receiptAddress').textContent = c.dusun + ', ' + c.desa + ', ' + c.kecamatan + (c.alamat ? ' - ' + c.alamat : '');
+                document.getElementById('receiptPhone').textContent = c.telepon;
+                document.getElementById('receiptPackage').textContent = c.paket + ' - ' + formatCurrency(c.finalPrice); } else { document.getElementById('receiptCustomer').textContent = t.customerName;
+                document.getElementById('receiptAddress').textContent = '-';
+                document.getElementById('receiptPhone').textContent = '-';
+                document.getElementById('receiptPackage').textContent = '-'; }
+            document.getElementById('receiptPeriod').textContent = formatMonthYear(getPreviousMonthYear(t.monthYear)) + ' - ' + formatMonthYear(t.monthYear);
+            document.getElementById('receiptDueDate').textContent = formatDate(t.dueDate);
+            document.getElementById('receiptAmount').textContent = formatCurrency(t.amount);
+            document.getElementById('receiptNotes').textContent = isInvoice ? 'Tagihan Jasa Layanan Internet' : (t.notes || 'Jasa Layanan Internet');
+            document.getElementById('downloadBtnText').textContent = isInvoice ? 'Download Tagihan' : 'Download Bukti';
+            openModal('receiptModal'); }
+
+        function getPreviousMonthYear(my) { var parts = my.split('-'); var y = parseInt(parts[0]); var m = parseInt(parts[1]); var pm = m - 1; var py = y; if (pm < 1) { pm = 12;
+                py--; } return py + '-' + String(pm).padStart(2, '0'); }
+
+        function downloadReceiptImage() { var cname = document.getElementById('receiptCustomer').textContent; var period = document.getElementById('receiptPeriod').textContent; var isInvoice = document.getElementById('paymentInstructions').style.display !== 'none'; var fname = isInvoice ? 'Tagihan_' + cname.replace(/[^a-zA-Z0-9]/g, '_') + '.png' : 'Bukti_Bayar_' + cname.replace(/[^a-zA-Z0-9]/g, '_') + '.png'; var btn = document.getElementById('downloadBtnText'); var orig = btn.textContent;
+            btn.innerHTML = '<span style="display:inline-block;width:20px;height:20px;border:3px solid rgba(255,255,255,0.3);border-radius:50%;border-top-color:white;animation:spin 1s linear infinite;margin-right:8px;"></span> Memproses...'; var clone = document.getElementById('receiptContent').cloneNode(true);
+            clone.style.width = '600px';
+            clone.style.padding = '40px';
+            clone.style.backgroundColor = '#FFFFFF'; var container = document.createElement('div');
+            container.style.cssText = 'position:fixed;left:-9999px;background:#FFFFFF;';
+            container.appendChild(clone);
+            document.body.appendChild(container);
+            html2canvas(clone, { scale: 2, backgroundColor: '#FFFFFF', useCORS: true, allowTaint: true, logging: false }).then(function(canvas) {
+                btn.textContent = orig;
+                canvas.toBlob(function(blob) { var link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = fname;
+                    link.click();
+                    setTimeout(function() { URL.revokeObjectURL(link.href);
+                        document.body.removeChild(container); }, 100); }, 'image/png', 0.9);
+            }).catch(function() { btn.textContent = orig;
+                document.body.removeChild(container); }); }
+
+        // ==================== CHARTS ====================
+        function renderCharts() {
+            Object.values(chartInstances).forEach(function(ch) { ch.destroy(); });
+            chartInstances = {};
+            var ctx1 = document.getElementById('packagePriceChart');
+            if (ctx1) {
+                chartInstances.price = new Chart(ctx1.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Basic', 'Basic Plus', 'Standard', 'Premium', 'Premium Plus'],
+                        datasets: [{ label: 'Harga (Rp)', data: [100000, 120000, 150000, 200000, 300000], backgroundColor: ['#3498db', '#2ecc71', '#f39c12', '#e74c3c', '#9b59b6'] }]
+                    },
+                    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { callback: function(v) { return formatCurrency(v); } } } } }
+                });
+            }
+            var ctx2 = document.getElementById('packageCountChart');
+            if (ctx2) {
+                var allP = ['Basic', 'Basic Plus', 'Standard', 'Premium', 'Premium Plus', 'Paket 6/12'];
+                chartInstances.count = new Chart(ctx2.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: allP,
+                        datasets: [{ label: 'Pelanggan', data: allP.map(function(p) { return customers.filter(function(c) { return c.status === 'active' && c.paket === p; }).length; }), backgroundColor: ['#3498db', '#2ecc71', '#f39c12', '#e74c3c', '#9b59b6', '#34495e'] }]
+                    },
+                    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+                });
+            }
+            var ctx3 = document.getElementById('villageChart');
+            if (ctx3) {
+                var dc = {};
+                customers.filter(function(c) { return c.status === 'active'; }).forEach(function(c) { var k = c.desa + ', ' + c.kecamatan;
+                    dc[k] = (dc[k] || 0) + 1; });
+                var sorted = Object.entries(dc).sort(function(a, b) { return b[1] - a[1]; }).slice(0, 10);
+                chartInstances.village = new Chart(ctx3.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: sorted.map(function(e) { return e[0]; }),
+                        datasets: [{ label: 'Pelanggan', data: sorted.map(function(e) { return e[1]; }), backgroundColor: ['#008055', '#27ae60', '#2ecc71', '#3498db', '#2980b9', '#9b59b6', '#e74c3c', '#f39c12', '#1abc9c', '#34495e'].slice(0, sorted.length) }]
+                    },
+                    options: { indexAxis: 'y', responsive: true, plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+                });
+            }
+        }
+
+        // ==================== REPORT ====================
+        function generateReport() {
+            var yearSelect = document.getElementById('reportYear'); if (!yearSelect) return;
+            var year = yearSelect.value; if (!year) return;
+            var monthlyData = {};
+            for (var m = 1; m <= 12; m++) {
+                var mk = year + '-' + String(m).padStart(2, '0');
+                monthlyData[mk] = { totalBilled: 0, totalPaid: 0, totalIncome: 0, totalExpense: 0, totalNeed: 0, totalWant: 0, newCustomers: 0, package6: 0, package12: 0 };
+            }
+            transactions.forEach(function(t) {
+                if (t.monthYear && t.monthYear.startsWith(year) && monthlyData[t.monthYear]) {
+                    monthlyData[t.monthYear].totalBilled += (t.amount || 0);
+                    if (t.status === 'paid') monthlyData[t.monthYear].totalPaid += (t.paid || t.amount || 0);
+                }
+            });
+            finances.forEach(function(f) {
+                if (f.date && f.date.startsWith(year)) {
+                    var mk = f.date.substring(0, 7);
+                    if (monthlyData[mk]) {
+                        if (f.type === 'income') monthlyData[mk].totalIncome += (f.amount || 0);
+                        else {
+                            monthlyData[mk].totalExpense += (f.amount || 0);
+                            if (f.expenseCategory === 'KEBUTUHAN') monthlyData[mk].totalNeed += (f.amount || 0);
+                            else if (f.expenseCategory === 'KEINGINAN') monthlyData[mk].totalWant += (f.amount || 0);
+                        }
+                    }
+                }
+            });
+            customers.forEach(function(c) {
+                if (c.tanggalDaftar) {
+                    var jd = new Date(c.tanggalDaftar);
+                    if (jd.getFullYear().toString() === year) {
+                        var mk = year + '-' + String(jd.getMonth() + 1).padStart(2, '0');
+                        if (monthlyData[mk]) monthlyData[mk].newCustomers++;
+                    }
+                }
+            });
+            packageCustomers.forEach(function(p) {
+                if (p.startDate) {
+                    var sd = new Date(p.startDate);
+                    if (sd.getFullYear().toString() === year) {
+                        var mk = year + '-' + String(sd.getMonth() + 1).padStart(2, '0');
+                        if (monthlyData[mk]) {
+                            if (p.packageDuration === '6') monthlyData[mk].package6++;
+                            else monthlyData[mk].package12++;
+                        }
+                    }
+                }
+            });
+            var reportList = document.getElementById('reportList'); if (!reportList) return;
+            reportList.innerHTML = '';
+            var monthKeys = Object.keys(monthlyData).sort();
+            var hasData = false;
+            monthKeys.forEach(function(mk) {
+                var d = monthlyData[mk];
+                var bal = d.totalPaid + d.totalIncome - d.totalExpense;
+                if (d.totalBilled > 0 || d.totalPaid > 0 || d.totalIncome > 0 || d.totalExpense > 0) hasData = true;
+                var row = document.createElement('tr');
+                row.innerHTML = '<td>' + formatMonthYear(mk) + '</td><td>' + formatCurrency(d.totalBilled) + '</td><td>' + formatCurrency(d.totalPaid) + '</td><td class="income-text">' + formatCurrency(d.totalIncome) + '</td><td class="expense-text">' + formatCurrency(d.totalExpense) + '</td><td class="need-text">' + formatCurrency(d.totalNeed) + '</td><td class="want-text">' + formatCurrency(d.totalWant) + '</td><td>' + formatCurrency(bal) + '</td>';
+                reportList.appendChild(row);
+            });
+            if (!hasData) {
+                reportList.innerHTML = '<tr><td colspan="8" class="text-center" style="padding:20px;color:#999;">Belum ada data untuk tahun ' + year + '</td></tr>';
+            }
+            var tb = 0,
+                tp = 0,
+                ti = 0,
+                te = 0,
+                tn = 0,
+                tw = 0,
+                nc = 0,
+                ap6 = 0,
+                ap12 = 0;
+            monthKeys.forEach(function(mk) { var d = monthlyData[mk];
+                tb += d.totalBilled;
+                tp += d.totalPaid;
+                ti += d.totalIncome;
+                te += d.totalExpense;
+                tn += d.totalNeed;
+                tw += d.totalWant;
+                nc += d.newCustomers;
+                ap6 += d.package6;
+                ap12 += d.package12; });
+            var acG = customers.filter(function(c) { return c.status === 'active' && c.paket !== 'Paket 6/12'; }).length;
+            var icG = customers.filter(function(c) { return c.status === 'inactive'; }).length;
+            var balG = tp + ti - te;
+            var cards = [{ title: 'Total Tahunan', value: formatCurrency(tb) }, { title: 'Total Dibayar', value: formatCurrency(tp) }, { title: 'Pelanggan Aktif', value: acG }, { title: 'Pelanggan Baru', value: nc }, { title: 'Pelanggan Nonaktif', value: icG }, { title: 'Total Pemasukan', value: formatCurrency(ti) }, { title: 'Total Pengeluaran', value: formatCurrency(te) }, { title: 'Total Kebutuhan', value: formatCurrency(tn) }, { title: 'Total Keinginan', value: formatCurrency(tw) }, { title: 'Saldo', value: formatCurrency(balG) }, { title: 'Paket 6 Bulan', value: ap6 }, { title: 'Paket 12 Bulan', value: ap12 }];
+            var as = document.getElementById('annualSummary'); if (as) { as.innerHTML = '';
+                cards.forEach(function(card) { var div = document.createElement('div');
+                    div.className = 'summary-card';
+                    div.innerHTML = '<h3>' + card.title + '</h3><p>' + card.value + '</p>';
+                    as.appendChild(div); }); }
+        }
+    </script>
+</body>
+</html>
