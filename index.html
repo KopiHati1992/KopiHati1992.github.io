@@ -4,337 +4,304 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
-    <title>Manajemen Pelanggan & Tagihan</title>
+    <title>Manajemen Pelanggan & Tagihan - KH1992</title>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-     <style>
-       /* ================================================ */
-/* CSS UNTUK RESET & VARIABEL GLOBAL (ROOT)        */
-/* ================================================ */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        /* ========== VARIABEL WARNA & GAYA DASAR ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-:root {
-    --primary: #6366f1;
-    --primary-dark: #4f46e5;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --danger: #ef4444;
-    --purple: #8b5cf6;
-    --dark: #1e293b;
-    --gray: #64748b;
-    --light: #f8fafc;
-    --border: #e2e8f0;
-    --card-radius: 18px;
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-}
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --purple: #8b5cf6;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+            --card-radius: 18px;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+        }
 
-/* ================================================ */
-/* CSS UNTUK TAMPILAN DASAR BODY & CONTAINER       */
-/* ================================================ */
-body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
-    color: var(--dark);
-    font-size: 12px;
-    line-height: 1.4;
-    min-height: 100vh;
-}
+        /* ========== GAYA UMUM ========== */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
+            color: var(--dark);
+            font-size: 12px;
+            line-height: 1.4;
+            min-height: 100vh;
+        }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 0 0 24px 24px;
-    box-shadow: var(--shadow-xl);
-    overflow-x: hidden;
-    padding-bottom: 60px;
-}
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 0 0 24px 24px;
+            box-shadow: var(--shadow-xl);
+            overflow-x: hidden;
+            padding-bottom: 60px;
+        }
 
-/* ================================================ */
-/* CSS UNTUK HEADER STICKY & LOGO                  */
-/* ================================================ */
-.header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px;
-    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
-    color: white;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-}
+        /* ========== HEADER ========== */
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+        }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: linear-gradient(145deg, #fbbf24, #d97706);
-    border-radius: 14px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
-    padding: 6px 18px;
-    height: 44px;
-    min-width: 130px;
-    position: relative;
-    overflow: hidden;
-}
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(145deg, #fbbf24, #d97706);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+            padding: 6px 18px;
+            height: 44px;
+            min-width: 130px;
+            position: relative;
+            overflow: hidden;
+        }
 
-.logo::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
-    transform: rotate(35deg);
-    transition: transform 0.5s;
-}
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+            transform: rotate(35deg);
+            transition: transform 0.5s;
+        }
 
-.logo:hover::before {
-    transform: rotate(35deg) translate(20%, 20%);
-}
+        .logo:hover::before {
+            transform: rotate(35deg) translate(20%, 20%);
+        }
 
-.logo:hover {
-    transform: scale(1.01);
-    box-shadow: 0 8px 20px rgba(251, 191, 36, 0.4);
-}
+        .logo:hover {
+            transform: scale(1.01);
+            box-shadow: 0 8px 20px rgba(251, 191, 36, 0.4);
+        }
 
-.logo-icon {
-    font-size: 22px;
-}
+        .logo-icon {
+            font-size: 22px;
+        }
 
-.logo-text {
-    font-size: 16px;
-    font-weight: 700;
-    color: white;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-    letter-spacing: 0.5px;
-}
+        .logo-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            letter-spacing: 0.5px;
+        }
 
-.app-title {
-    font-size: 1.3rem;
-    font-weight: 700;
-    letter-spacing: -0.3px;
-    background: linear-gradient(135deg, #fff, #c7d2fe);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
+        .app-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            background: linear-gradient(135deg, #fff, #c7d2fe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-.badge-date {
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(10px);
-    padding: 5px 12px;
-    border-radius: 30px;
-    font-size: 11px;
-    font-weight: 500;
-    border: 1px solid rgba(255,255,255,0.2);
-}
+        .badge-date {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 500;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
 
-.content {
-    padding: 20px;
-}
+        .content {
+            padding: 20px;
+        }
 
-/* ================================================ */
-/* CSS UNTUK TOMBOL (BUTTON)                       */
-/* ================================================ */
-button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 11px;
-    font-weight: 600;
-    transition: all 0.2s ease;
-    font-family: inherit;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
+        /* ========== TOMBOL ========== */
+        button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
 
-.btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
-.btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
-.btn-success { background: linear-gradient(135deg, var(--success), #059669); color: white; }
-.btn-warning { background: linear-gradient(135deg, var(--warning), #d97706); color: white; }
-.btn-danger { background: linear-gradient(135deg, var(--danger), #dc2626); color: white; }
-.btn-outline { background: white; border: 1px solid var(--border); color: var(--gray); }
-.btn-outline:hover { background: var(--light); border-color: var(--primary); color: var(--primary); }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
+        .btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+        .btn-success { background: linear-gradient(135deg, var(--success), #059669); color: white; }
+        .btn-warning { background: linear-gradient(135deg, var(--warning), #d97706); color: white; }
+        .btn-danger { background: linear-gradient(135deg, var(--danger), #dc2626); color: white; }
+        .btn-outline { background: white; border: 1px solid var(--border); color: var(--gray); }
+        .btn-outline:hover { background: var(--light); border-color: var(--primary); color: var(--primary); }
 
-.button-group { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
-.action-btn { padding: 4px 10px; font-size: 10px; border-radius: 8px; margin: 1px; gap: 4px; }
+        .button-group { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+        .action-btn { padding: 4px 10px; font-size: 10px; border-radius: 8px; margin: 1px; gap: 4px; }
 
-/* ================================================ */
-/* CSS UNTUK FORM INPUT                             */
-/* ================================================ */
-.form-group { margin-bottom: 14px; }
-label { display: block; margin-bottom: 5px; font-weight: 600; color: var(--dark); font-size: 11px; }
-input, select, textarea {
-    width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 10px;
-    font-size: 12px; font-family: inherit; transition: all 0.2s; background: white;
-}
-input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+        /* ========== FORM INPUT ========== */
+        .form-group { margin-bottom: 14px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: var(--dark); font-size: 11px; }
+        input, select, textarea {
+            width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 10px;
+            font-size: 12px; font-family: inherit; transition: all 0.2s; background: white;
+        }
+        input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
 
-/* ================================================ */
-/* CSS UNTUK KARTU RINGKASAN (SUMMARY CARDS)       */
-/* ================================================ */
-.summary-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 12px;
-    margin: 20px 0;
-}
+        /* ========== KARTU RINGKASAN ========== */
+        .summary-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
 
-.summary-card {
-    background: white;
-    padding: 14px;
-    border-radius: var(--card-radius);
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--border);
-    transition: all 0.3s;
-    position: relative;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        .summary-card {
+            background: white;
+            padding: 14px;
+            border-radius: var(--card-radius);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.summary-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary), var(--purple));
-    border-radius: var(--card-radius) var(--card-radius) 0 0;
-}
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--purple));
+            border-radius: var(--card-radius) var(--card-radius) 0 0;
+        }
 
-.summary-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-.summary-info h3 { font-size: 10px; color: var(--gray); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
-.summary-info p { font-size: 18px; font-weight: 700; color: var(--dark); }
-.summary-icon { width: 38px; height: 38px; background: var(--light); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .summary-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+        .summary-info h3 { font-size: 10px; color: var(--gray); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+        .summary-info p { font-size: 18px; font-weight: 700; color: var(--dark); }
+        .summary-icon { width: 38px; height: 38px; background: var(--light); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
 
-/* ================================================ */
-/* CSS UNTUK TABEL                                  */
-/* ================================================ */
-.responsive-table { overflow-x: auto; margin: 16px 0; border-radius: 16px; border: 1px solid var(--border); background: white; }
-table { width: 100%; border-collapse: collapse; font-size: 11px; }
-th { background: var(--light); padding: 10px 12px; text-align: left; font-weight: 600; border-bottom: 1px solid var(--border); }
-td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
-tr:last-child td { border-bottom: none; }
-tr:hover { background: var(--light); }
-.active-row { background: #f0fdf4; }
-.inactive-row { background: #fef2f2; opacity: 0.7; }
-.package6-row { background: #f5f3ff; }
-.package12-row { background: #fffbeb; }
+        /* ========== TABEL ========== */
+        .responsive-table { overflow-x: auto; margin: 16px 0; border-radius: 16px; border: 1px solid var(--border); background: white; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        th { background: var(--light); padding: 10px 12px; text-align: left; font-weight: 600; border-bottom: 1px solid var(--border); }
+        td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background: var(--light); }
+        .active-row { background: #f0fdf4; }
+        .inactive-row { background: #fef2f2; opacity: 0.7; }
+        .package6-row { background: #f5f3ff; }
+        .package12-row { background: #fffbeb; }
 
-/* ================================================ */
-/* CSS UNTUK BADGE STATUS                           */
-/* ================================================ */
-.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 24px; font-size: 10px; font-weight: 600; }
-.badge-success { background: #d1fae5; color: #065f46; }
-.badge-danger { background: #fee2e2; color: #991b1b; }
-.badge-warning { background: #fed7aa; color: #92400e; }
+        /* ========== STATUS BADGE & WARNA TEKS ========== */
+        .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 24px; font-size: 10px; font-weight: 600; }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+        .badge-warning { background: #fed7aa; color: #92400e; }
+        
+        /* Warna status pelanggan */
+        .status-active { color: #10b981; font-weight: bold; }
+        .status-package6 { color: #8b5cf6; font-weight: bold; }
+        .status-package12 { color: #f59e0b; font-weight: bold; }
+        .status-inactive { color: #ef4444; font-weight: bold; }
+        
+        /* Warna pemasukan/pengeluaran */
+        .income-text { color: #10b981; font-weight: 600; }
+        .expense-text { color: #ef4444; font-weight: 600; }
 
-/* Style untuk teks pemasukan (hijau) dan pengeluaran (merah) */
-.income-text {
-    color: #10b981;
-    font-weight: 600;
-}
+        /* ========== NAVIGASI BAWAH ========== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            max-width: 400px;
+            width: 90%;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around;
+            border-radius: 50px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            padding: 6px 12px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
 
-.expense-text {
-    color: #ef4444;
-    font-weight: 600;
-}
+        .nav-item { text-align: center; flex: 1; cursor: pointer; color: var(--gray); transition: all 0.2s; padding: 6px 0; border-radius: 30px; }
+        .nav-item.active { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
+        .nav-icon { font-size: 18px; margin-bottom: 2px; }
+        .nav-label { font-size: 9px; font-weight: 600; }
 
-/* ================================================ */
-/* CSS UNTUK NAVIGASI BAWAH (BOTTOM NAV)           */
-/* ================================================ */
-.bottom-nav {
-    position: fixed;
-    bottom: 12px;
-    left: 50%;
-    transform: translateX(-50%);
-    max-width: 400px;
-    width: 90%;
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(20px);
-    display: flex;
-    justify-content: space-around;
-    border-radius: 50px;
-    box-shadow: var(--shadow-lg);
-    z-index: 1000;
-    padding: 6px 12px;
-    border: 1px solid rgba(255,255,255,0.3);
-}
+        /* ========== TAB KONTEN ========== */
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-.nav-item { text-align: center; flex: 1; cursor: pointer; color: var(--gray); transition: all 0.2s; padding: 6px 0; border-radius: 30px; }
-.nav-item.active { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
-.nav-icon { font-size: 18px; margin-bottom: 2px; }
-.nav-label { font-size: 9px; font-weight: 600; }
+        .package-tabs { display: flex; gap: 6px; margin-bottom: 16px; background: var(--light); padding: 5px; border-radius: 50px; width: fit-content; }
+        .package-tab { padding: 7px 20px; cursor: pointer; border-radius: 30px; font-weight: 600; transition: all 0.2s; font-size: 11px; }
+        .package-tab.active { background: white; color: var(--primary); box-shadow: var(--shadow-sm); }
 
-/* ================================================ */
-/* CSS UNTUK TAB KONTEN & ANIMASI                   */
-/* ================================================ */
-.tab-content { display: none; animation: fadeIn 0.3s ease; }
-.tab-content.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        /* ========== MODAL ========== */
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 1001; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 24px; width: 90%; max-width: 450px; max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-xl); animation: fadeIn 0.2s ease; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+        .modal-header h2 { font-size: 1.2rem; font-weight: 700; }
+        .close-modal { font-size: 24px; cursor: pointer; color: var(--gray); transition: color 0.2s; }
+        .close-modal:hover { color: var(--danger); }
 
-.package-tabs { display: flex; gap: 6px; margin-bottom: 16px; background: var(--light); padding: 5px; border-radius: 50px; width: fit-content; }
-.package-tab { padding: 7px 20px; cursor: pointer; border-radius: 30px; font-weight: 600; transition: all 0.2s; font-size: 11px; }
-.package-tab.active { background: white; color: var(--primary); box-shadow: var(--shadow-sm); }
+        /* ========== PENCARIAN ========== */
+        .search-box { margin-bottom: 16px; }
+        .search-box input { background: var(--light); border: none; padding: 10px 16px; border-radius: 40px; font-size: 12px; width: 100%; }
+        .search-box input:focus { background: white; border: 1px solid var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+        .filter-group { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+        .filter-group select, .filter-group input { flex: 1; min-width: 120px; background: var(--light); border: none; border-radius: 40px; padding: 8px 14px; font-size: 11px; }
 
-/* ================================================ */
-/* CSS UNTUK MODAL                                  */
-/* ================================================ */
-.modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 1001; justify-content: center; align-items: center; }
-.modal-content { background: white; padding: 20px; border-radius: 24px; width: 90%; max-width: 450px; max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-xl); animation: fadeIn 0.2s ease; }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
-.modal-header h2 { font-size: 1.2rem; font-weight: 700; }
-.close-modal { font-size: 24px; cursor: pointer; color: var(--gray); transition: color 0.2s; }
-.close-modal:hover { color: var(--danger); }
-
-/* ================================================ */
-/* CSS UNTUK PENCARIAN & FILTER                     */
-/* ================================================ */
-.search-box { margin-bottom: 16px; }
-.search-box input { background: var(--light); border: none; padding: 10px 16px; border-radius: 40px; font-size: 12px; width: 100%; }
-.search-box input:focus { background: white; border: 1px solid var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
-.filter-group { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-.filter-group select, .filter-group input { flex: 1; min-width: 120px; background: var(--light); border: none; border-radius: 40px; padding: 8px 14px; font-size: 11px; }
-        /* ================================================ */
-        /* CSS UNTUK BUKTI BAYAR (RECEIPT) - STYLE STRUK    */
-        /* ================================================ */
-       #receiptContent {
-    position: relative;
-    overflow: visible !important;
-    background: white;
-    padding: 20px 16px !important;
-    border-radius: 0px !important;
-    max-width: 380px;
-    width: 100%;
-    margin: 0 auto;
-    font-family: 'Courier New', 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
-    font-size: 12px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    
-    /* Ukuran 
-    aspect-ratio: 5 / 7; 
-    
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto; /* biar konten panjang bisa di-scroll */
-}
+        /* ========== GAYA STRUK BUKTI ========== */
+        #receiptContent {
+            position: relative;
+            overflow: visible !important;
+            background: white;
+            padding: 20px 16px !important;
+            border-radius: 0px !important;
+            max-width: 380px;
+            width: 100%;
+            margin: 0 auto;
+            font-family: 'Courier New', 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+            font-size: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
 
         #receiptContent h2 {
             font-family: 'Courier New', monospace;
@@ -423,9 +390,7 @@ tr:hover { background: var(--light); }
             margin-top: 20px;
         }
 
-        /* ================================================ */
-        /* CSS RESPONSIVE UNTUK HP (MEDIA QUERY)           */
-        /* ================================================ */
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 640px) {
             .content { padding: 16px; }
             .summary-container { grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -453,11 +418,37 @@ tr:hover { background: var(--light); }
 
         @keyframes spin { to { transform: rotate(360deg); } }
         .loading-spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 0.6s linear infinite; }
+
+        /* Optimasi untuk print */
+        @media print {
+            #receiptContent {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            
+            #receiptStamp {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+
+        /* Khusus untuk mode invoice (tagihan) - ukuran lebih pendek */
+        #receiptContent.invoice-mode {
+            min-height: auto !important;
+            max-height: none !important;
+            padding: 16px !important;
+        }
+
+        /* Sembunyikan baris Paket dan Periode saat mode invoice */
+        #receiptContent.invoice-mode .hide-on-invoice {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
-
     <div class="container">
+        <!-- BAGIAN HEADER / NAVIGASI ATAS -->
         <div class="header-container">
             <div class="logo" id="logo">
                 <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9MlltS8Z9gDyRUe09dh6vmIye6mjgzi0a4-94BaOVSeIpa-7Dp7qjns6t_1dSwvuZF4mi0P998TolhFJS2DT9Ge_aXL1qdO9FnbscN5ZgJoDuPHYX4ekJgVwttL7q9ChXExhizmZ9rx44pDB4rdy1EVnADyfZ6q3HZzY2CJ8aEhxLa_zA6z9xPfpKWRo/s16000/text.gif" style="height: 25px; width: 240px;" alt="Logo">
@@ -466,14 +457,12 @@ tr:hover { background: var(--light); }
         </div>
         
         <div class="content">
-            <!-- TAB PELANGGAN -->
+            <!-- TAB 1: DATA PELANGGAN -->
             <div id="pelanggan-tab" class="tab-content active">
                 <div class="search-box">
                     <input type="text" id="searchCustomer" placeholder="🔍 Cari pelanggan..." oninput="filterCustomers()">
                 </div>
-                
                 <button class="btn-primary" onclick="openCustomerForm()">➕ Tambah Pelanggan</button>
-                
                 <div class="summary-container">
                     <div class="summary-card"><div class="summary-info"><h3>Total Pelanggan Aktif</h3><p id="totalActiveCustomers">0</p></div><div class="summary-icon">👥</div></div>
                     <div class="summary-card"><div class="summary-info"><h3>Total Tagihan Bulanan</h3><p id="totalMonthlyBills">Rp 0</p></div><div class="summary-icon">💰</div></div>
@@ -481,7 +470,6 @@ tr:hover { background: var(--light); }
                     <div class="summary-card"><div class="summary-info"><h3>Total Paket 6 Bulan</h3><p id="totalPackage6Customers">0</p></div><div class="summary-icon">📦</div></div>
                     <div class="summary-card"><div class="summary-info"><h3>Total Paket 12 Bulan</h3><p id="totalPackage12Customers">0</p></div><div class="summary-icon">📦</div></div>
                 </div>
-                
                 <div class="responsive-table">
                     <table id="customerTable">
                         <thead><tr><th>No</th><th>Nama</th><th>Paket</th><th>Tagihan</th><th>Status</th><th>Aksi</th></tr></thead>
@@ -490,23 +478,19 @@ tr:hover { background: var(--light); }
                 </div>
             </div>
             
-            <!-- TAB TRANSAKSI -->
+            <!-- TAB 2: TRANSAKSI -->
             <div id="transaksi-tab" class="tab-content">
                 <div class="filter-group">
                     <input type="month" id="filterMonth" onchange="filterTransactions()">
                     <select id="filterPaymentStatus" onchange="filterTransactions()">
-                        <option value="">Semua Status</option>
-                        <option value="paid">Lunas</option>
-                        <option value="pending">Belum Bayar</option>
+                        <option value="">Semua Status</option><option value="paid">Lunas</option><option value="pending">Belum Bayar</option>
                     </select>
                     <input type="text" id="searchTransactionCustomer" placeholder="🔍 Cari pelanggan..." oninput="filterTransactions()">
                 </div>
-                
                 <div class="summary-container">
                     <div class="summary-card"><div class="summary-info"><h3>Total Sudah Dibayar</h3><p id="totalPaidAmount">Rp 0</p></div><div class="summary-icon">✅</div></div>
                     <div class="summary-card"><div class="summary-info"><h3>Total Belum Dibayar</h3><p id="totalUnpaidAmount">Rp 0</p></div><div class="summary-icon">⏳</div></div>
                 </div>
-                
                 <div class="responsive-table">
                     <table id="transactionTable">
                         <thead><tr><th>No</th><th>Pelanggan</th><th>Bulan</th><th>Tagihan</th><th>Status</th><th>Aksi</th></tr></thead>
@@ -515,17 +499,15 @@ tr:hover { background: var(--light); }
                 </div>
             </div>
             
-            <!-- TAB KEUANGAN -->
+            <!-- TAB 3: KEUANGAN -->
             <div id="keuangan-tab" class="tab-content">
                 <div class="button-group">
                     <button class="btn-primary" onclick="openFinanceForm('income')">💰 + Pemasukan</button>
                     <button class="btn-danger" onclick="openFinanceForm('expense')">💸 + Pengeluaran</button>
                 </div>
-                
                 <div class="filter-group">
                     <input type="month" id="filterFinanceMonth" onchange="renderFinanceList(this.value)">
                 </div>
-                
                 <div class="responsive-table">
                     <table id="financeTable">
                         <thead><tr><th>No</th><th>Tanggal</th><th>Kategori</th><th>Keterangan</th><th>Jumlah</th><th>Aksi</th></tr></thead>
@@ -534,25 +516,22 @@ tr:hover { background: var(--light); }
                 </div>
             </div>
             
-            <!-- TAB PAKET -->
+            <!-- TAB 4: PAKET -->
             <div id="paket-tab" class="tab-content">
                 <div class="package-tabs">
                     <div class="package-tab active" onclick="switchPackageTab('all')">Semua</div>
                     <div class="package-tab" onclick="switchPackageTab('6')">Paket 6 Bulan</div>
                     <div class="package-tab" onclick="switchPackageTab('12')">Paket 12 Bulan</div>
                 </div>
-                
                 <div class="summary-container">
                     <div class="summary-card"><div class="summary-info"><h3>Total Paket 6 Bulan</h3><p id="totalPackage6">0</p></div><div class="summary-icon">📦6</div></div>
                     <div class="summary-card"><div class="summary-info"><h3>Total Paket 12 Bulan</h3><p id="totalPackage12">0</p></div><div class="summary-icon">📦12</div></div>
                     <div class="summary-card"><div class="summary-info"><h3>Total Pendapatan 6 Bulan</h3><p id="totalRevenue6">Rp 0</p></div><div class="summary-icon">💰</div></div>
                     <div class="summary-card"><div class="summary-info"><h3>Total Pendapatan 12 Bulan</h3><p id="totalRevenue12">Rp 0</p></div><div class="summary-icon">💰</div></div>
                 </div>
-                
                 <div class="search-box">
                     <input type="text" id="searchPackageCustomer" placeholder="🔍 Cari pelanggan..." oninput="filterPackageCustomers()">
                 </div>
-                
                 <div class="responsive-table">
                     <table id="packageTable">
                         <thead><tr><th>No</th><th>Nama</th><th>Paket</th><th>Jumlah</th><th>Tanggal Mulai</th><th>Tanggal Berakhir</th><th>Status</th><th>Aksi</th></tr></thead>
@@ -561,28 +540,18 @@ tr:hover { background: var(--light); }
                 </div>
             </div>
             
-            <!-- TAB LAPORAN dengan FITUR FILTER RANGE TANGGAL -->
+            <!-- TAB 5: LAPORAN -->
             <div id="laporan-tab" class="tab-content">
                 <div class="form-group">
                     <label for="reportYear">📅 Tahun:</label>
                     <select id="reportYear" onchange="generateReport()"></select>
                 </div>
-                
-                <!-- FITUR FILTER RANGE TANGGAL -->
                 <div class="filter-group" style="margin-top: 15px; margin-bottom: 15px; display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label>📅 Dari Tanggal:</label>
-                        <input type="date" id="filterDateFrom" style="width: 160px;">
-                    </div>
-                    <div class="form-group" style="margin-bottom: 0;">
-                        <label>📅 Sampai Tanggal:</label>
-                        <input type="date" id="filterDateTo" style="width: 160px;">
-                    </div>
+                    <div class="form-group" style="margin-bottom: 0;"><label>📅 Dari Tanggal:</label><input type="date" id="filterDateFrom" style="width: 160px;"></div>
+                    <div class="form-group" style="margin-bottom: 0;"><label>📅 Sampai Tanggal:</label><input type="date" id="filterDateTo" style="width: 160px;"></div>
                     <button class="btn-primary" onclick="filterReportByDateRange()" style="margin-bottom: 5px;">🔍 Filter Range</button>
                     <button class="btn-outline" onclick="resetDateFilter()" style="margin-bottom: 5px;">🔄 Reset</button>
                 </div>
-
-                <!-- Kartu Ringkasan Range -->
                 <div class="summary-container" id="rangeSummaryContainer" style="display: none;">
                     <div class="summary-card"><div class="summary-info"><h3>Total Tagihan (Range)</h3><p id="totalBilledRange">Rp 0</p></div><div class="summary-icon">💰</div></div>
                     <div class="summary-card"><div class="summary-info"><h3>Total Dibayar (Range)</h3><p id="totalPaidRange">Rp 0</p></div><div class="summary-icon">✅</div></div>
@@ -590,8 +559,6 @@ tr:hover { background: var(--light); }
                     <div class="summary-card"><div class="summary-info"><h3>Total Pengeluaran (Range)</h3><p id="totalExpenseRange">Rp 0</p></div><div class="summary-icon">💸</div></div>
                     <div class="summary-card"><div class="summary-info"><h3>Saldo (Range)</h3><p id="balanceRange">Rp 0</p></div><div class="summary-icon">🏦</div></div>
                 </div>
-
-                <!-- Laporan Tahunan (Ringkasan 10 kartu) -->
                 <div class="summary-container">
                     <div class="summary-card"><div class="summary-info"><h3>Total Tahunan</h3><p id="annual-billed">Rp 0</p></div><div class="summary-icon">📊</div></div>
                     <div class="summary-card"><div class="summary-info"><h3>Total Dibayar</h3><p id="annual-paid">Rp 0</p></div><div class="summary-icon">✅</div></div>
@@ -604,7 +571,6 @@ tr:hover { background: var(--light); }
                     <div class="summary-card"><div class="summary-info"><h3>Paket 6 Bulan</h3><p id="annual-package6">0</p></div><div class="summary-icon">📦</div></div>
                     <div class="summary-card"><div class="summary-info"><h3>Paket 12 Bulan</h3><p id="annual-package12">0</p></div><div class="summary-icon">📦</div></div>
                 </div>
-                
                 <h3>📋 Rincian Bulanan</h3>
                 <div class="responsive-table">
                     <table id="reportTable">
@@ -612,30 +578,13 @@ tr:hover { background: var(--light); }
                         <tbody id="reportList"></tbody>
                     </table>
                 </div>
-
-                <!-- Tabel Detail Per Tanggal (Hasil Filter Range) -->
                 <h3 id="rangeDetailTitle" style="display: none;">📋 Detail Transaksi Per Tanggal</h3>
                 <div class="responsive-table" id="rangeDetailTable" style="display: none;">
-                    <table id="dateRangeTable">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Tanggal</th>
-                                <th>Jenis</th>
-                                <th>Pelanggan / Kategori</th>
-                                <th>Keterangan</th>
-                                <th>Jumlah</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dateRangeList"></tbody>
-                    </table>
+                    <table id="dateRangeTable"><thead><tr><th>No</th><th>Tanggal</th><th>Jenis</th><th>Pelanggan / Kategori</th><th>Keterangan</th><th>Jumlah</th></tr></thead><tbody id="dateRangeList"></tbody></table>
                 </div>
             </div>
         </div>
-        
-        <div class="footer">
-            Sistem Billing KH1992 - © 2026
-        </div>
+        <div class="footer">Sistem Billing KH1992 - © 2026</div>
     </div>
     
     <!-- BOTTOM NAVIGATION -->
@@ -648,163 +597,42 @@ tr:hover { background: var(--light); }
     </div>
     
     <!-- MODAL CUSTOMER -->
-    <div id="customerModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h2 id="modalCustomerTitle">Tambah Pelanggan</h2><span class="close-modal" onclick="closeModal('customerModal')">&times;</span></div>
-            <form id="customerForm">
-                <input type="hidden" id="customerId">
-                <div class="form-group"><label>Nama Pelanggan:</label><input type="text" id="nama" required></div>
-                <div class="form-group"><label>Alamat:</label><textarea id="alamat" rows="2" required></textarea></div>
-                <div class="form-group"><label>Telepon:</label><input type="tel" id="telepon" required></div>
-                <div class="form-group">
-                    <label>Paket Layanan:</label>
-                    <select id="paket" required onchange="togglePackageOptions()">
-                        <option value="">Pilih Paket</option>
-                        <option value="Basic">Basic - Rp 100.000/bulan</option>
-                        <option value="Basic Plus">Basic Plus - Rp 120.000/bulan</option>
-                        <option value="Standard">Standard - Rp 150.000/bulan</option>
-                        <option value="Premium">Premium - Rp 200.000/bulan</option>
-                        <option value="Premium Plus">Premium Plus - Rp 300.000/bulan</option>
-                        <option value="Paket 6/12">Paket 6/12 Bulan</option>
-                        <option value="Lainnya">Paket Lain</option>
-                    </select>
-                </div>
-                <div class="form-group" id="packageDurationGroup" style="display:none;">
-                    <label>Durasi Paket:</label>
-                    <select id="packageDuration"><option value="6">6 Bulan</option><option value="12">12 Bulan</option></select>
-                </div>
-                <div class="form-group" id="customAmountGroup" style="display:none;">
-                    <label>Nominal Tagihan:</label>
-                    <input type="number" id="customAmount" placeholder="Masukkan nominal">
-                </div>
-                <div class="form-group"><label>Diskon (Nominal):</label><input type="number" id="discountAmount" placeholder="Opsional"></div>
-                <div class="form-group">
-                    <label>Tanggal Daftar:</label>
-                    <input type="date" id="tanggalDaftar" required>
-                    <small style="color:#777;">Maksimal tanggal 28</small>
-                </div>
-                <div class="button-group"><button type="submit" class="btn-primary">💾 Simpan</button><button type="button" class="btn-outline" onclick="closeModal('customerModal')">❌ Batal</button></div>
-            </form>
-        </div>
-    </div>
+    <div id="customerModal" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="modalCustomerTitle">Tambah Pelanggan</h2><span class="close-modal" onclick="closeModal('customerModal')">&times;</span></div><form id="customerForm"><input type="hidden" id="customerId"><div class="form-group"><label>Nama Pelanggan:</label><input type="text" id="nama" required></div><div class="form-group"><label>Alamat:</label><textarea id="alamat" rows="2" required></textarea></div><div class="form-group"><label>Telepon:</label><input type="tel" id="telepon" required></div><div class="form-group"><label>Paket Layanan:</label><select id="paket" required onchange="togglePackageOptions()"><option value="">Pilih Paket</option><option value="Basic">Basic - Rp 100.000/bulan</option><option value="Basic Plus">Basic Plus - Rp 120.000/bulan</option><option value="Standard">Standard - Rp 150.000/bulan</option><option value="Premium">Premium - Rp 200.000/bulan</option><option value="Premium Plus">Premium Plus - Rp 300.000/bulan</option><option value="Paket 6/12">Paket 6/12 Bulan</option><option value="Lainnya">Paket Lain</option></select></div><div class="form-group" id="packageDurationGroup" style="display:none;"><label>Durasi Paket:</label><select id="packageDuration"><option value="6">6 Bulan</option><option value="12">12 Bulan</option></select></div><div class="form-group" id="customAmountGroup" style="display:none;"><label>Nominal Tagihan:</label><input type="number" id="customAmount" placeholder="Masukkan nominal"></div><div class="form-group"><label>Diskon (Nominal):</label><input type="number" id="discountAmount" placeholder="Opsional"></div><div class="form-group"><label>Tanggal Daftar:</label><input type="date" id="tanggalDaftar" required><small style="color:#777;">Maksimal tanggal 28</small></div><div class="button-group"><button type="submit" class="btn-primary">💾 Simpan</button><button type="button" class="btn-outline" onclick="closeModal('customerModal')">❌ Batal</button></div></form></div></div>
     
     <!-- MODAL PAYMENT -->
-    <div id="paymentModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h2>Pembayaran Tagihan</h2><span class="close-modal" onclick="closeModal('paymentModal')">&times;</span></div>
-            <form id="paymentForm">
-                <input type="hidden" id="paymentCustomerId">
-                <div class="form-group"><label>Pelanggan:</label><p id="paymentCustomerName" style="font-weight:bold;"></p></div>
-                <div class="form-group"><label>Pilih Bulan Tagihan:</label><select id="paymentMonthSelect" required></select></div>
-                <div class="form-group"><label>Jumlah Tagihan:</label><p id="paymentAmount" style="font-weight:bold;"></p></div>
-                <div class="form-group"><label>Tanggal Bayar:</label><input type="date" id="paymentDate" required></div>
-                <div class="form-group"><label>Keterangan:</label><textarea id="paymentNotes" rows="2"></textarea></div>
-                <div class="button-group"><button type="submit" class="btn-primary">✅ Konfirmasi Pembayaran</button><button type="button" class="btn-outline" onclick="closeModal('paymentModal')">❌ Batal</button></div>
-            </form>
-        </div>
-    </div>
+    <div id="paymentModal" class="modal"><div class="modal-content"><div class="modal-header"><h2>Pembayaran Tagihan</h2><span class="close-modal" onclick="closeModal('paymentModal')">&times;</span></div><form id="paymentForm"><input type="hidden" id="paymentCustomerId"><div class="form-group"><label>Pelanggan:</label><p id="paymentCustomerName" style="font-weight:bold;"></p></div><div class="form-group"><label>Pilih Bulan Tagihan:</label><select id="paymentMonthSelect" required></select></div><div class="form-group"><label>Jumlah Tagihan:</label><p id="paymentAmount" style="font-weight:bold;"></p></div><div class="form-group"><label>Tanggal Bayar:</label><input type="date" id="paymentDate" required></div><div class="form-group"><label>Keterangan:</label><textarea id="paymentNotes" rows="2"></textarea></div><div class="button-group"><button type="submit" class="btn-primary">✅ Konfirmasi Pembayaran</button><button type="button" class="btn-outline" onclick="closeModal('paymentModal')">❌ Batal</button></div></form></div></div>
     
     <!-- MODAL DETAIL -->
-    <div id="detailModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h2>Detail Pelanggan</h2><span class="close-modal" onclick="closeModal('detailModal')">&times;</span></div>
-            <div id="customerDetailContent"></div>
-            <div class="button-group" style="margin-top:20px;">
-                <button type="button" class="btn-success" id="editDetailBtn">✏️ Edit</button>
-                <button type="button" class="btn-danger" id="deleteCustomerBtn">🗑️ Hapus</button>
-                <button type="button" class="btn-warning" id="toggleStatusBtn">⛔ Nonaktifkan</button>
-                <button type="button" class="btn-outline" onclick="closeModal('detailModal')">❌ Tutup</button>
-            </div>
-        </div>
-    </div>
+    <div id="detailModal" class="modal"><div class="modal-content"><div class="modal-header"><h2>Detail Pelanggan</h2><span class="close-modal" onclick="closeModal('detailModal')">&times;</span></div><div id="customerDetailContent"></div><div class="button-group" style="margin-top:20px;"><button type="button" class="btn-success" id="editDetailBtn">✏️ Edit</button><button type="button" class="btn-danger" id="deleteCustomerBtn">🗑️ Hapus</button><button type="button" class="btn-warning" id="toggleStatusBtn">⛔ Nonaktifkan</button><button type="button" class="btn-outline" onclick="closeModal('detailModal')">❌ Tutup</button></div></div></div>
     
     <!-- MODAL FINANCE -->
-    <div id="financeModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h2 id="modalFinanceTitle">Tambah Pemasukan</h2><span class="close-modal" onclick="closeModal('financeModal')">&times;</span></div>
-            <form id="financeForm">
-                <input type="hidden" id="financeId"><input type="hidden" id="financeType">
-                <div class="form-group"><label>Tanggal:</label><input type="date" id="financeDate" required></div>
-                <div class="form-group"><label>Kategori:</label><select id="financeCategory" required></select></div>
-                <div class="form-group"><label>Jumlah:</label><input type="number" id="financeAmount" required></div>
-                <div class="form-group"><label>Keterangan:</label><textarea id="financeDescription" rows="2"></textarea></div>
-                <div class="button-group"><button type="submit" class="btn-primary">💾 Simpan</button><button type="button" class="btn-outline" onclick="closeModal('financeModal')">❌ Batal</button></div>
-            </form>
-        </div>
-    </div>
+    <div id="financeModal" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="modalFinanceTitle">Tambah Pemasukan</h2><span class="close-modal" onclick="closeModal('financeModal')">&times;</span></div><form id="financeForm"><input type="hidden" id="financeId"><input type="hidden" id="financeType"><div class="form-group"><label>Tanggal:</label><input type="date" id="financeDate" required></div><div class="form-group"><label>Kategori:</label><select id="financeCategory" required></select></div><div class="form-group"><label>Jumlah:</label><input type="number" id="financeAmount" required></div><div class="form-group"><label>Keterangan:</label><textarea id="financeDescription" rows="2"></textarea></div><div class="button-group"><button type="submit" class="btn-primary">💾 Simpan</button><button type="button" class="btn-outline" onclick="closeModal('financeModal')">❌ Batal</button></div></form></div></div>
     
     <!-- MODAL BACKUP -->
-    <div id="backupModal" class="modal">
-        <div class="modal-content" style="text-align:center;">
-            <div class="modal-header"><h2>Backup & Restore</h2><span class="close-modal" onclick="closeModal('backupModal')">&times;</span></div>
-            <div class="button-group"><button class="btn-success" onclick="importData()">📥 Import Data</button><button class="btn-primary" onclick="exportData()">📤 Export Data</button></div>
-            <input type="file" id="importFile" accept=".json" style="margin:20px auto; display:block;">
-        </div>
-    </div>
+    <div id="backupModal" class="modal"><div class="modal-content" style="text-align:center;"><div class="modal-header"><h2>Backup & Restore</h2><span class="close-modal" onclick="closeModal('backupModal')">&times;</span></div><div class="button-group"><button class="btn-success" onclick="importData()">📥 Import Data</button><button class="btn-primary" onclick="exportData()">📤 Export Data</button></div><input type="file" id="importFile" accept=".json" style="margin:20px auto; display:block;"></div></div>
     
     <!-- MODAL RECEIPT -->
-    <div id="receiptModal" class="modal">
-        <div class="modal-content" style="max-width:600px;">
-            <div class="modal-header"><h2 id="receiptTitle">Bukti Pembayaran</h2><span class="close-modal" onclick="closeModal('receiptModal')">&times;</span></div>
-            <div id="receiptContent" style="position:relative;">
-                <div class="watermark"></div>
-                <div style="text-align:center; margin-bottom:25px;">
-                    <h2 style="color:#1e1b4b;">BILLING KH1992</h2>
-                    <p id="receiptSubtitle">Bukti Pembayaran Internet</p>
-                </div>
-                <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                    <div><p><strong>No. Transaksi:</strong> <span id="receiptTrxId"></span></p><p><strong>Tanggal:</strong> <span id="receiptDate"></span></p></div>
-                    <div><p><strong>Status:</strong> <span id="receiptStatus" class="badge badge-success">LUNAS</span></p></div>
-                </div>
-                <table style="width:100%; border-collapse:collapse; margin-bottom:25px;">
-                    <tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Pelanggan</strong></td><td id="receiptCustomer"></td></tr>
-                    <tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Alamat</strong></td><td id="receiptAddress"></td></tr>
-                    <tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Telepon</strong></td><td id="receiptPhone"></td></tr>
-                    <tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Paket</strong></td><td id="receiptPackage"></td></tr>
-                    <tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Periode</strong></td><td id="receiptPeriod"></td></tr>
-                    <tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Jatuh Tempo</strong></td><td id="receiptDueDate"></td></tr>
-                    <tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Jumlah</strong></td><td id="receiptAmount"></td></tr>
-                    <tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Keterangan</strong></td><td id="receiptNotes"></td></tr>
-                </table>
-                <div id="paymentInstructions" style="margin-top:20px; padding:15px; background:#f9f9f9; border-radius:8px; display:none; text-align:center;">
-                    <h3>Instruksi Pembayaran:</h3>
-                    <img src="https://i.postimg.cc/G2hCPXLZ/file-00000000c69461f9a7d407e0da794c3a.png" style="max-width:200px;">
-                    <p>Batas pembayaran: <span id="dueDateText"></span></p>
-                </div>
-                <div style="text-align: center; margin-top: 40px;">
-                    <div style="display: inline-block; text-align: center; margin-top: 50px; position: relative;">
-                        <div id="receiptStamp" style="position: absolute; top: -90px; right: -35px; opacity: 0.9; display: none;">
-                            <img src="https://iili.io/Fwnvp2I.png" alt="Stempel" style="height: 120px; transform: rotate(-9deg);">              
-                        </div>
-                        <p style="opacity: 0.6; margin-top: -20px;">(suroso)</p>
-                    </div>
-                </div>
-            </div>
-           <div class="button-group">
-    <button class="btn-primary" onclick="downloadReceiptImage()">📷 Unduh PNG</button>
-    <button class="btn-success" onclick="downloadReceiptPDF()">📄 Unduh PDF</button>
-    <button class="btn-outline" onclick="closeModal('receiptModal')">❌ Tutup</button>
-</div>
-        </div>
-    </div>
+    <div id="receiptModal" class="modal"><div class="modal-content" style="max-width:600px;"><div class="modal-header"><h2 id="receiptTitle">Bukti Pembayaran</h2><span class="close-modal" onclick="closeModal('receiptModal')">&times;</span></div><div id="receiptContent" style="position:relative;"><div class="watermark"></div><div style="text-align:center; margin-bottom:25px;"><h2 style="color:#1e1b4b;">BILLING KH1992</h2><p id="receiptSubtitle">Bukti Pembayaran Internet</p></div><div style="display:flex; justify-content:space-between; margin-bottom:20px;"><div><p><strong>No. Transaksi:</strong> <span id="receiptTrxId"></span></p><p><strong>Tanggal:</strong> <span id="receiptDate"></span></p></div><div><p><strong>Status:</strong> <span id="receiptStatus" class="badge badge-success">LUNAS</span></p></div></div><table style="width:100%; border-collapse:collapse; margin-bottom:25px;"><tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Pelanggan</strong></td><td id="receiptCustomer"></td></tr><tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Alamat</strong></td><td id="receiptAddress"></td></tr><tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Telepon</strong></td><td id="receiptPhone"></td></tr><tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Paket</strong></td><td id="receiptPackage"></td></tr><tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Periode</strong></td><td id="receiptPeriod"></td></tr><tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Jatuh Tempo</strong></td><td id="receiptDueDate"></td></tr><tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Jumlah</strong></td><td id="receiptAmount"></td></tr><tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>Keterangan</strong></td><td id="receiptNotes"></td></tr></table><div id="paymentInstructions" style="display:none; margin-top:20px; background:linear-gradient(135deg, #fef9e3 0%, #fef3c7 100%); border-left:4px solid #f59e0b; border-radius:12px; overflow:hidden; box-shadow:0 2px 8px rgba(0,0,0,0.05);"><div style="background:linear-gradient(135deg, #f59e0b, #d97706); padding:10px 15px; color:white;"><h3 style="font-size:13px; font-weight:700; margin:0; display:flex; align-items:center; gap:8px;"><span>📋</span> INSTRUKSI PEMBAYARAN</h3></div><div style="padding:15px;"><div style="margin-bottom:15px; padding-bottom:12px; border-bottom:1px dashed #fde68a;"><div style="font-weight:700; color:#92400e; font-size:11px; margin-bottom:6px; display:flex; align-items:center; gap:6px;"><span>📱</span> E-WALLET DANA</div><div style="font-size:11px; color:#451a03; padding-left:20px; line-height:1.6;"><strong style="min-width:60px; display:inline-block;">No. DANA:</strong> 085604472695<br><strong style="min-width:60px; display:inline-block;">a.n.</strong> SUROSO</div></div><div style="margin-bottom:15px; padding-bottom:12px; border-bottom:1px dashed #fde68a;"><div style="font-weight:700; color:#92400e; font-size:11px; margin-bottom:6px; display:flex; align-items:center; gap:6px;"><span>🏦</span> TRANSFER BANK</div><div style="padding-left:20px;"><div style="font-size:11px; color:#451a03; margin-bottom:4px; display:flex; align-items:center; gap:8px;"><span style="font-weight:700; color:#92400e; min-width:65px;">MANDIRI</span><span>:</span><span>1780001524905 a.n. SUROSO</span></div><div style="font-size:11px; color:#451a03; margin-bottom:4px; display:flex; align-items:center; gap:8px;"><span style="font-weight:700; color:#92400e; min-width:65px;">BRI</span><span>:</span><span>630701011793531 a.n. SUROSO</span></div></div></div><div style="background:linear-gradient(135deg, #075e5410, #25d36610); border-radius:10px; padding:10px; margin:12px 0; text-align:center; border:1px solid #25d36630;"><p style="color:#075e54; font-weight:700; font-size:11px; margin:0; display:flex; align-items:center; justify-content:center; gap:8px;"><span>💬</span> KONFIRMASI PEMBAYARAN <span>💬</span></p><div style="font-size:13px; font-weight:800; color:#25d366; background:#075e5410; padding:4px 10px; border-radius:20px; display:inline-block; margin-top:6px;">WhatsApp 085850651102</div></div><div style="background:#fee2e2; border-radius:8px; padding:8px 12px; text-align:center; margin-top:12px;"><span style="font-weight:600; color:#991b1b; font-size:11px;">⏰ BATAS PEMBAYARAN :</span><span id="dueDateText" style="font-weight:800; color:#dc2626; font-size:11px; background:white; padding:2px 8px; border-radius:15px; margin-left:6px;"></span></div></div></div><div style="text-align: center; margin-top: 40px;"><div style="display: inline-block; text-align: center; margin-top: 50px; position: relative;"><div id="receiptStamp" style="position: absolute; top: -90px; right: -35px; opacity: 0.9; display: none;"><img src="https://iili.io/Fwnvp2I.png" alt="Stempel" style="height: 120px; transform: rotate(-9deg);"></div><p style="opacity: 0.6; margin-top: -20px;">(suroso)</p></div></div></div><div class="button-group"><button class="btn-primary" onclick="downloadReceiptImage()">📷 Unduh PNG</button><button class="btn-success" onclick="downloadReceiptPDF()">📄 Unduh PDF</button><button class="btn-outline" onclick="closeModal('receiptModal')">❌ Tutup</button></div></div></div>
 
     <script>
-        // ==================== DATA STORAGE ====================
+        // ==================== PENYIMPANAN DATA ====================
         let customers = JSON.parse(localStorage.getItem('customers')) || [];
         let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
         let finances = JSON.parse(localStorage.getItem('finances')) || [];
         let packageCustomers = JSON.parse(localStorage.getItem('packageCustomers')) || [];
+        
+        // Variabel untuk mengatur tampilan
         let currentTab = 'pelanggan';
         let currentPackageTab = 'all';
+        let currentReceiptMode = 'receipt';
+        let currentReceiptTransactionId = null;
+        let currentReceiptType = 'transaction';
         
+        // Data kategori keuangan
         const incomeCategories = ['Penjualan Barang', 'Layanan Tambahan', 'Service', 'Lainnya'];
         const expenseCategories = ['Gaji Karyawan', 'Peralatan', 'Internet', 'Listrik', 'Akomodasi', 'Lainnya'];
         
-        // Display current date
-        const today = new Date();
-        document.getElementById('currentDate').textContent = today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-        
-        // ==================== UTILITY FUNCTIONS ====================
+        // ==================== FUNGSI PEMBANTU ====================
         function formatDate(dateString) {
             if (!dateString) return '';
             const date = new Date(dateString);
@@ -838,18 +666,41 @@ tr:hover { background: var(--light); }
         function openModal(modalId) { document.getElementById(modalId).style.display = 'flex'; }
         function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
         
-        // ==================== CUSTOMER FUNCTIONS ====================
+        // ==================== FUNGSI PERHITUNGAN TANGGAL ====================
+        function calculateDueDate(monthDate, registrationDate) {
+            const regDate = new Date(registrationDate);
+            let day = regDate.getDate();
+            if (day > 28) day = 28;
+            const dueDate = new Date(monthDate);
+            dueDate.setDate(day);
+            if (dueDate.getMonth() !== new Date(monthDate).getMonth()) dueDate.setDate(0);
+            return dueDate.toISOString().substring(0, 10);
+        }
+        
+        function calculatePackageEndDate(startDate, duration) {
+            const date = new Date(startDate);
+            date.setMonth(date.getMonth() + parseInt(duration));
+            date.setDate(date.getDate() - 1);
+            return date.toISOString().substring(0, 10);
+        }
+        
+        function validateRegistrationDate(dateString) {
+            const date = new Date(dateString);
+            if (date.getDate() > 28) { alert('Tanggal pendaftaran tidak boleh melebihi tanggal 28'); return false; }
+            return true;
+        }
+        
+        function setMaxRegistrationDate() {
+            const today = new Date();
+            let maxDate = new Date(today);
+            if (today.getDate() > 28) maxDate.setDate(28);
+            document.getElementById('tanggalDaftar').max = maxDate.toISOString().substring(0, 10);
+        }
+        
+        // ==================== FUNGSI PAKET ====================
         function getPackagePrice(paket) {
             const prices = { 'Basic': 100000, 'Basic Plus': 120000, 'Standard': 150000, 'Premium': 200000, 'Premium Plus': 300000 };
             return prices[paket] || 0;
-        }
-        
-        function calculateDueDate(monthDate, registrationDate) {
-            const regDate = new Date(registrationDate);
-            const day = Math.min(regDate.getDate(), 28);
-            const dueDate = new Date(monthDate);
-            dueDate.setDate(day);
-            return dueDate.toISOString().substring(0, 10);
         }
         
         function generateTransactionId(customer, monthYear) {
@@ -857,13 +708,7 @@ tr:hover { background: var(--light); }
             return `KH${yyyymm}${customer.id.slice(-4)}`;
         }
         
-        function calculatePackageEndDate(startDate, duration) {
-            const date = new Date(startDate);
-            date.setMonth(date.getMonth() + parseInt(duration));
-            date.setDate(0);
-            return date.toISOString().substring(0, 10);
-        }
-        
+        // ==================== MANAJEMEN TAGIHAN OTOMATIS ====================
         function generateInitialTransactions(customer) {
             if (customer.paket === 'Paket 6/12') return;
             const startDate = new Date(customer.tanggalDaftar);
@@ -880,13 +725,9 @@ tr:hover { background: var(--light); }
                         id: generateTransactionId(customer, monthYear),
                         customerId: customer.id,
                         customerName: customer.nama,
-                        monthYear: monthYear,
-                        amount: customer.finalPrice,
-                        paid: 0,
-                        paymentDate: '',
+                        monthYear, amount: customer.finalPrice, paid: 0, paymentDate: '',
                         dueDate: calculateDueDate(date, customer.tanggalDaftar),
-                        status: customer.finalPrice < 1 ? 'free' : 'pending',
-                        notes: ''
+                        status: customer.finalPrice < 1 ? 'free' : 'pending', notes: ''
                     });
                 }
                 date.setMonth(date.getMonth() + 1);
@@ -908,15 +749,10 @@ tr:hover { background: var(--light); }
                         const date = new Date(nextYear, m-1, 1);
                         transactions.push({
                             id: generateTransactionId(customer, monthYear),
-                            customerId: customer.id,
-                            customerName: customer.nama,
-                            monthYear: monthYear,
-                            amount: customer.finalPrice,
-                            paid: 0,
-                            paymentDate: '',
+                            customerId: customer.id, customerName: customer.nama, monthYear,
+                            amount: customer.finalPrice, paid: 0, paymentDate: '',
                             dueDate: calculateDueDate(date, customer.tanggalDaftar),
-                            status: 'pending',
-                            notes: `Tagihan otomatis tahun ${nextYear}`
+                            status: 'pending', notes: `Tagihan otomatis tahun ${nextYear}`
                         });
                         generated++;
                     }
@@ -931,7 +767,6 @@ tr:hover { background: var(--light); }
             const currentYear = new Date().getFullYear();
             const currentMonth = new Date().getMonth() + 1;
             if (currentMonth === 1) {
-                let totalGenerated = 0;
                 customers.forEach(customer => {
                     if (customer.paket !== 'Paket 6/12' && customer.status === 'active') {
                         for (let m = 1; m <= 12; m++) {
@@ -941,22 +776,16 @@ tr:hover { background: var(--light); }
                                 const date = new Date(currentYear, m-1, 1);
                                 transactions.push({
                                     id: generateTransactionId(customer, monthYear),
-                                    customerId: customer.id,
-                                    customerName: customer.nama,
-                                    monthYear: monthYear,
-                                    amount: customer.finalPrice,
-                                    paid: 0,
-                                    paymentDate: '',
+                                    customerId: customer.id, customerName: customer.nama, monthYear,
+                                    amount: customer.finalPrice, paid: 0, paymentDate: '',
                                     dueDate: calculateDueDate(date, customer.tanggalDaftar),
-                                    status: 'pending',
-                                    notes: `Tagihan otomatis tahun ${currentYear}`
+                                    status: 'pending', notes: `Tagihan otomatis tahun ${currentYear}`
                                 });
-                                totalGenerated++;
                             }
                         }
                     }
                 });
-                if (totalGenerated > 0) saveToLocalStorage();
+                saveToLocalStorage();
             }
         }
         
@@ -966,39 +795,14 @@ tr:hover { background: var(--light); }
             saveToLocalStorage();
         }
         
-        function validateRegistrationDate(dateString) {
-            const date = new Date(dateString);
-            if (date.getDate() > 28) {
-                alert('Tanggal pendaftaran tidak boleh melebihi tanggal 28');
-                return false;
-            }
-            return true;
-        }
-        
-        function setMaxRegistrationDate() {
-            const today = new Date();
-            let maxDate = new Date(today);
-            if (today.getDate() > 28) maxDate.setDate(28);
-            document.getElementById('tanggalDaftar').max = maxDate.toISOString().substring(0, 10);
-        }
-        
+        // ==================== FORM PAKET ====================
         function togglePackageOptions() {
             const paket = document.getElementById('paket').value;
             const customGroup = document.getElementById('customAmountGroup');
             const durationGroup = document.getElementById('packageDurationGroup');
-            if (paket === 'Paket 6/12') {
-                durationGroup.style.display = 'block';
-                customGroup.style.display = 'block';
-                document.getElementById('customAmount').required = true;
-            } else if (paket === 'Lainnya') {
-                durationGroup.style.display = 'none';
-                customGroup.style.display = 'block';
-                document.getElementById('customAmount').required = true;
-            } else {
-                durationGroup.style.display = 'none';
-                customGroup.style.display = 'none';
-                document.getElementById('customAmount').required = false;
-            }
+            if (paket === 'Paket 6/12') { durationGroup.style.display = 'block'; customGroup.style.display = 'block'; document.getElementById('customAmount').required = true; }
+            else if (paket === 'Lainnya') { durationGroup.style.display = 'none'; customGroup.style.display = 'block'; document.getElementById('customAmount').required = true; }
+            else { durationGroup.style.display = 'none'; customGroup.style.display = 'none'; document.getElementById('customAmount').required = false; }
         }
         
         function resetCustomerForm() {
@@ -1009,9 +813,9 @@ tr:hover { background: var(--light); }
             document.getElementById('modalCustomerTitle').textContent = 'Tambah Pelanggan';
         }
         
+        // ==================== CRUD PELANGGAN ====================
         function openCustomerForm(customerId = null) {
-            resetCustomerForm();
-            setMaxRegistrationDate();
+            resetCustomerForm(); setMaxRegistrationDate();
             if (customerId) {
                 const customer = customers.find(c => c.id === customerId);
                 if (customer) {
@@ -1019,7 +823,7 @@ tr:hover { background: var(--light); }
                     document.getElementById('nama').value = customer.nama;
                     document.getElementById('alamat').value = customer.alamat;
                     document.getElementById('telepon').value = customer.telepon;
-                    document.getElementById('paket').value = customer.paket === 'Paket Lain' ? 'Lainnya' : customer.paket;
+                    document.getElementById('paket').value = customer.paket;
                     document.getElementById('tanggalDaftar').value = customer.tanggalDaftar;
                     document.getElementById('discountAmount').value = customer.discount || 0;
                     if (customer.paket === 'Paket 6/12') {
@@ -1027,8 +831,7 @@ tr:hover { background: var(--light); }
                         document.getElementById('packageDurationGroup').style.display = 'block';
                         document.getElementById('customAmountGroup').style.display = 'block';
                         document.getElementById('customAmount').value = customer.originalPrice || customer.tagihan;
-                    }
-                    if (customer.paket === 'Paket Lain') {
+                    } else if (customer.paket === 'Paket Lain' || customer.paket === 'Lainnya') {
                         document.getElementById('customAmount').value = customer.originalPrice || customer.tagihan;
                         document.getElementById('customAmountGroup').style.display = 'block';
                     }
@@ -1053,98 +856,47 @@ tr:hover { background: var(--light); }
             const customAmount = parseInt(document.getElementById('customAmount').value) || 0;
             const discount = parseInt(document.getElementById('discountAmount').value) || 0;
             
-            if (!nama || !alamat || !telepon || !tanggalDaftar || !paket) {
-                alert('Harap lengkapi semua field!');
-                return false;
-            }
+            if (!nama || !alamat || !telepon || !tanggalDaftar || !paket) { alert('Harap lengkapi semua field!'); return false; }
             if (!validateRegistrationDate(tanggalDaftar)) return false;
-            if (paket === 'Paket 6/12' && customAmount <= 0) {
-                alert('Nominal tagihan untuk paket 6/12 bulan harus diisi!');
-                return false;
-            }
+            if (paket === 'Paket 6/12' && customAmount <= 0) { alert('Nominal tagihan untuk paket 6/12 bulan harus diisi!'); return false; }
             
             let originalPrice, tagihan;
-            if (paket === 'Lainnya') {
-                originalPrice = customAmount;
-                if (originalPrice <= 0) { alert('Nominal tagihan harus lebih dari 0'); return false; }
-                tagihan = originalPrice;
-            } else if (paket === 'Paket 6/12') {
-                originalPrice = customAmount;
-                if (originalPrice <= 0) { alert('Nominal tagihan harus lebih dari 0'); return false; }
-                tagihan = originalPrice;
-            } else {
-                originalPrice = getPackagePrice(paket);
-                tagihan = originalPrice;
-            }
+            if (paket === 'Lainnya') { originalPrice = customAmount; if (originalPrice <= 0) { alert('Nominal tagihan harus lebih dari 0'); return false; } tagihan = originalPrice; }
+            else if (paket === 'Paket 6/12') { originalPrice = customAmount; if (originalPrice <= 0) { alert('Nominal tagihan harus lebih dari 0'); return false; } tagihan = originalPrice; }
+            else { originalPrice = getPackagePrice(paket); tagihan = originalPrice; }
             
-            if (discount > 0) {
-                if (discount > tagihan) { alert('Diskon tidak boleh melebihi tagihan'); return false; }
-                tagihan -= discount;
-            }
+            if (discount > 0) { if (discount > tagihan) { alert('Diskon tidak boleh melebihi tagihan'); return false; } tagihan -= discount; }
             
-            const customerData = {
-                id: customerId || Date.now().toString(),
-                nama, alamat, telepon,
-                paket: paket === 'Lainnya' ? 'Paket Lain' : paket,
-                tanggalDaftar, status: 'active',
-                tagihan, discount, originalPrice, finalPrice: tagihan,
-                packageDuration: paket === 'Paket 6/12' ? packageDuration : null
-            };
+            const customerData = { id: customerId || Date.now().toString(), nama, alamat, telepon, paket: paket === 'Lainnya' ? 'Paket Lain' : paket, tanggalDaftar, status: 'active', tagihan, discount, originalPrice, finalPrice: tagihan, packageDuration: paket === 'Paket 6/12' ? packageDuration : null };
             
             if (customerId) {
                 const index = customers.findIndex(c => c.id === customerId);
                 if (index !== -1) customers[index] = customerData;
                 const pkgIndex = packageCustomers.findIndex(p => p.customerId === customerId);
-                if (pkgIndex !== -1) {
-                    packageCustomers[pkgIndex] = {
-                        ...packageCustomers[pkgIndex],
-                        packageDuration, amount: tagihan,
-                        endDate: calculatePackageEndDate(tanggalDaftar, packageDuration)
-                    };
-                }
+                if (pkgIndex !== -1) packageCustomers[pkgIndex] = { ...packageCustomers[pkgIndex], packageDuration, amount: tagihan, endDate: calculatePackageEndDate(tanggalDaftar, packageDuration) };
             } else {
                 customers.push(customerData);
                 if (paket === 'Paket 6/12') {
-                    packageCustomers.push({
-                        id: Date.now().toString(),
-                        customerId: customerData.id,
-                        customerName: customerData.nama,
-                        packageDuration, startDate: tanggalDaftar,
-                        endDate: calculatePackageEndDate(tanggalDaftar, packageDuration),
-                        amount: tagihan, status: 'active'
-                    });
-                    finances.push({
-                        id: Date.now().toString(), type: 'income', date: tanggalDaftar,
-                        category: 'Paket ' + packageDuration + ' Bulan', amount: tagihan,
-                        description: 'Pembayaran paket ' + packageDuration + ' bulan untuk ' + nama
-                    });
+                    packageCustomers.push({ id: Date.now().toString(), customerId: customerData.id, customerName: customerData.nama, packageDuration, startDate: tanggalDaftar, endDate: calculatePackageEndDate(tanggalDaftar, packageDuration), amount: tagihan, status: 'active' });
+                    finances.push({ id: Date.now().toString(), type: 'income', date: tanggalDaftar, category: 'Paket ' + packageDuration + ' Bulan', amount: tagihan, description: 'Pembayaran paket ' + packageDuration + ' bulan untuk ' + nama });
                 } else {
                     transactions = transactions.filter(t => t.customerId !== customerData.id);
                     generateInitialTransactions(customerData);
                 }
             }
-            
-            saveToLocalStorage();
-            closeModal('customerModal');
-            renderCustomerList();
-            renderTransactionList();
-            renderFinanceList();
-            renderPackageList();
-            generateReport();
+            saveToLocalStorage(); closeModal('customerModal');
+            renderCustomerList(); renderTransactionList(); renderFinanceList(); renderPackageList(); generateReport();
             return true;
         }
         
         function deleteCustomer(customerId) {
-            if (confirm('Yakin hapus pelanggan ini?')) {
+            if (confirm('Yakin hapus pelanggan ini? Semua data tagihan akan dihapus.')) {
                 customers = customers.filter(c => c.id !== customerId);
                 packageCustomers = packageCustomers.filter(p => p.customerId !== customerId);
                 const currentMonth = new Date().toISOString().substring(0, 7);
                 transactions = transactions.filter(t => !(t.customerId === customerId && t.monthYear >= currentMonth));
                 saveToLocalStorage();
-                renderCustomerList();
-                renderTransactionList();
-                renderPackageList();
-                generateReport();
+                renderCustomerList(); renderTransactionList(); renderPackageList(); generateReport();
                 closeModal('detailModal');
             }
         }
@@ -1161,8 +913,7 @@ tr:hover { background: var(--light); }
                 customer.tanggalDaftar = activationDate.toISOString().substring(0, 10);
                 if (customer.paket !== 'Paket 6/12') {
                     transactions = transactions.filter(t => !(t.customerId === customerId && t.status === 'pending'));
-                    const startDate = new Date(activationDate);
-                    startDate.setDate(1);
+                    const startDate = new Date(activationDate); startDate.setDate(1);
                     const currentYear = new Date().getFullYear();
                     if (startDate <= new Date(currentYear, 11, 31)) {
                         for (let m = activationDate.getMonth(); m <= 11; m++) {
@@ -1171,46 +922,21 @@ tr:hover { background: var(--light); }
                             const existing = transactions.find(t => t.customerId === customerId && t.monthYear === monthYear);
                             if (!existing) {
                                 const date = new Date(currentYear, m, 1);
-                                transactions.push({
-                                    id: generateTransactionId(customer, monthYear),
-                                    customerId: customer.id,
-                                    customerName: customer.nama,
-                                    monthYear, amount: customer.finalPrice, paid: 0, paymentDate: '',
-                                    dueDate: calculateDueDate(date, customer.tanggalDaftar),
-                                    status: 'pending', notes: ''
-                                });
+                                transactions.push({ id: generateTransactionId(customer, monthYear), customerId: customer.id, customerName: customer.nama, monthYear, amount: customer.finalPrice, paid: 0, paymentDate: '', dueDate: calculateDueDate(date, customer.tanggalDaftar), status: 'pending', notes: '' });
                             }
                         }
                     }
                 }
                 alert(`Pelanggan diaktifkan. Tagihan dimulai dari bulan ini sampai Desember ${new Date().getFullYear()}`);
-            } else {
-                transactions = transactions.filter(t => !(t.customerId === customerId && t.status === 'pending'));
-                alert('Pelanggan dinonaktifkan. Tagihan pending dihapus.');
-            }
+            } else { transactions = transactions.filter(t => !(t.customerId === customerId && t.status === 'pending')); alert('Pelanggan dinonaktifkan. Tagihan pending dihapus.'); }
             saveToLocalStorage();
-            renderCustomerList();
-            renderTransactionList();
-            renderPackageList();
-            generateReport();
+            renderCustomerList(); renderTransactionList(); renderPackageList(); generateReport();
         }
         
         function showCustomerDetail(customerId) {
             const customer = customers.find(c => c.id === customerId);
             if (!customer) { alert('Pelanggan tidak ditemukan'); return; }
-            const detailHtml = `
-                <div style="padding:15px; background:#fdfdfd; border-radius:8px;">
-                    <h3 style="text-align:center;">${customer.nama}</h3>
-                    <table style="width:100%">
-                        <tr><td><strong>Alamat</strong></td><td>: ${customer.alamat}</td></tr>
-                        <tr><td><strong>Telepon</strong></td><td>: ${customer.telepon}</td></tr>
-                        <tr><td><strong>Paket</strong></td><td>: ${customer.paket}${customer.paket === 'Paket 6/12' ? ' (' + customer.packageDuration + ' Bulan)' : ''}</td></tr>
-                        <tr><td><strong>Tagihan</strong></td><td>: ${formatCurrency(customer.finalPrice)}${customer.paket !== 'Paket 6/12' ? '/bulan' : ' (sekali bayar)'}</td></tr>
-                        <tr><td><strong>Tgl Daftar</strong></td><td>: ${formatDate(customer.tanggalDaftar)}</td></tr>
-                        <tr><td><strong>Status</strong></td><td>: <span class="${customer.status === 'active' ? 'status-active' : 'status-inactive'}">${customer.status === 'active' ? 'Aktif' : 'Nonaktif'}</span></td></tr>
-                    
-                </div>
-            `;
+            const detailHtml = `<div style="padding:15px; background:#fdfdfd; border-radius:8px;"><h3 style="text-align:center;">${customer.nama}</h3><table style="width:100%"><tr><td><strong>Alamat</strong></td><td>: ${customer.alamat}</td></tr><tr><td><strong>Telepon</strong></td><td>: ${customer.telepon}</td></tr><tr><td><strong>Paket</strong></td><td>: ${customer.paket}${customer.paket === 'Paket 6/12' ? ' (' + customer.packageDuration + ' Bulan)' : ''}</td></tr><tr><td><strong>Tagihan</strong></td><td>: ${formatCurrency(customer.finalPrice)}${customer.paket !== 'Paket 6/12' ? '/bulan' : ' (sekali bayar)'}</td></tr><tr><td><strong>Tgl Daftar</strong></td><td>: ${formatDate(customer.tanggalDaftar)}</td></tr><tr><td><strong>Status</strong></td><td>: <span class="${customer.status === 'active' ? 'status-active' : 'status-inactive'}">${customer.status === 'active' ? 'Aktif' : 'Nonaktif'}</span></td></tr></table></div>`;
             document.getElementById('customerDetailContent').innerHTML = detailHtml;
             document.getElementById('editDetailBtn').onclick = () => { closeModal('detailModal'); openCustomerForm(customerId); };
             document.getElementById('deleteCustomerBtn').onclick = () => deleteCustomer(customerId);
@@ -1221,161 +947,70 @@ tr:hover { background: var(--light); }
         }
         
         function renderCustomerList(filter = '') {
-            const tbody = document.getElementById('customerList');
-            tbody.innerHTML = '';
+            const tbody = document.getElementById('customerList'); tbody.innerHTML = '';
             let filtered = customers;
-            if (filter) {
-                const term = filter.toLowerCase();
-                filtered = customers.filter(c => c.nama.toLowerCase().includes(term) || c.alamat.toLowerCase().includes(term));
-            }
+            if (filter) { const term = filter.toLowerCase(); filtered = customers.filter(c => c.nama.toLowerCase().includes(term) || c.alamat.toLowerCase().includes(term)); }
             filtered.sort((a,b) => new Date(a.tanggalDaftar) - new Date(b.tanggalDaftar));
-            
             const activeCount = customers.filter(c => c.status === 'active' && c.paket !== 'Paket 6/12').length;
             const freeCount = customers.filter(c => c.status === 'active' && c.finalPrice < 1).length;
             const pkg6Count = customers.filter(c => c.status === 'active' && c.paket === 'Paket 6/12' && c.packageDuration === '6').length;
             const pkg12Count = customers.filter(c => c.status === 'active' && c.paket === 'Paket 6/12' && c.packageDuration === '12').length;
             const totalBill = customers.reduce((s,c) => s + (c.status === 'active' && c.paket !== 'Paket 6/12' && c.finalPrice >= 1 ? c.finalPrice : 0), 0);
-            
             document.getElementById('totalActiveCustomers').textContent = activeCount;
             document.getElementById('totalMonthlyBills').textContent = formatCurrency(totalBill);
             document.getElementById('totalFreeCustomers').textContent = freeCount;
             document.getElementById('totalPackage6Customers').textContent = pkg6Count;
             document.getElementById('totalPackage12Customers').textContent = pkg12Count;
-            
-            if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Tidak ada data</td></tr>';
-                return;
-            }
-            
+            if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="text-center">Tidak ada data</td></tr>'; return; }
             filtered.forEach((c, i) => {
                 const row = tbody.insertRow();
                 row.className = c.status === 'active' ? (c.paket === 'Paket 6/12' ? (c.packageDuration === '6' ? 'package6-row' : 'package12-row') : 'active-row') : 'inactive-row';
                 const hasPending = c.paket !== 'Paket 6/12' && c.finalPrice >= 1 && transactions.some(t => t.customerId === c.id && t.status === 'pending');
-                row.innerHTML = `
-                    <td>${i+1}</td>
-                    <td>${c.nama}</td>
-                    <td>${c.paket}${c.paket === 'Paket 6/12' ? ' (' + c.packageDuration + ' Bln)' : ''}</td>
-                    <td>${formatCurrency(c.finalPrice)}${c.discount ? `<br><small>(Diskon ${formatCurrency(c.discount)})</small>` : ''}</td>
-                    <td><span class="${c.status === 'active' ? (c.paket === 'Paket 6/12' ? (c.packageDuration === '6' ? 'status-package6' : 'status-package12') : 'status-active') : 'status-inactive'}">${c.status === 'active' ? (c.paket === 'Paket 6/12' ? 'Paket ' + c.packageDuration + ' Bln' : 'Aktif') : 'Nonaktif'}</span></td>
-                    <td>
-                        <button class="action-btn btn-secondary" onclick="showCustomerDetail('${c.id}')">👤 Detail</button>
-                        ${c.paket !== 'Paket 6/12' && c.finalPrice >= 1 ? `<button class="action-btn ${hasPending ? 'btn-primary' : 'btn-outline'}" onclick="${hasPending ? `openPaymentModal('${c.id}')` : 'return false'}" ${!hasPending ? 'disabled' : ''}>💰 Bayar</button>` : ''}
-                    </td>
-                `;
+                row.innerHTML = `<td>${i+1}</td><td>${c.nama}</td><td>${c.paket}${c.paket === 'Paket 6/12' ? ' (' + c.packageDuration + ' Bln)' : ''}</td><td>${formatCurrency(c.finalPrice)}${c.discount ? `<br><small>(Diskon ${formatCurrency(c.discount)})</small>` : ''}</td><td><span class="${c.status === 'active' ? (c.paket === 'Paket 6/12' ? (c.packageDuration === '6' ? 'status-package6' : 'status-package12') : 'status-active') : 'status-inactive'}">${c.status === 'active' ? (c.paket === 'Paket 6/12' ? 'Paket ' + c.packageDuration + ' Bln' : 'Aktif') : 'Nonaktif'}</span></td><td><button class="action-btn btn-secondary" onclick="showCustomerDetail('${c.id}')">👤 Detail</button>${c.paket !== 'Paket 6/12' && c.finalPrice >= 1 ? `<button class="action-btn ${hasPending ? 'btn-primary' : 'btn-outline'}" onclick="${hasPending ? `openPaymentModal('${c.id}')` : 'return false'}" ${!hasPending ? 'disabled' : ''}>💰 Bayar</button>` : ''}</td>`;
             });
         }
         
         function filterCustomers() { renderCustomerList(document.getElementById('searchCustomer').value); }
         
-      // ==================== TRANSACTION FUNCTIONS ====================
-function renderTransactionList(filterMonth = '', statusFilter = '', customerFilter = '') {
-    const tbody = document.getElementById('transactionList');
-    tbody.innerHTML = '';
-    let filtered = [...transactions];
-    if (!filterMonth) {
-        filterMonth = new Date().toISOString().substring(0, 7);
-        document.getElementById('filterMonth').value = filterMonth;
-    }
-    filtered = filtered.filter(t => t.monthYear === filterMonth);
-    if (statusFilter) filtered = filtered.filter(t => t.status === statusFilter && t.amount >= 1);
-    if (customerFilter) {
-        const term = customerFilter.toLowerCase();
-        filtered = filtered.filter(t => getCustomerName(t.customerId).toLowerCase().includes(term));
-    }
-    
-    // ========== TAMBAHKAN INI (URUTAN BERDASARKAN PELANGGAN) ==========
-    filtered.sort((a, b) => {
-        const customerA = customers.find(c => c.id === a.customerId);
-        const customerB = customers.find(c => c.id === b.customerId);
-        
-        const dateA = customerA ? new Date(customerA.tanggalDaftar) : new Date(0);
-        const dateB = customerB ? new Date(customerB.tanggalDaftar) : new Date(0);
-        
-        if (dateA.getTime() !== dateB.getTime()) {
-            return dateA.getTime() - dateB.getTime();
+        // ==================== MANAJEMEN TRANSAKSI ====================
+        function renderTransactionList(filterMonth = '', statusFilter = '', customerFilter = '') {
+            const tbody = document.getElementById('transactionList'); tbody.innerHTML = '';
+            let filtered = [...transactions];
+            if (!filterMonth) { filterMonth = new Date().toISOString().substring(0, 7); document.getElementById('filterMonth').value = filterMonth; }
+            filtered = filtered.filter(t => t.monthYear === filterMonth);
+            if (statusFilter) filtered = filtered.filter(t => t.status === statusFilter && t.amount >= 1);
+            if (customerFilter) { const term = customerFilter.toLowerCase(); filtered = filtered.filter(t => getCustomerName(t.customerId).toLowerCase().includes(term)); }
+            filtered.sort((a, b) => { const ca = customers.find(c => c.id === a.customerId); const cb = customers.find(c => c.id === b.customerId); const da = ca ? new Date(ca.tanggalDaftar) : new Date(0); const db = cb ? new Date(cb.tanggalDaftar) : new Date(0); if (da.getTime() !== db.getTime()) return da.getTime() - db.getTime(); const na = ca ? ca.nama : ''; const nb = cb ? cb.nama : ''; return na.localeCompare(nb); });
+            const totalPaid = filtered.filter(t => t.status === 'paid' && t.amount >= 1).reduce((s,t) => s + (t.paid || t.amount), 0);
+            const totalUnpaid = filtered.filter(t => t.status === 'pending' && t.amount >= 1).reduce((s,t) => s + t.amount, 0);
+            document.getElementById('totalPaidAmount').textContent = formatCurrency(totalPaid);
+            document.getElementById('totalUnpaidAmount').textContent = formatCurrency(totalUnpaid);
+            if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="text-center">Tidak ada data</td></tr>'; return; }
+            filtered.forEach((t, i) => { const row = tbody.insertRow(); const customerName = getCustomerName(t.customerId); row.innerHTML = `<td>${i+1}</td><td>${customerName}</td><td>${formatMonthYear(t.monthYear)}</td><td>${formatCurrency(t.amount)}</td><td>${getStatusBadge(t.status)}</td><td>${t.status === 'pending' && t.amount >= 1 ? `<button class="action-btn btn-primary" onclick="openPaymentModal('${t.customerId}', '${t.id}')">💰 Bayar</button><button class="action-btn btn-warning" onclick="openReceiptModal('${t.id}', true)">📄 Tagihan</button>` : `<button class="action-btn btn-secondary" onclick="viewTransactionDetail('${t.id}')">📋 Detail</button><button class="action-btn btn-primary" onclick="openReceiptModal('${t.id}')">📷 Bukti</button>`}</td>`; });
         }
-        
-        const nameA = customerA ? customerA.nama : '';
-        const nameB = customerB ? customerB.nama : '';
-        return nameA.localeCompare(nameB);
-    });
-    // ==================================================================
-    
-    const totalPaid = filtered.filter(t => t.status === 'paid' && t.amount >= 1).reduce((s,t) => s + (t.paid || t.amount), 0);
-    const totalUnpaid = filtered.filter(t => t.status === 'pending' && t.amount >= 1).reduce((s,t) => s + t.amount, 0);
-    document.getElementById('totalPaidAmount').textContent = formatCurrency(totalPaid);
-    document.getElementById('totalUnpaidAmount').textContent = formatCurrency(totalUnpaid);
-    
-    if (filtered.length === 0) {
-        tbody.innerHTML = '<td><td colspan="6" class="text-center">Tidak ada数据</td></td>';
-        return;
-    }
-    
-    filtered.forEach((t, i) => {
-        const row = tbody.insertRow();
-        const customerName = getCustomerName(t.customerId);
-        row.innerHTML = `
-            <td>${i+1}</td>
-            <td>${customerName}</td>
-            <td>${formatMonthYear(t.monthYear)}</td>
-            <td>${formatCurrency(t.amount)}</td>
-            <td>${getStatusBadge(t.status)}</td>
-            <td>
-                ${t.status === 'pending' && t.amount >= 1 ? 
-                    `<button class="action-btn btn-primary" onclick="openPaymentModal('${t.customerId}', '${t.id}')">💰 Bayar</button>
-                     <button class="action-btn btn-warning" onclick="openReceiptModal('${t.id}', true)">📄 Tagihan</button>` : 
-                    `<button class="action-btn btn-secondary" onclick="viewTransactionDetail('${t.id}')">📋 Detail</button>
-                     <button class="action-btn btn-primary" onclick="openReceiptModal('${t.id}')">📷 Bukti</button>`
-                }
-            </td>
-        `;
-    });
-}
         
         function getCustomerName(customerId) {
             const customer = customers.find(c => c.id === customerId);
             return customer ? customer.nama : (transactions.find(t => t.customerId === customerId)?.customerName || 'Pelanggan Terhapus');
         }
         
-        function filterTransactions() {
-            renderTransactionList(
-                document.getElementById('filterMonth').value,
-                document.getElementById('filterPaymentStatus').value,
-                document.getElementById('searchTransactionCustomer').value
-            );
-        }
+        function filterTransactions() { renderTransactionList(document.getElementById('filterMonth').value, document.getElementById('filterPaymentStatus').value, document.getElementById('searchTransactionCustomer').value); }
         
         function openPaymentModal(customerId, transactionId = null) {
             const customer = customers.find(c => c.id === customerId);
             if (!customer) return;
-            if (customer.paket === 'Paket 6/12') {
-                alert('Pelanggan paket 6/12 tidak punya tagihan bulanan');
-                return;
-            }
+            if (customer.paket === 'Paket 6/12') { alert('Pelanggan paket 6/12 tidak punya tagihan bulanan'); return; }
             let pending = transactions.filter(t => t.customerId === customerId && t.status === 'pending').sort((a,b) => a.monthYear.localeCompare(b.monthYear));
-            if (transactionId) {
-                const specific = pending.find(t => t.id === transactionId);
-                if (specific) pending = [specific, ...pending.filter(t => t.id !== transactionId)];
-            }
+            if (transactionId) { const specific = pending.find(t => t.id === transactionId); if (specific) pending = [specific, ...pending.filter(t => t.id !== transactionId)]; }
             if (pending.length === 0) { alert('Tidak ada tagihan pending'); return; }
-            const select = document.getElementById('paymentMonthSelect');
-            select.innerHTML = '';
-            pending.forEach(trans => {
-                const opt = document.createElement('option');
-                opt.value = trans.id;
-                opt.textContent = `${formatMonthYear(trans.monthYear)} - ${formatCurrency(trans.amount)}`;
-                if (transactionId && trans.id === transactionId) opt.selected = true;
-                select.appendChild(opt);
-            });
+            const select = document.getElementById('paymentMonthSelect'); select.innerHTML = '';
+            pending.forEach(trans => { const opt = document.createElement('option'); opt.value = trans.id; opt.textContent = `${formatMonthYear(trans.monthYear)} - ${formatCurrency(trans.amount)}`; if (transactionId && trans.id === transactionId) opt.selected = true; select.appendChild(opt); });
             document.getElementById('paymentCustomerId').value = customerId;
             document.getElementById('paymentCustomerName').textContent = customer.nama;
             document.getElementById('paymentAmount').textContent = formatCurrency(pending[0].amount);
             document.getElementById('paymentDate').value = new Date().toISOString().substring(0, 10);
             document.getElementById('paymentNotes').value = '';
-            select.onchange = () => {
-                const trans = transactions.find(t => t.id === select.value);
-                if (trans) document.getElementById('paymentAmount').textContent = formatCurrency(trans.amount);
-            };
+            select.onchange = () => { const trans = transactions.find(t => t.id === select.value); if (trans) document.getElementById('paymentAmount').textContent = formatCurrency(trans.amount); };
             openModal('paymentModal');
         }
         
@@ -1395,9 +1030,7 @@ function renderTransactionList(filterMonth = '', statusFilter = '', customerFilt
             const generated = checkAndGenerateNextYearBills(customerId, paidMonthYear);
             if (generated) setTimeout(() => alert('Tagihan untuk tahun depan telah otomatis dibuat.'), 500);
             closeModal('paymentModal');
-            renderCustomerList();
-            renderTransactionList();
-            generateReport();
+            renderCustomerList(); renderTransactionList(); generateReport();
             openReceiptModal(transactionId);
         }
         
@@ -1405,50 +1038,22 @@ function renderTransactionList(filterMonth = '', statusFilter = '', customerFilt
             const t = transactions.find(t => t.id === transactionId);
             if (!t) return;
             const customer = customers.find(c => c.id === t.customerId);
-            const detailHtml = `
-                <div>
-                    <h3 style="text-align:center;">Detail Transaksi</h3>
-                    <table style="width:100%">
-                        <tr><td><strong>Pelanggan</strong></td><td>: ${getCustomerName(t.customerId)}</td></tr>
-                        <tr><td><strong>Bulan</strong></td><td>: ${formatMonthYear(t.monthYear)}</td></tr>
-                        <tr><td><strong>Paket</strong></td><td>: ${customer ? customer.paket : '-'}</td></tr>
-                        <tr><td><strong>Tagihan</strong></td><td>: ${formatCurrency(t.amount)}</td></tr>
-                        <tr><td><strong>Dibayar</strong></td><td>: ${formatCurrency(t.paid)}</td></tr>
-                        <tr><td><strong>Tgl Bayar</strong></td><td>: ${t.paymentDate ? formatDate(t.paymentDate) : '-'}</td></tr>
-                        <tr><td><strong>Jatuh Tempo</strong></td><td>: ${formatDate(t.dueDate)}</td></tr>
-                        <tr><td><strong>Status</strong></td><td>: ${getStatusBadge(t.status)}</td></tr>
-                        <tr><td><strong>Keterangan</strong></td><td>: ${t.notes || '-'}</td></tr>
-                    
-                    <div class="button-group"><button class="btn-primary" onclick="openReceiptModal('${t.id}')">📷 Download Bukti</button><button class="btn-outline" onclick="closeModal('detailModal')">❌ Tutup</button></div>
-                </div>
-            `;
+            const detailHtml = `<div><h3 style="text-align:center;">Detail Transaksi</h3><table style="width:100%"><tr><td><strong>Pelanggan</strong></td><td>: ${getCustomerName(t.customerId)}</td></tr><tr><td><strong>Bulan</strong></td><td>: ${formatMonthYear(t.monthYear)}</td></tr><tr><td><strong>Paket</strong></td><td>: ${customer ? customer.paket : '-'}</td></tr><tr><td><strong>Tagihan</strong></td><td>: ${formatCurrency(t.amount)}</td></tr><tr><td><strong>Dibayar</strong></td><td>: ${formatCurrency(t.paid)}</td></tr><tr><td><strong>Tgl Bayar</strong></td><td>: ${t.paymentDate ? formatDate(t.paymentDate) : '-'}</td></tr><tr><td><strong>Jatuh Tempo</strong></td><td>: ${formatDate(t.dueDate)}</td></tr><tr><td><strong>Status</strong></td><td>: ${getStatusBadge(t.status)}</td></tr><tr><td><strong>Keterangan</strong></td><td>: ${t.notes || '-'}</td></tr></table><div class="button-group"><button class="btn-primary" onclick="openReceiptModal('${t.id}')">📷 Download Bukti</button><button class="btn-outline" onclick="closeModal('detailModal')">❌ Tutup</button></div></div>`;
             document.getElementById('customerDetailContent').innerHTML = detailHtml;
             document.querySelector('#detailModal .button-group').style.display = 'none';
             openModal('detailModal');
         }
         
-        // ==================== FINANCE FUNCTIONS ====================
+        // ==================== KEUANGAN ====================
         function openFinanceForm(type, financeId = null) {
             document.getElementById('financeType').value = type;
             document.getElementById('modalFinanceTitle').textContent = type === 'income' ? 'Tambah Pemasukan' : 'Tambah Pengeluaran';
             document.getElementById('financeDate').value = new Date().toISOString().substring(0, 10);
-            document.getElementById('financeId').value = '';
-            document.getElementById('financeAmount').value = '';
-            document.getElementById('financeDescription').value = '';
-            const catSelect = document.getElementById('financeCategory');
-            catSelect.innerHTML = '';
+            document.getElementById('financeId').value = ''; document.getElementById('financeAmount').value = ''; document.getElementById('financeDescription').value = '';
+            const catSelect = document.getElementById('financeCategory'); catSelect.innerHTML = '';
             const cats = type === 'income' ? incomeCategories : expenseCategories;
             cats.forEach(c => { const opt = document.createElement('option'); opt.value = c; opt.textContent = c; catSelect.appendChild(opt); });
-            if (financeId) {
-                const f = finances.find(f => f.id === financeId);
-                if (f) {
-                    document.getElementById('financeId').value = f.id;
-                    document.getElementById('financeDate').value = f.date;
-                    document.getElementById('financeCategory').value = f.category;
-                    document.getElementById('financeAmount').value = f.amount;
-                    document.getElementById('financeDescription').value = f.description || '';
-                }
-            }
+            if (financeId) { const f = finances.find(f => f.id === financeId); if (f) { document.getElementById('financeId').value = f.id; document.getElementById('financeDate').value = f.date; document.getElementById('financeCategory').value = f.category; document.getElementById('financeAmount').value = f.amount; document.getElementById('financeDescription').value = f.description || ''; } }
             openModal('financeModal');
         }
         
@@ -1457,83 +1062,40 @@ function renderTransactionList(filterMonth = '', statusFilter = '', customerFilt
             const type = document.getElementById('financeType').value;
             const amount = parseFloat(document.getElementById('financeAmount').value);
             if (amount <= 0) { alert('Jumlah harus lebih dari 0'); return; }
-            const data = {
-                type, date: document.getElementById('financeDate').value,
-                category: document.getElementById('financeCategory').value,
-                amount, description: document.getElementById('financeDescription').value
-            };
-            if (id) {
-                const idx = finances.findIndex(f => f.id === id);
-                if (idx !== -1) finances[idx] = { ...finances[idx], ...data };
-            } else {
-                data.id = Date.now().toString();
-                finances.push(data);
-            }
-            saveToLocalStorage();
-            closeModal('financeModal');
-            renderFinanceList();
-            generateReport();
+            const data = { type, date: document.getElementById('financeDate').value, category: document.getElementById('financeCategory').value, amount, description: document.getElementById('financeDescription').value };
+            if (id) { const idx = finances.findIndex(f => f.id === id); if (idx !== -1) finances[idx] = { ...finances[idx], ...data }; }
+            else { data.id = Date.now().toString(); finances.push(data); }
+            saveToLocalStorage(); closeModal('financeModal');
+            renderFinanceList(); generateReport();
         }
         
-        function deleteFinance(financeId) {
-            if (confirm('Yakin hapus data ini?')) {
-                finances = finances.filter(f => f.id !== financeId);
-                saveToLocalStorage();
-                renderFinanceList();
-                generateReport();
-            }
-        }
+        function deleteFinance(financeId) { if (confirm('Yakin hapus data ini?')) { finances = finances.filter(f => f.id !== financeId); saveToLocalStorage(); renderFinanceList(); generateReport(); } }
         
         function renderFinanceList(filterMonth = '') {
-            const tbody = document.getElementById('financeList');
-            tbody.innerHTML = '';
+            const tbody = document.getElementById('financeList'); tbody.innerHTML = '';
             let filtered = [...finances];
-            if (!filterMonth) {
-                filterMonth = new Date().toISOString().substring(0, 7);
-                document.getElementById('filterFinanceMonth').value = filterMonth;
-            }
+            if (!filterMonth) { filterMonth = new Date().toISOString().substring(0, 7); document.getElementById('filterFinanceMonth').value = filterMonth; }
             filtered = filtered.filter(f => f.date.startsWith(filterMonth));
             filtered.sort((a,b) => a.date.localeCompare(b.date));
-            if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Tidak ada data</td></tr>';
-                return;
-            }
-            filtered.forEach((f, i) => {
-                const row = tbody.insertRow();
-                row.innerHTML = `
-                    <td>${i+1}</td>
-                    <td>${formatDate(f.date)}</td>
-                    <td>${f.category}</td>
-                    <td>${f.description || '-'}</td>
-                    <td class="${f.type === 'income' ? 'income-text' : 'expense-text'}">${formatCurrency(f.amount)}</td>
-                    <td><button class="action-btn btn-secondary" onclick="openFinanceForm('${f.type}', '${f.id}')">✏️ Edit</button><button class="action-btn btn-danger" onclick="deleteFinance('${f.id}')">🗑️ Hapus</button></td>
-                `;
-            });
+            if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="6" class="text-center">Tidak ada data</td></tr>'; return; }
+            filtered.forEach((f, i) => { const row = tbody.insertRow(); row.innerHTML = `<td>${i+1}</td><td>${formatDate(f.date)}</td><td>${f.category}</td><td>${f.description || '-'}</td><td class="${f.type === 'income' ? 'income-text' : 'expense-text'}">${formatCurrency(f.amount)}</td><td><button class="action-btn btn-secondary" onclick="openFinanceForm('${f.type}', '${f.id}')">✏️ Edit</button><button class="action-btn btn-danger" onclick="deleteFinance('${f.id}')">🗑️ Hapus</button></td>`; });
         }
         
-        // ==================== PACKAGE FUNCTIONS ====================
+        // ==================== PAKET ====================
         function switchPackageTab(tab) {
             currentPackageTab = tab;
-            document.querySelectorAll('.package-tab').forEach((t, i) => {
-                t.classList.toggle('active', (tab === 'all' && i === 0) || (tab === '6' && i === 1) || (tab === '12' && i === 2));
-            });
+            document.querySelectorAll('.package-tab').forEach((t, i) => { t.classList.toggle('active', (tab === 'all' && i === 0) || (tab === '6' && i === 1) || (tab === '12' && i === 2)); });
             renderPackageList();
         }
         
-        function filterPackageCustomers() {
-            renderPackageList(document.getElementById('searchPackageCustomer').value);
-        }
+        function filterPackageCustomers() { renderPackageList(document.getElementById('searchPackageCustomer').value); }
         
         function renderPackageList(filter = '') {
-            const tbody = document.getElementById('packageList');
-            tbody.innerHTML = '';
+            const tbody = document.getElementById('packageList'); tbody.innerHTML = '';
             let filtered = [...packageCustomers];
             if (currentPackageTab === '6') filtered = filtered.filter(p => p.packageDuration === '6');
             if (currentPackageTab === '12') filtered = filtered.filter(p => p.packageDuration === '12');
-            if (filter) {
-                const term = filter.toLowerCase();
-                filtered = filtered.filter(p => p.customerName.toLowerCase().includes(term));
-            }
+            if (filter) { const term = filter.toLowerCase(); filtered = filtered.filter(p => p.customerName.toLowerCase().includes(term)); }
             filtered.sort((a,b) => new Date(a.endDate) - new Date(b.endDate));
             const total6 = packageCustomers.filter(p => p.packageDuration === '6').length;
             const total12 = packageCustomers.filter(p => p.packageDuration === '12').length;
@@ -1543,31 +1105,8 @@ function renderTransactionList(filterMonth = '', statusFilter = '', customerFilt
             document.getElementById('totalPackage12').textContent = total12;
             document.getElementById('totalRevenue6').textContent = formatCurrency(rev6);
             document.getElementById('totalRevenue12').textContent = formatCurrency(rev12);
-            if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" class="text-center">Tidak ada data</td></tr>';
-                return;
-            }
-            filtered.forEach((p, i) => {
-                const customer = customers.find(c => c.id === p.customerId);
-                const isActive = customer ? customer.status === 'active' : false;
-                const isExpired = new Date(p.endDate) < new Date();
-                const row = tbody.insertRow();
-                row.className = p.packageDuration === '6' ? 'package6-row' : 'package12-row';
-                row.innerHTML = `
-                    <tr>${i+1}</td>
-                    <td>${p.customerName}</td>
-                    <td>Paket ${p.packageDuration} Bulan</td>
-                    <td>${formatCurrency(p.amount)}</td>
-                    <td>${formatDate(p.startDate)}</td>
-                    <td>${formatDate(p.endDate)}</td>
-                    <td><span class="${isActive ? (p.packageDuration === '6' ? 'status-package6' : 'status-package12') : 'status-inactive'}">${isActive ? (isExpired ? 'Kadaluarsa' : 'Aktif') : 'Nonaktif'}</span></td>
-                    <td>
-                        <button class="action-btn btn-secondary" onclick="showPackageDetail('${p.id}')">📋 Detail</button>
-                        <button class="action-btn btn-primary" onclick="openPackageReceiptModal('${p.id}')">📷 Bukti</button>
-                        ${isExpired && isActive ? `<button class="action-btn btn-warning" onclick="renewPackage('${p.id}')">🔄 Perpanjang</button>` : ''}
-                    </td>
-                `;
-            });
+            if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="8" class="text-center">Tidak ada data</td></tr>'; return; }
+            filtered.forEach((p, i) => { const customer = customers.find(c => c.id === p.customerId); const isActive = customer ? customer.status === 'active' : false; const isExpired = new Date(p.endDate) < new Date(); const row = tbody.insertRow(); row.className = p.packageDuration === '6' ? 'package6-row' : 'package12-row'; row.innerHTML = `<td>${i+1}</td><td>${p.customerName}</td><td>Paket ${p.packageDuration} Bulan</td><td>${formatCurrency(p.amount)}</td><td>${formatDate(p.startDate)}</td><td>${formatDate(p.endDate)}</td><td><span class="${isActive ? (p.packageDuration === '6' ? 'status-package6' : 'status-package12') : 'status-inactive'}">${isActive ? (isExpired ? 'Kadaluarsa' : 'Aktif') : 'Nonaktif'}</span></td><td><button class="action-btn btn-secondary" onclick="showPackageDetail('${p.id}')">📋 Detail</button><button class="action-btn btn-primary" onclick="openPackageReceiptModal('${p.id}')">📷 Bukti</button>${isExpired && isActive ? `<button class="action-btn btn-warning" onclick="renewPackage('${p.id}')">🔄 Perpanjang</button>` : ''}</td>`; });
         }
         
         function showPackageDetail(packageId) {
@@ -1575,20 +1114,7 @@ function renderTransactionList(filterMonth = '', statusFilter = '', customerFilt
             if (!pkg) return;
             const customer = customers.find(c => c.id === pkg.customerId);
             const isExpired = new Date(pkg.endDate) < new Date();
-            const detailHtml = `
-                <div>
-                    <h3 style="text-align:center;">Detail Paket</h3>
-                    <table style="width:100%">
-                        <tr><td><strong>Pelanggan</strong></td><td>: ${pkg.customerName}</td></tr>
-                        <tr><td><strong>Paket</strong></td><td>: ${pkg.packageDuration} Bulan</td></tr>
-                        <tr><td><strong>Jumlah</strong></td><td>: ${formatCurrency(pkg.amount)}</td></tr>
-                        <tr><td><strong>Tgl Mulai</strong></td><td>: ${formatDate(pkg.startDate)}</td></tr>
-                        <tr><td><strong>Tgl Berakhir</strong></td><td>: ${formatDate(pkg.endDate)}</td></tr>
-                        <tr><td><strong>Status</strong></td><td>: <span class="${customer?.status === 'active' ? (pkg.packageDuration === '6' ? 'status-package6' : 'status-package12') : 'status-inactive'}">${customer?.status === 'active' ? (isExpired ? 'Kadaluarsa' : 'Aktif') : 'Nonaktif'}</span></td></tr>
-                    20
-                    <div class="button-group"><button class="btn-primary" onclick="renewPackage('${pkg.id}')">🔄 Perpanjang</button><button class="btn-outline" onclick="closeModal('detailModal')">❌ Tutup</button></div>
-                </div>
-            `;
+            const detailHtml = `<div><h3 style="text-align:center;">Detail Paket</h3><table style="width:100%"><tr><td><strong>Pelanggan</strong></td><td>: ${pkg.customerName}</td></tr><tr><td><strong>Paket</strong></td><td>: ${pkg.packageDuration} Bulan</td></tr><tr><td><strong>Jumlah</strong></td><td>: ${formatCurrency(pkg.amount)}</td></tr><tr><td><strong>Tgl Mulai</strong></td><td>: ${formatDate(pkg.startDate)}</td></tr><tr><td><strong>Tgl Berakhir</strong></td><td>: ${formatDate(pkg.endDate)}</td></tr><tr><td><strong>Status</strong></td><td>: <span class="${customer?.status === 'active' ? (pkg.packageDuration === '6' ? 'status-package6' : 'status-package12') : 'status-inactive'}">${customer?.status === 'active' ? (isExpired ? 'Kadaluarsa' : 'Aktif') : 'Nonaktif'}</span></td></tr></table><div class="button-group"><button class="btn-primary" onclick="renewPackage('${pkg.id}')">🔄 Perpanjang</button><button class="btn-outline" onclick="closeModal('detailModal')">❌ Tutup</button></div></div>`;
             document.getElementById('customerDetailContent').innerHTML = detailHtml;
             document.querySelector('#detailModal .button-group').style.display = 'none';
             openModal('detailModal');
@@ -1605,398 +1131,352 @@ function renderTransactionList(filterMonth = '', statusFilter = '', customerFilt
                 const newStartDate = today > endDate ? today : endDate;
                 pkg.startDate = newStartDate.toISOString().substring(0, 10);
                 pkg.endDate = calculatePackageEndDate(pkg.startDate, pkg.packageDuration);
-                finances.push({
-                    id: Date.now().toString(), type: 'income', date: pkg.startDate,
-                    category: 'Paket ' + pkg.packageDuration + ' Bulan', amount: pkg.amount,
-                    description: 'Perpanjangan paket ' + pkg.packageDuration + ' bulan untuk ' + customer.nama
-                });
+                finances.push({ id: Date.now().toString(), type: 'income', date: pkg.startDate, category: 'Paket ' + pkg.packageDuration + ' Bulan', amount: pkg.amount, description: 'Perpanjangan paket ' + pkg.packageDuration + ' bulan untuk ' + customer.nama });
                 saveToLocalStorage();
-                renderPackageList();
-                renderFinanceList();
-                generateReport();
+                renderPackageList(); renderFinanceList(); generateReport();
                 closeModal('detailModal');
                 alert(`Paket diperpanjang hingga ${formatDate(pkg.endDate)}`);
             }
         }
         
-     // ==================== RECEIPT FUNCTIONS ====================
-function openReceiptModal(transactionId, isInvoice = false) {
-    const transaction = transactions.find(t => t.id === transactionId);
-    if (!transaction) { alert('Transaksi tidak ditemukan'); return; }
-    const customer = customers.find(c => c.id === transaction.customerId);
+        // ==================== FUNGSI BUKTI ====================
+        function openReceiptModal(transactionId, isInvoice = false) {
+            const transaction = transactions.find(t => t.id === transactionId);
+            if (!transaction) { alert('Transaksi tidak ditemukan'); return; }
+            const customer = customers.find(c => c.id === transaction.customerId);
+            currentReceiptMode = isInvoice ? 'invoice' : 'receipt';
+            currentReceiptTransactionId = transactionId;
+            const receiptContent = document.getElementById('receiptContent');
+            if (isInvoice) receiptContent.classList.add('invoice-mode'); else receiptContent.classList.remove('invoice-mode');
+            document.getElementById('receiptTrxId').textContent = transaction.id;
+            document.getElementById('receiptDate').textContent = isInvoice ? formatDate(new Date().toISOString().substring(0,10)) : formatDate(transaction.paymentDate);
+            if (isInvoice) {
+                document.getElementById('receiptTitle').textContent = 'TAGIHAN INTERNET';
+                document.getElementById('receiptSubtitle').textContent = 'Tagihan Bulanan Internet';
+                document.getElementById('receiptStatus').textContent = 'BELUM LUNAS';
+                document.getElementById('receiptStatus').className = 'badge badge-danger';
+                document.getElementById('paymentInstructions').style.display = 'block';
+                document.getElementById('dueDateText').textContent = formatDate(transaction.dueDate);
+                document.getElementById('receiptStamp').style.display = 'none';
+                const packageRow = document.querySelector('#receiptContent table tr:has(#receiptPackage)');
+                const periodRow = document.querySelector('#receiptContent table tr:has(#receiptPeriod)');
+                if (packageRow) packageRow.style.display = 'none';
+                if (periodRow) periodRow.style.display = 'none';
+            } else {
+                document.getElementById('receiptTitle').textContent = 'Bukti Pembayaran';
+                document.getElementById('receiptSubtitle').textContent = 'Bukti Pembayaran Internet';
+                document.getElementById('receiptStatus').textContent = transaction.status === 'paid' ? 'LUNAS' : 'PENDING';
+                document.getElementById('receiptStatus').className = transaction.status === 'paid' ? 'badge badge-success' : 'badge badge-warning';
+                document.getElementById('paymentInstructions').style.display = 'none';
+                document.getElementById('receiptStamp').style.display = transaction.status === 'paid' ? 'block' : 'none';
+                const packageRow = document.querySelector('#receiptContent table tr:has(#receiptPackage)');
+                const periodRow = document.querySelector('#receiptContent table tr:has(#receiptPeriod)');
+                if (packageRow) packageRow.style.display = '';
+                if (periodRow) periodRow.style.display = '';
+            }
+            if (customer) {
+                document.getElementById('receiptCustomer').textContent = customer.nama;
+                document.getElementById('receiptAddress').textContent = customer.alamat;
+                document.getElementById('receiptPhone').textContent = customer.telepon;
+                document.getElementById('receiptPackage').textContent = customer.paket + ' - ' + formatCurrency(customer.finalPrice) + (customer.paket === 'Paket 6/12' ? ' (sekali bayar)' : '/bulan');
+            } else {
+                document.getElementById('receiptCustomer').textContent = transaction.customerName;
+                document.getElementById('receiptAddress').textContent = '-';
+                document.getElementById('receiptPhone').textContent = '-';
+                document.getElementById('receiptPackage').textContent = '-';
+            }
+            document.getElementById('receiptPeriod').textContent = `${formatMonthYear(transaction.monthYear)}`;
+            document.getElementById('receiptDueDate').textContent = formatDate(transaction.dueDate);
+            document.getElementById('receiptAmount').textContent = formatCurrency(transaction.amount);
+            document.getElementById('receiptNotes').textContent = isInvoice ? 'Tagihan Jasa Layanan Internet' : (transaction.notes || 'Jasa Layanan Internet');
+            currentReceiptType = 'transaction';
+            openModal('receiptModal');
+        }
+        
+        async function downloadReceiptImage() {
+            const receipt = document.getElementById('receiptContent');
+            const btn = document.querySelector('#receiptModal .btn-primary');
+            if (!btn) return;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="loading-spinner"></span> Menyiapkan gambar...';
+            btn.disabled = true;
+            const stamp = document.getElementById('receiptStamp');
+            const isInvoiceMode = (currentReceiptMode === 'invoice');
+            const isPaidMode = (document.getElementById('receiptStatus')?.textContent === 'LUNAS');
+            if (stamp) stamp.style.display = (isInvoiceMode || !isPaidMode) ? 'none' : 'block';
+            const paymentInstructions = document.getElementById('paymentInstructions');
+            if (paymentInstructions) paymentInstructions.style.display = isInvoiceMode ? 'block' : 'none';
+            const originalWidth = receipt.style.width, originalMaxWidth = receipt.style.maxWidth, originalMinHeight = receipt.style.minHeight;
+            receipt.style.width = '380px'; receipt.style.maxWidth = '380px'; receipt.style.minHeight = 'auto';
+            await new Promise(resolve => setTimeout(resolve, 100));
+            try {
+                const actualHeight = receipt.scrollHeight, actualWidth = receipt.scrollWidth;
+                const scale = isInvoiceMode ? 3 : 4.5;
+                const canvas = await html2canvas(receipt, { scale, backgroundColor: '#ffffff', logging: false, useCORS: true, windowWidth: actualWidth, windowHeight: actualHeight, onclone: (clonedDoc) => { const clonedStamp = clonedDoc.getElementById('receiptStamp'); const clonedStatus = clonedDoc.getElementById('receiptStatus'); if (clonedStamp && !isInvoiceMode && clonedStatus?.textContent === 'LUNAS') clonedStamp.style.display = 'block'; const clonedInstructions = clonedDoc.getElementById('paymentInstructions'); if (clonedInstructions) clonedInstructions.style.display = isInvoiceMode ? 'block' : 'none'; } });
+                let finalCanvas;
+                if (isInvoiceMode) finalCanvas = canvas;
+                else { const targetWidth = 800, targetHeight = 1200; finalCanvas = document.createElement('canvas'); finalCanvas.width = targetWidth; finalCanvas.height = targetHeight; const ctx = finalCanvas.getContext('2d'); ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, targetWidth, targetHeight); const imgRatio = canvas.width / canvas.height, targetRatio = targetWidth / targetHeight; let drawWidth, drawHeight, offsetX, offsetY; if (imgRatio > targetRatio) { drawWidth = targetWidth; drawHeight = targetWidth / imgRatio; offsetX = 0; offsetY = (targetHeight - drawHeight) / 2; } else { drawHeight = targetHeight; drawWidth = targetHeight * imgRatio; offsetX = (targetWidth - drawWidth) / 2; offsetY = 0; } ctx.drawImage(canvas, offsetX, offsetY, drawWidth, drawHeight); }
+                let customerName = 'pelanggan'; const customerElement = document.getElementById('receiptCustomer'); if (customerElement && customerElement.textContent !== '-') customerName = customerElement.textContent.trim().substring(0, 30);
+                const today = new Date();
+const day = String(today.getDate()).padStart(2, '0');
+const month = String(today.getMonth() + 1).padStart(2, '0');
+const year = today.getFullYear();
+const dateStr = `${day}-${month}-${year}`; let prefix = currentReceiptType === 'package' ? 'paket' : 'bayar'; if (currentReceiptMode === 'invoice') prefix = 'tagihan'; const filename = `${dateStr}_${customerName}_${prefix}.png`;
+                const link = document.createElement('a'); link.download = filename; link.href = finalCanvas.toDataURL('image/png', 1.0); link.click();
+            } catch (err) { alert('Gagal membuat gambar: ' + err.message); } finally { btn.innerHTML = originalText; btn.disabled = false; receipt.style.width = originalWidth; receipt.style.maxWidth = originalMaxWidth; receipt.style.minHeight = originalMinHeight; }
+        }
+        
+        async function downloadReceiptPDF() {
+            const receipt = document.getElementById('receiptContent');
+            const btn = document.querySelector('#receiptModal .btn-success');
+            if (!btn) return;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="loading-spinner"></span> Membuat PDF...';
+            btn.disabled = true;
+            const stamp = document.getElementById('receiptStamp');
+            const isInvoiceMode = (currentReceiptMode === 'invoice');
+            const isPaidMode = (document.getElementById('receiptStatus')?.textContent === 'LUNAS');
+            if (stamp) stamp.style.display = (isInvoiceMode || !isPaidMode) ? 'none' : 'block';
+            const paymentInstructions = document.getElementById('paymentInstructions');
+            if (paymentInstructions) paymentInstructions.style.display = isInvoiceMode ? 'block' : 'none';
+            try {
+                const canvas = await html2canvas(receipt, { scale: 5, backgroundColor: '#ffffff', logging: false, useCORS: true, windowWidth: receipt.scrollWidth });
+                const imgData = canvas.toDataURL('image/png'); const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait', compress: false });
+                const pdfWidth = pdf.internal.pageSize.getWidth(), pdfHeight = pdf.internal.pageSize.getHeight();
+                const imgWidth = canvas.width, imgHeight = canvas.height, ratio = imgWidth / imgHeight;
+                let finalWidth = pdfWidth - 20, finalHeight = finalWidth / ratio;
+                if (finalHeight > pdfHeight - 30) { finalHeight = pdfHeight - 30; finalWidth = finalHeight * ratio; }
+                const xPos = (pdfWidth - finalWidth) / 2, yPos = 15;
+                pdf.addImage(imgData, 'PNG', xPos, yPos, finalWidth, finalHeight, undefined, 'FAST');
+                let customerName = 'pelanggan'; const customerElement = document.getElementById('receiptCustomer'); if (customerElement && customerElement.textContent !== '-') customerName = customerElement.textContent.trim().substring(0, 30);
+               const today = new Date();
+const day = String(today.getDate()).padStart(2, '0');
+const month = String(today.getMonth() + 1).padStart(2, '0');
+const year = today.getFullYear();
+const dateStr = `${day}-${month}-${year}`; let prefix = currentReceiptType === 'package' ? 'paket' : 'bayar'; if (currentReceiptMode === 'invoice') prefix = 'tagihan';
+                pdf.save(`${dateStr}_${customerName}_${prefix}.pdf`);
+            } catch (err) { alert('Gagal membuat PDF: ' + err.message); } finally { btn.innerHTML = originalText; btn.disabled = false; }
+        }
+        
+        // ==================== FUNGSI LAPORAN ====================
+        
+        /** Generate laporan tahunan */
+        function generateReport() {
+            const year = document.getElementById('reportYear').value;
+            if (!year) return;
+            
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Ags', 'Sep', 'Okt', 'Nov', 'Des'];
+            const tbody = document.getElementById('reportList');
+            tbody.innerHTML = '';
+            
+            let totalBilled = 0;
+            let totalPaid = 0;
+            let totalIncome = 0;
+            let totalExpense = 0;
+            
+            // Data per bulan
+            for (let i = 0; i < 12; i++) {
+                const month = (i + 1).toString().padStart(2, '0');
+                const monthYear = `${year}-${month}`;
+                
+                // Tagihan bulan ini
+                const monthTransactions = transactions.filter(t => t.monthYear === monthYear && t.amount > 0);
+                const billed = monthTransactions.reduce((sum, t) => sum + t.amount, 0);
+                const paid = monthTransactions.filter(t => t.status === 'paid').reduce((sum, t) => sum + (t.paid || t.amount), 0);
+                
+                // Keuangan bulan ini
+                const monthFinances = finances.filter(f => f.date.startsWith(monthYear));
+                const income = monthFinances.filter(f => f.type === 'income').reduce((sum, f) => sum + f.amount, 0);
+                const expense = monthFinances.filter(f => f.type === 'expense').reduce((sum, f) => sum + f.amount, 0);
+                
+                const balance = paid + income - expense;
+                
+                totalBilled += billed;
+                totalPaid += paid;
+                totalIncome += income;
+                totalExpense += expense;
+                
+                const row = tbody.insertRow();
+                row.innerHTML = `
+                    <td>${months[i]} ${year}</td>
+                    <td>${formatCurrency(billed)}</td>
+                    <td>${formatCurrency(paid)}</td>
+                    <td>${formatCurrency(income)}</td>
+                    <td>${formatCurrency(expense)}</td>
+                    <td>${formatCurrency(balance)}</td>
+                `;
+            }
+            
+            // Update ringkasan
+            document.getElementById('annual-billed').textContent = formatCurrency(totalBilled);
+            document.getElementById('annual-paid').textContent = formatCurrency(totalPaid);
+            document.getElementById('total-income').textContent = formatCurrency(totalIncome);
+            document.getElementById('total-expense').textContent = formatCurrency(totalExpense);
+            document.getElementById('balance').textContent = formatCurrency(totalIncome - totalExpense);
+            
+            // Statistik pelanggan
+            const activeCustomers = customers.filter(c => c.status === 'active').length;
+            const inactiveCustomers = customers.filter(c => c.status === 'inactive').length;
+            const newCustomers = customers.filter(c => c.tanggalDaftar.startsWith(year)).length;
+            const package6Count = packageCustomers.filter(p => p.packageDuration === '6').length;
+            const package12Count = packageCustomers.filter(p => p.packageDuration === '12').length;
+            
+            document.getElementById('active-customers').textContent = activeCustomers;
+            document.getElementById('inactive-customers').textContent = inactiveCustomers;
+            document.getElementById('new-customers').textContent = newCustomers;
+            document.getElementById('annual-package6').textContent = package6Count;
+            document.getElementById('annual-package12').textContent = package12Count;
+        }
+        
+      
+        // ==================== FUNGSI FILTER RANGE TANGGAL ====================
+function filterReportByDateRange() {
+    const dateFrom = document.getElementById('filterDateFrom').value;
+    const dateTo = document.getElementById('filterDateTo').value;
     
-    // SIMPAN MODE ke global variable
-    window.currentReceiptMode = isInvoice ? 'invoice' : 'receipt';
-    window.currentReceiptTransactionId = transactionId;
-    
-    document.getElementById('receiptTrxId').textContent = transaction.id;
-    document.getElementById('receiptDate').textContent = isInvoice ? formatDate(new Date().toISOString().substring(0,10)) : formatDate(transaction.paymentDate);
-    
-    if (isInvoice) {
-        document.getElementById('receiptTitle').textContent = 'TAGIHAN INTERNET';
-        document.getElementById('receiptSubtitle').textContent = 'Tagihan Bulanan Internet';
-        document.getElementById('receiptStatus').textContent = 'BELUM LUNAS';
-        document.getElementById('receiptStatus').className = 'badge badge-danger';
-        document.getElementById('paymentInstructions').style.display = 'block';
-        document.getElementById('dueDateText').textContent = formatDate(transaction.dueDate);
-        // INVOICE: stempel HARUS disembunyikan
-        document.getElementById('receiptStamp').style.display = 'none';
-    } else {
-        document.getElementById('receiptTitle').textContent = 'Bukti Pembayaran';
-        document.getElementById('receiptSubtitle').textContent = 'Bukti Pembayaran Internet';
-        document.getElementById('receiptStatus').textContent = transaction.status === 'paid' ? 'LUNAS' : 'PENDING';
-        document.getElementById('receiptStatus').className = transaction.status === 'paid' ? 'badge badge-success' : 'badge badge-warning';
-        document.getElementById('paymentInstructions').style.display = 'none';
-        // Receipt: stempel hanya untuk status LUNAS
-        document.getElementById('receiptStamp').style.display = transaction.status === 'paid' ? 'block' : 'none';
+    if (!dateFrom || !dateTo) {
+        alert('Pilih tanggal dari dan sampai terlebih dahulu');
+        return;
     }
     
-    if (customer) {
-        document.getElementById('receiptCustomer').textContent = customer.nama;
-        document.getElementById('receiptAddress').textContent = customer.alamat;
-        document.getElementById('receiptPhone').textContent = customer.telepon;
-        document.getElementById('receiptPackage').textContent = customer.paket + ' - ' + formatCurrency(customer.finalPrice) + (customer.paket === 'Paket 6/12' ? ' (sekali bayar)' : '/bulan');
-    } else {
-        document.getElementById('receiptCustomer').textContent = transaction.customerName;
-        document.getElementById('receiptAddress').textContent = '-';
-        document.getElementById('receiptPhone').textContent = '-';
-        document.getElementById('receiptPackage').textContent = '-';
+    // ===== SEMBUNYIKAN SEMUA LAPORAN TAHUNAN =====
+    // 1. Sembunyikan seluruh container summary (ringkasan tahunan)
+    const allSummaryContainers = document.querySelectorAll('#laporan-tab .summary-container');
+    allSummaryContainers.forEach(container => {
+        // Hanya sembunyikan yang BUKAN rangeSummaryContainer
+        if (container.id !== 'rangeSummaryContainer') {
+            container.style.display = 'none';
+        }
+    });
+    
+    // 2. Sembunyikan judul "Rincian Bulanan"
+    const headings = document.querySelectorAll('#laporan-tab h3');
+    headings.forEach(heading => {
+        if (heading.textContent.includes('Rincian Bulanan') && heading.id !== 'rangeDetailTitle') {
+            heading.style.display = 'none';
+        }
+    });
+    
+    // 3. Sembunyikan tabel laporan tahunan (rincian bulanan)
+    const reportTable = document.getElementById('reportTable');
+    if (reportTable) {
+        const tableContainer = reportTable.closest('.responsive-table');
+        if (tableContainer) tableContainer.style.display = 'none';
     }
-    document.getElementById('receiptPeriod').textContent = `${formatMonthYear(transaction.monthYear)}`;
-    document.getElementById('receiptDueDate').textContent = formatDate(transaction.dueDate);
-    document.getElementById('receiptAmount').textContent = formatCurrency(transaction.amount);
-    document.getElementById('receiptNotes').textContent = isInvoice ? 'Tagihan Jasa Layanan Internet' : (transaction.notes || 'Jasa Layanan Internet');
-    window.currentReceiptType = 'transaction';
-    openModal('receiptModal');
+    
+    // 1. Filter TRANSAKSI PEMBAYARAN berdasarkan tanggal bayar
+    const paidTransactions = transactions.filter(t => 
+        t.status === 'paid' && 
+        t.paymentDate && 
+        t.paymentDate >= dateFrom && 
+        t.paymentDate <= dateTo
+    );
+    
+    // 2. Filter KEUANGAN (pemasukan/pengeluaran) berdasarkan tanggal
+    const filteredFinances = finances.filter(f => 
+        f.date >= dateFrom && f.date <= dateTo
+    );
+    
+    // 3. Hitung ringkasan
+    const totalBilled = paidTransactions.reduce((sum, t) => sum + t.amount, 0);
+    const totalPaid = paidTransactions.reduce((sum, t) => sum + (t.paid || t.amount), 0);
+    const totalIncome = filteredFinances.filter(f => f.type === 'income').reduce((sum, f) => sum + f.amount, 0);
+    const totalExpense = filteredFinances.filter(f => f.type === 'expense').reduce((sum, f) => sum + f.amount, 0);
+    const balance = totalPaid + totalIncome - totalExpense;
+    
+    // 4. Tampilkan ringkasan range
+    document.getElementById('totalBilledRange').textContent = formatCurrency(totalBilled);
+    document.getElementById('totalPaidRange').textContent = formatCurrency(totalPaid);
+    document.getElementById('totalIncomeRange').textContent = formatCurrency(totalIncome);
+    document.getElementById('totalExpenseRange').textContent = formatCurrency(totalExpense);
+    document.getElementById('balanceRange').textContent = formatCurrency(balance);
+    document.getElementById('rangeSummaryContainer').style.display = 'grid';
+    
+    // 5. Tampilkan DETAIL TRANSAKSI per tanggal
+    const detailList = document.getElementById('dateRangeList');
+    detailList.innerHTML = '';
+    let detailNo = 1;
+    
+    // 5a. Tambahkan data pembayaran tagihan (dari transactions)
+    paidTransactions.forEach(t => {
+        const row = detailList.insertRow();
+        row.innerHTML = `
+            <td>${detailNo++}</td>
+            <td>${formatDate(t.paymentDate)}</td
+            <td>Pembayaran Tagihan</td
+            <td>${getCustomerName(t.customerId)}</td
+            <td>${t.notes || `Tagihan ${formatMonthYear(t.monthYear)}`}</td
+            <td class="income-text">${formatCurrency(t.paid || t.amount)}</td
+        `;
+    });
+    
+    // 5b. Tambahkan data pemasukan/pengeluaran (dari finances)
+    filteredFinances.forEach(f => {
+        const row = detailList.insertRow();
+        row.innerHTML = `
+            <td>${detailNo++}</td
+            <td>${formatDate(f.date)}</td
+            <td>${f.type === 'income' ? 'Pemasukan' : 'Pengeluaran'}</td
+            <td>${f.category}</td
+            <td>${f.description || '-'}</td
+            <td class="${f.type === 'income' ? 'income-text' : 'expense-text'}">${formatCurrency(f.amount)}</td
+        `;
+    });
+    
+    // 6. Tampilkan pesan jika tidak ada data dalam range yang dipilih
+    if (detailNo === 1) {
+        const row = detailList.insertRow();
+        row.innerHTML = '<td colspan="6" class="text-center" style="text-align:center;">Tidak ada data dalam range tanggal yang dipilih</td>';
+    }
+    
+    // 7. Tampilkan bagian detail tabel range
+    document.getElementById('rangeDetailTitle').style.display = 'block';
+    document.getElementById('rangeDetailTable').style.display = 'block';
 }
 
-function openPackageReceiptModal(packageId) {
-    const pkg = packageCustomers.find(p => p.id === packageId);
-    if (!pkg) { alert('Data paket tidak ditemukan'); return; }
-    const customer = customers.find(c => c.id === pkg.customerId);
-    const receiptId = `PKG-${pkg.id.slice(-8)}`;
+// ==================== RESET FILTER TANGGAL====================
+function resetDateFilter() {
+    // Reset input tanggal
+    document.getElementById('filterDateFrom').value = '';
+    document.getElementById('filterDateTo').value = '';
     
-    window.currentReceiptMode = 'package';
+    // Sembunyikan komponen range
+    document.getElementById('rangeSummaryContainer').style.display = 'none';
+    document.getElementById('rangeDetailTitle').style.display = 'none';
+    document.getElementById('rangeDetailTable').style.display = 'none';
     
-    document.getElementById('receiptTrxId').textContent = receiptId;
-    document.getElementById('receiptDate').textContent = formatDate(new Date().toISOString().substring(0,10));
-    document.getElementById('receiptTitle').textContent = 'BUKTI PEMBAYARAN PAKET';
-    document.getElementById('receiptSubtitle').textContent = 'Pembayaran Paket Internet';
-    const paymentExists = finances.some(f => f.description && f.description.includes(pkg.customerName) && f.description.includes('paket'));
-    const isPaid = paymentExists || (customer && customer.status === 'active');
-    document.getElementById('receiptStatus').textContent = isPaid ? 'LUNAS' : 'BELUM LUNAS';
-    document.getElementById('receiptStatus').className = isPaid ? 'badge badge-success' : 'badge badge-warning';
-    document.getElementById('paymentInstructions').style.display = 'none';
-    document.getElementById('receiptStamp').style.display = isPaid ? 'block' : 'none';
-    if (customer) {
-        document.getElementById('receiptCustomer').textContent = customer.nama;
-        document.getElementById('receiptAddress').textContent = customer.alamat;
-        document.getElementById('receiptPhone').textContent = customer.telepon;
-        document.getElementById('receiptPackage').textContent = customer.paket + ' - ' + (pkg.packageDuration === '6' ? 'Paket 6 Bulan' : 'Paket 12 Bulan');
-    } else {
-        document.getElementById('receiptCustomer').textContent = pkg.customerName;
-        document.getElementById('receiptAddress').textContent = '-';
-        document.getElementById('receiptPhone').textContent = '-';
-        document.getElementById('receiptPackage').textContent = `Paket ${pkg.packageDuration} Bulan`;
+    // ===== TAMPILKAN KEMBALI SEMUA LAPORAN TAHUNAN =====
+    // 1. Tampilkan seluruh container summary (ringkasan tahunan)
+    const allSummaryContainers = document.querySelectorAll('#laporan-tab .summary-container');
+    allSummaryContainers.forEach(container => {
+        if (container.id !== 'rangeSummaryContainer') {
+            container.style.display = 'grid';
+        }
+    });
+    
+    // 2. Tampilkan judul "Rincian Bulanan"
+    const headings = document.querySelectorAll('#laporan-tab h3');
+    headings.forEach(heading => {
+        if (heading.textContent.includes('Rincian Bulanan') && heading.id !== 'rangeDetailTitle') {
+            heading.style.display = 'block';
+        }
+    });
+    
+    // 3. Tampilkan tabel laporan tahunan (rincian bulanan)
+    const reportTable = document.getElementById('reportTable');
+    if (reportTable) {
+        const tableContainer = reportTable.closest('.responsive-table');
+        if (tableContainer) tableContainer.style.display = 'block';
     }
-    document.getElementById('receiptPeriod').textContent = `${formatDate(pkg.startDate)} s/d ${formatDate(pkg.endDate)}`;
-    document.getElementById('receiptDueDate').textContent = formatDate(pkg.endDate);
-    document.getElementById('receiptAmount').textContent = formatCurrency(pkg.amount);
-    document.getElementById('receiptNotes').textContent = `Pembayaran paket ${pkg.packageDuration} bulan untuk layanan internet`;
-    window.currentReceiptType = 'package';
-    openModal('receiptModal');
+    
+    // Refresh laporan tahunan
+    generateReport();
 }
-
-// ==================== FUNGSI DOWNLOAD BUKTI (DIPERBAIKI) ====================
-function downloadReceiptImage() {
-    const btn = document.querySelector('#receiptModal .btn-primary');
-    const closeBtn = document.querySelector('#receiptModal .close-modal');
-    const tutupBtn = document.querySelector('#receiptModal .btn-outline');
-    
-    if (!btn) return;
-    
-    const originalText = btn.innerHTML;
-    btn.innerHTML = '<span class="loading-spinner"></span> Membuat...';
-    btn.disabled = true;
-    
-    if (closeBtn) closeBtn.style.display = 'none';
-    if (tutupBtn) tutupBtn.style.display = 'none';
-    
-    const receipt = document.getElementById('receiptContent');
-    
-    // ========== STEMPEL DENGAN MODE ==========
-    const stamp = document.getElementById('receiptStamp');
-    const originalStampDisplay = stamp ? stamp.style.display : 'block';
-    const originalStampPosition = stamp ? stamp.style.cssText : '';
-    
-    // JANGAN PAKSA STAMPEL TAMPIL! Sesuaikan dengan kondisi sebenarnya
-    // Cek apakah ini mode invoice atau receipt yang belum lunas
-    const isInvoiceMode = (window.currentReceiptMode === 'invoice');
-    const isPaidMode = (document.getElementById('receiptStatus')?.textContent === 'LUNAS');
-    
-    if (stamp) {
-        if (isInvoiceMode || !isPaidMode) {
-            // INVOICE atau BELUM LUNAS: stempel hidden
-            stamp.style.display = 'none';
-        } else {
-            // LUNAS: stempel tampil
-            stamp.style.display = 'block';
-            stamp.style.position = 'absolute';
-            stamp.style.top = '-90px';
-            stamp.style.right = '-35px';
-            stamp.style.opacity = '0.9';
-            stamp.style.transform = 'rotate(-4deg) scale(1.1)';
-            stamp.style.pointerEvents = 'none';
-            stamp.style.zIndex = '15';
-        }
-    }
-    
-    const paymentInstructions = document.getElementById('paymentInstructions');
-    const originalPaymentInstDisplay = paymentInstructions ? paymentInstructions.style.display : 'none';
-    // Untuk invoice, paymentInstructions tampil, untuk receipt hidden
-    if (paymentInstructions && !isInvoiceMode) {
-        paymentInstructions.style.display = 'none';
-    }
-    
-    const watermark = document.querySelector('#receiptContent .watermark');
-    if (watermark) {
-        watermark.style.opacity = '0.04';
-    }
-    
-    setTimeout(() => {
-        html2canvas(receipt, { 
-            scale: 3.2,
-            backgroundColor: '#ffffff',
-            logging: false,
-            useCORS: true,
-            allowTaint: false,
-            onclone: (clonedDoc, element) => {
-                const clonedStamp = clonedDoc.getElementById('receiptStamp');
-                const clonedIsInvoice = (window.currentReceiptMode === 'invoice');
-                const clonedIsPaid = (clonedDoc.getElementById('receiptStatus')?.textContent === 'LUNAS');
-                
-                if (clonedStamp) {
-                    if (clonedIsInvoice || !clonedIsPaid) {
-                        clonedStamp.style.display = 'none';
-                    } else {
-                        clonedStamp.style.display = 'block';
-                        clonedStamp.style.position = 'absolute';
-                        clonedStamp.style.top = '-90px';
-                        clonedStamp.style.right = '-35px';
-                        clonedStamp.style.opacity = '0.9';
-                        clonedStamp.style.transform = 'rotate(-4deg) scale(1.1)';
-                    }
-                }
-                
-                const clonedWatermark = clonedDoc.querySelector('#receiptContent .watermark');
-                if (clonedWatermark) {
-                    clonedWatermark.style.opacity = '0.04';
-                }
-                
-                const clonedInstructions = clonedDoc.getElementById('paymentInstructions');
-                if (clonedInstructions && !clonedIsInvoice) {
-                    clonedInstructions.style.display = 'none';
-                }
-                
-                const clonedButtons = clonedDoc.querySelectorAll('#receiptContent button');
-                clonedButtons.forEach(btn => btn.remove());
-            }
-        }).then(canvas => {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-            if (closeBtn) closeBtn.style.display = '';
-            if (tutupBtn) tutupBtn.style.display = '';
-            
-            if (stamp) {
-                stamp.style.cssText = originalStampPosition;
-                stamp.style.display = originalStampDisplay;
-            }
-            
-            if (paymentInstructions) {
-                paymentInstructions.style.display = originalPaymentInstDisplay;
-            }
-            
-            canvas.toBlob(blob => {
-                const link = document.createElement('a');
-                
-                let customerName = 'pelanggan';
-                const customerElement = document.getElementById('receiptCustomer');
-                if (customerElement && customerElement.textContent && customerElement.textContent !== '-') {
-                    customerName = customerElement.textContent.trim()
-                        .toUpperCase()
-                        .replace(/[^a-zA-Z0-9]/g, '_')
-                        .replace(/_+/g, '_');
-                    if (customerName.length > 30) customerName = customerName.substring(0, 30);
-                }
-                
-                let dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-                const dateElement = document.getElementById('receiptDate');
-                if (dateElement && dateElement.textContent) {
-                    const tanggal = dateElement.textContent;
-                    const bulanMap = {
-                        'Januari': '01', 'Februari': '02', 'Maret': '03', 'April': '04',
-                        'Mei': '05', 'Juni': '06', 'Juli': '07', 'Agustus': '08',
-                        'September': '09', 'Oktober': '10', 'November': '11', 'Desember': '12'
-                    };
-                    for (const [bulan, angka] of Object.entries(bulanMap)) {
-                        if (tanggal.includes(bulan)) {
-                            const parts = tanggal.split(' ');
-                            const hari = parts[0].padStart(2, '0');
-                            const tahun = parts[2];
-                            dateStr = `${tahun}${angka}${hari}`;
-                            break;
-                        }
-                    }
-                }
-                
-                // Bedakan nama file untuk invoice vs receipt
-                let prefix = window.currentReceiptType === 'package' ? 'paket' : 'bayar';
-                if (window.currentReceiptMode === 'invoice') {
-                    prefix = 'tagihan';
-                }
-                const filename = `${customerName}_${dateStr}_${prefix}.png`;
-                
-                link.download = filename;
-                link.href = URL.createObjectURL(blob);
-                link.click();
-                URL.revokeObjectURL(link.href);
-                
-            }, 'image/png', 1.0);
-        }).catch(err => {
-            console.error('Error:', err);
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-            if (closeBtn) closeBtn.style.display = '';
-            if (tutupBtn) tutupBtn.style.display = '';
-            
-            if (stamp) {
-                stamp.style.cssText = originalStampPosition;
-                stamp.style.display = originalStampDisplay;
-            }
-            if (paymentInstructions) {
-                paymentInstructions.style.display = originalPaymentInstDisplay;
-            }
-            
-            alert('Gagal membuat gambar: ' + err.message);
-        });
-    }, 100);
-}
-
-// ==================== DOWNLOAD BUKTI PDF ====================
-async function downloadReceiptPDF() {
-    const receipt = document.getElementById('receiptContent');
-    const btn = document.querySelector('#receiptModal .btn-success');
-    const closeBtn = document.querySelector('#receiptModal .close-modal');
-    const tutupBtn = document.querySelector('#receiptModal .btn-outline');
-    const downloadImgBtn = document.querySelector('#receiptModal .btn-primary');
-    
-    if (!btn) return;
-    
-    // Sembunyikan tombol sementara
-    if (closeBtn) closeBtn.style.display = 'none';
-    if (tutupBtn) tutupBtn.style.display = 'none';
-    if (downloadImgBtn) downloadImgBtn.style.display = 'none';
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loading-spinner"></span> Membuat PDF...';
-    
-    // ========== STEMPEL DENGAN MODE ==========
-    const stamp = document.getElementById('receiptStamp');
-    const originalStampDisplay = stamp ? stamp.style.display : 'block';
-    
-    const isInvoiceMode = (window.currentReceiptMode === 'invoice');
-    const isPaidMode = (document.getElementById('receiptStatus')?.textContent === 'LUNAS');
-    
-    if (stamp) {
-        if (isInvoiceMode || !isPaidMode) {
-            stamp.style.display = 'none';
-        } else {
-            stamp.style.display = 'block';
-        }
-    }
-    
-    const watermark = document.querySelector('#receiptContent .watermark');
-    if (watermark) watermark.style.opacity = '0.04';
-    
-    try {
-        const canvas = await html2canvas(receipt, {
-            scale: 3,
-            backgroundColor: '#ffffff',
-            logging: false,
-            useCORS: true
-        });
         
-        const imgData = canvas.toDataURL('image/png');
-        const { jsPDF } = window.jspdf;
+        // ==================== BACKUP & RESTORE ====================
         
-        const imgWidth = 210;
-        const pageHeight = 297;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        
-        let pdf = new jsPDF('p', 'mm', 'a4');
-        let position = 0;
-        
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        
-        let heightLeft = imgHeight - pageHeight;
-        while (heightLeft > 0) {
-            position = heightLeft - imgHeight;
-            pdf.addPage();
-            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-            heightLeft -= pageHeight;
-        }
-        
-        let customerName = 'pelanggan';
-        const customerElement = document.getElementById('receiptCustomer');
-        if (customerElement && customerElement.textContent && customerElement.textContent !== '-') {
-            customerName = customerElement.textContent.trim()
-                .toUpperCase()
-                .replace(/[^a-zA-Z0-9]/g, '_')
-                .replace(/_+/g, '_');
-            if (customerName.length > 30) customerName = customerName.substring(0, 30);
-        }
-        
-        let dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-        const dateElement = document.getElementById('receiptDate');
-        if (dateElement && dateElement.textContent) {
-            const tanggal = dateElement.textContent;
-            const bulanMap = {
-                'Januari': '01', 'Februari': '02', 'Maret': '03', 'April': '04',
-                'Mei': '05', 'Juni': '06', 'Juli': '07', 'Agustus': '08',
-                'September': '09', 'Oktober': '10', 'November': '11', 'Desember': '12'
-            };
-            for (const [bulan, angka] of Object.entries(bulanMap)) {
-                if (tanggal.includes(bulan)) {
-                    const parts = tanggal.split(' ');
-                    const hari = parts[0].padStart(2, '0');
-                    const tahun = parts[2];
-                    dateStr = `${tahun}${angka}${hari}`;
-                    break;
-                }
-            }
-        }
-        
-        let prefix = window.currentReceiptType === 'package' ? 'paket' : 'bayar';
-        if (window.currentReceiptMode === 'invoice') {
-            prefix = 'tagihan';
-        }
-        const filename = `${customerName}_${dateStr}_${prefix}.pdf`;
-        
-        pdf.save(filename);
-        
-    } catch (err) {
-        console.error('Error membuat PDF:', err);
-        alert('Gagal membuat PDF: ' + err.message);
-    } finally {
-        if (closeBtn) closeBtn.style.display = '';
-        if (tutupBtn) tutupBtn.style.display = '';
-        if (downloadImgBtn) downloadImgBtn.style.display = '';
-        if (stamp) stamp.style.display = originalStampDisplay;
-        btn.disabled = false;
-        btn.innerHTML = '📄 Download PDF';
-    }
-}
-
-        // ==================== BACKUP FUNCTIONS ====================
+        /** Export semua data ke file JSON */
         function exportData() {
             const data = { customers, transactions, finances, packageCustomers };
             const date = new Date().toISOString().split('T')[0];
@@ -2008,9 +1488,14 @@ async function downloadReceiptPDF() {
             URL.revokeObjectURL(link.href);
         }
         
+        /** Import data dari file JSON */
         function importData() {
             const file = document.getElementById('importFile').files[0];
-            if (!file) { alert('Pilih file terlebih dahulu'); return; }
+            if (!file) { 
+                alert('Pilih file terlebih dahulu'); 
+                return; 
+            }
+            
             const reader = new FileReader();
             reader.onload = e => {
                 try {
@@ -2028,22 +1513,34 @@ async function downloadReceiptPDF() {
                         generateReport();
                         closeModal('backupModal');
                         alert('Data berhasil diimpor!');
-                    } else alert('Format file tidak valid');
-                } catch (err) { alert('Gagal membaca file: ' + err.message); }
+                    } else {
+                        alert('Format file tidak valid');
+                    }
+                } catch (err) { 
+                    alert('Gagal membaca file: ' + err.message); 
+                }
             };
             reader.readAsText(file);
         }
         
-        function openBackupMenu() { openModal('backupModal'); }
+        /** Buka menu backup (double click logo) */
+        function openBackupMenu() { 
+            openModal('backupModal'); 
+        }
         
-        // ==================== TAB & INITIALIZATION ====================
+        // ==================== NAVIGASI & INITIALISASI ====================
+        
+        /** Switch antar tab */
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById(`${tabName}-tab`).classList.add('active');
+            
             document.querySelectorAll('.nav-item').forEach((item, i) => {
                 const tabs = ['pelanggan', 'transaksi', 'keuangan', 'paket', 'laporan'];
                 item.classList.toggle('active', tabs[i] === tabName);
             });
+            
+            // Refresh data saat pindah tab
             if (tabName === 'pelanggan') renderCustomerList();
             else if (tabName === 'transaksi') renderTransactionList();
             else if (tabName === 'keuangan') renderFinanceList();
@@ -2051,22 +1548,53 @@ async function downloadReceiptPDF() {
             else if (tabName === 'laporan') generateReport();
         }
         
+        /** Inisialisasi saat halaman dimuat */
         document.addEventListener('DOMContentLoaded', function() {
+            // Load data dari localStorage
             customers = JSON.parse(localStorage.getItem('customers')) || [];
             transactions = JSON.parse(localStorage.getItem('transactions')) || [];
             finances = JSON.parse(localStorage.getItem('finances')) || [];
             packageCustomers = JSON.parse(localStorage.getItem('packageCustomers')) || [];
+            
+            // Bersihkan data & generate otomatis
             cleanUpFutureTransactions();
             autoGenerateNewYearBills();
+            
+            // Render semua tampilan
             renderCustomerList();
             renderTransactionList();
             renderFinanceList();
             renderPackageList();
             generateReport();
-            document.getElementById('customerForm').addEventListener('submit', e => { e.preventDefault(); saveCustomer(); });
-            document.getElementById('paymentForm').addEventListener('submit', e => { e.preventDefault(); processPayment(); });
-            document.getElementById('financeForm').addEventListener('submit', e => { e.preventDefault(); saveFinance(); });
+            
+            // Set current date
+            const today = new Date();
+            document.getElementById('currentDate').textContent = today.toLocaleDateString('id-ID', { 
+                day: 'numeric', 
+                month: 'long', 
+                year: 'numeric' 
+            });
+            
+            // Event listeners form
+            document.getElementById('customerForm').addEventListener('submit', e => { 
+                e.preventDefault(); 
+                saveCustomer(); 
+            });
+            
+            document.getElementById('paymentForm').addEventListener('submit', e => { 
+                e.preventDefault(); 
+                processPayment(); 
+            });
+            
+            document.getElementById('financeForm').addEventListener('submit', e => { 
+                e.preventDefault(); 
+                saveFinance(); 
+            });
+            
+            // Double click logo untuk backup
             document.getElementById('logo').addEventListener('dblclick', openBackupMenu);
+            
+            // Populate tahun di laporan
             const yearSelect = document.getElementById('reportYear');
             const currentYear = new Date().getFullYear();
             for (let y = currentYear - 5; y <= currentYear + 5; y++) {
