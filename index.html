@@ -6,289 +6,368 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
     <title>Manajemen Pelanggan & Tagihan</title>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+     <style>
+       /* ================================================ */
+/* CSS UNTUK RESET & VARIABEL GLOBAL (ROOT)        */
+/* ================================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --purple: #8b5cf6;
+    --dark: #1e293b;
+    --gray: #64748b;
+    --light: #f8fafc;
+    --border: #e2e8f0;
+    --card-radius: 18px;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+}
+
+/* ================================================ */
+/* CSS UNTUK TAMPILAN DASAR BODY & CONTAINER       */
+/* ================================================ */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
+    color: var(--dark);
+    font-size: 12px;
+    line-height: 1.4;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 0 0 24px 24px;
+    box-shadow: var(--shadow-xl);
+    overflow-x: hidden;
+    padding-bottom: 60px;
+}
+
+/* ================================================ */
+/* CSS UNTUK HEADER STICKY & LOGO                  */
+/* ================================================ */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(145deg, #fbbf24, #d97706);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    box-shadow: 0 4px 12px rgba(251, 191, 36, 0.3);
+    padding: 6px 18px;
+    height: 44px;
+    min-width: 130px;
+    position: relative;
+    overflow: hidden;
+}
+
+.logo::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+    transform: rotate(35deg);
+    transition: transform 0.5s;
+}
+
+.logo:hover::before {
+    transform: rotate(35deg) translate(20%, 20%);
+}
+
+.logo:hover {
+    transform: scale(1.01);
+    box-shadow: 0 8px 20px rgba(251, 191, 36, 0.4);
+}
+
+.logo-icon {
+    font-size: 22px;
+}
+
+.logo-text {
+    font-size: 16px;
+    font-weight: 700;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    letter-spacing: 0.5px;
+}
+
+.app-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    background: linear-gradient(135deg, #fff, #c7d2fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.badge-date {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    padding: 5px 12px;
+    border-radius: 30px;
+    font-size: 11px;
+    font-weight: 500;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.content {
+    padding: 20px;
+}
+
+/* ================================================ */
+/* CSS UNTUK TOMBOL (BUTTON)                       */
+/* ================================================ */
+button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
+.btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn-success { background: linear-gradient(135deg, var(--success), #059669); color: white; }
+.btn-warning { background: linear-gradient(135deg, var(--warning), #d97706); color: white; }
+.btn-danger { background: linear-gradient(135deg, var(--danger), #dc2626); color: white; }
+.btn-outline { background: white; border: 1px solid var(--border); color: var(--gray); }
+.btn-outline:hover { background: var(--light); border-color: var(--primary); color: var(--primary); }
+
+.button-group { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+.action-btn { padding: 4px 10px; font-size: 10px; border-radius: 8px; margin: 1px; gap: 4px; }
+
+/* ================================================ */
+/* CSS UNTUK FORM INPUT                             */
+/* ================================================ */
+.form-group { margin-bottom: 14px; }
+label { display: block; margin-bottom: 5px; font-weight: 600; color: var(--dark); font-size: 11px; }
+input, select, textarea {
+    width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 10px;
+    font-size: 12px; font-family: inherit; transition: all 0.2s; background: white;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+
+/* ================================================ */
+/* CSS UNTUK KARTU RINGKASAN (SUMMARY CARDS)       */
+/* ================================================ */
+.summary-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.summary-card {
+    background: white;
+    padding: 14px;
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    transition: all 0.3s;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.summary-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--purple));
+    border-radius: var(--card-radius) var(--card-radius) 0 0;
+}
+
+.summary-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.summary-info h3 { font-size: 10px; color: var(--gray); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+.summary-info p { font-size: 18px; font-weight: 700; color: var(--dark); }
+.summary-icon { width: 38px; height: 38px; background: var(--light); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+
+/* ================================================ */
+/* CSS UNTUK TABEL                                  */
+/* ================================================ */
+.responsive-table { overflow-x: auto; margin: 16px 0; border-radius: 16px; border: 1px solid var(--border); background: white; }
+table { width: 100%; border-collapse: collapse; font-size: 11px; }
+th { background: var(--light); padding: 10px 12px; text-align: left; font-weight: 600; border-bottom: 1px solid var(--border); }
+td { padding: 10px 12px; border-bottom: 1px solid var(--border); }
+tr:last-child td { border-bottom: none; }
+tr:hover { background: var(--light); }
+.active-row { background: #f0fdf4; }
+.inactive-row { background: #fef2f2; opacity: 0.7; }
+.package6-row { background: #f5f3ff; }
+.package12-row { background: #fffbeb; }
+
+/* ================================================ */
+/* CSS UNTUK BADGE STATUS                           */
+/* ================================================ */
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 24px; font-size: 10px; font-weight: 600; }
+.badge-success { background: #d1fae5; color: #065f46; }
+.badge-danger { background: #fee2e2; color: #991b1b; }
+.badge-warning { background: #fed7aa; color: #92400e; }
+
+/* Style untuk teks pemasukan (hijau) dan pengeluaran (merah) */
+.income-text {
+    color: #10b981;
+    font-weight: 600;
+}
+
+.expense-text {
+    color: #ef4444;
+    font-weight: 600;
+}
+
+/* ================================================ */
+/* CSS UNTUK NAVIGASI BAWAH (BOTTOM NAV)           */
+/* ================================================ */
+.bottom-nav {
+    position: fixed;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 400px;
+    width: 90%;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(20px);
+    display: flex;
+    justify-content: space-around;
+    border-radius: 50px;
+    box-shadow: var(--shadow-lg);
+    z-index: 1000;
+    padding: 6px 12px;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.nav-item { text-align: center; flex: 1; cursor: pointer; color: var(--gray); transition: all 0.2s; padding: 6px 0; border-radius: 30px; }
+.nav-item.active { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
+.nav-icon { font-size: 18px; margin-bottom: 2px; }
+.nav-label { font-size: 9px; font-weight: 600; }
+
+/* ================================================ */
+/* CSS UNTUK TAB KONTEN & ANIMASI                   */
+/* ================================================ */
+.tab-content { display: none; animation: fadeIn 0.3s ease; }
+.tab-content.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+.package-tabs { display: flex; gap: 6px; margin-bottom: 16px; background: var(--light); padding: 5px; border-radius: 50px; width: fit-content; }
+.package-tab { padding: 7px 20px; cursor: pointer; border-radius: 30px; font-weight: 600; transition: all 0.2s; font-size: 11px; }
+.package-tab.active { background: white; color: var(--primary); box-shadow: var(--shadow-sm); }
+
+/* ================================================ */
+/* CSS UNTUK MODAL                                  */
+/* ================================================ */
+.modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 1001; justify-content: center; align-items: center; }
+.modal-content { background: white; padding: 20px; border-radius: 24px; width: 90%; max-width: 450px; max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-xl); animation: fadeIn 0.2s ease; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.modal-header h2 { font-size: 1.2rem; font-weight: 700; }
+.close-modal { font-size: 24px; cursor: pointer; color: var(--gray); transition: color 0.2s; }
+.close-modal:hover { color: var(--danger); }
+
+/* ================================================ */
+/* CSS UNTUK PENCARIAN & FILTER                     */
+/* ================================================ */
+.search-box { margin-bottom: 16px; }
+.search-box input { background: var(--light); border: none; padding: 10px 16px; border-radius: 40px; font-size: 12px; width: 100%; }
+.search-box input:focus { background: white; border: 1px solid var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+.filter-group { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.filter-group select, .filter-group input { flex: 1; min-width: 120px; background: var(--light); border: none; border-radius: 40px; padding: 8px 14px; font-size: 11px; }
+        /* ================================================ */
+        /* CSS UNTUK BUKTI BAYAR (RECEIPT) - STYLE STRUK    */
+        /* ================================================ */
+       #receiptContent {
+    position: relative;
+    overflow: visible !important;
+    background: white;
+    padding: 20px 16px !important;
+    border-radius: 0px !important;
+    max-width: 380px;
+    width: 100%;
+    margin: 0 auto;
+    font-family: 'Courier New', 'Lucida Sans Typewriter', 'Lucida Typewriter', monospace;
+    font-size: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    
+    /* Ukuran 
+    aspect-ratio: 5 / 7; 
+    
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* biar konten panjang bisa di-scroll */
+}
+
+        #receiptContent h2 {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            letter-spacing: 2px;
+            font-size: 16px;
         }
 
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --purple: #8b5cf6;
-            --dark: #1e293b;
-            --gray: #64748b;
-            --light: #f8fafc;
-            --border: #e2e8f0;
-            --card-radius: 24px;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1);
-            --shadow-xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+        #receiptContent p, 
+        #receiptContent td, 
+        #receiptContent th,
+        #receiptContent span,
+        #receiptContent strong {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(145deg, #f1f5f9 0%, #e2e8f0 100%);
-            color: var(--dark);
-            font-size: 14px;
-            line-height: 1.5;
-            min-height: 100vh;
+        #receiptContent .badge {
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 0 0 32px 32px;
-            box-shadow: var(--shadow-xl);
-            overflow-x: hidden;
-            padding-bottom: 80px;
-        }
-
-        /* HEADER STICKY */
-        .header-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 28px;
-            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
-            color: white;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        }
-
-        /* Logo melebar */
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: linear-gradient(145deg, #fbbf24, #d97706);
-            border-radius: 18px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            box-shadow: 0 8px 20px rgba(251, 191, 36, 0.3);
-            padding: 8px 24px;
-            height: 56px;
-            width: auto;
-            min-width: 160px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .logo::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
-            transform: rotate(35deg);
-            transition: transform 0.5s;
-        }
-
-        .logo:hover::before {
-            transform: rotate(35deg) translate(20%, 20%);
-        }
-
-        .logo:hover {
-            transform: scale(1.02);
-            box-shadow: 0 12px 28px rgba(251, 191, 36, 0.4);
-        }
-
-        .logo-icon {
-            font-size: 28px;
-        }
-
-        .logo-text {
-            font-size: 20px;
-            font-weight: 800;
-            color: white;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            letter-spacing: 1px;
-        }
-
-        .app-title {
-            font-size: 1.6rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            background: linear-gradient(135deg, #fff, #c7d2fe);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .badge-date {
-            background: rgba(255,255,255,0.15);
-            backdrop-filter: blur(10px);
-            padding: 8px 18px;
-            border-radius: 40px;
-            font-size: 13px;
-            font-weight: 500;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .content {
-            padding: 28px;
-        }
-
-        /* BUTTONS */
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 14px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            font-family: inherit;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-        .btn-success { background: linear-gradient(135deg, var(--success), #059669); color: white; }
-        .btn-warning { background: linear-gradient(135deg, var(--warning), #d97706); color: white; }
-        .btn-danger { background: linear-gradient(135deg, var(--danger), #dc2626); color: white; }
-        .btn-outline { background: white; border: 1px solid var(--border); color: var(--gray); }
-        .btn-outline:hover { background: var(--light); border-color: var(--primary); color: var(--primary); }
-
-        .button-group { display: flex; gap: 12px; flex-wrap: wrap; margin: 24px 0; }
-        .action-btn { padding: 6px 12px; font-size: 11px; border-radius: 10px; margin: 2px; gap: 4px; }
-
-        /* FORM */
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--dark); font-size: 13px; }
-        input, select, textarea {
-            width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 14px;
-            font-size: 14px; font-family: inherit; transition: all 0.2s; background: white;
-        }
-        input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
-
-        /* SUMMARY CARDS */
-        .summary-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 18px;
-            margin: 28px 0;
-        }
-
-        .summary-card {
-            background: white;
-            padding: 20px;
-            border-radius: var(--card-radius);
-            box-shadow: var(--shadow-sm);
-            border: 1px solid var(--border);
-            transition: all 0.3s;
-            position: relative;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .summary-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--purple));
-            border-radius: var(--card-radius) var(--card-radius) 0 0;
-        }
-
-        .summary-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-        .summary-info h3 { font-size: 12px; color: var(--gray); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .summary-info p { font-size: 22px; font-weight: 700; color: var(--dark); }
-        .summary-icon { width: 48px; height: 48px; background: var(--light); border-radius: 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
-
-        /* TABLES */
-        .responsive-table { overflow-x: auto; margin: 20px 0; border-radius: 20px; border: 1px solid var(--border); background: white; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th { background: var(--light); padding: 16px 14px; text-align: left; font-weight: 600; border-bottom: 1px solid var(--border); }
-        td { padding: 14px; border-bottom: 1px solid var(--border); }
-        tr:last-child td { border-bottom: none; }
-        tr:hover { background: var(--light); }
-        .active-row { background: #f0fdf4; }
-        .inactive-row { background: #fef2f2; opacity: 0.7; }
-        .package6-row { background: #f5f3ff; }
-        .package12-row { background: #fffbeb; }
-
-        /* BADGES */
-        .badge { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px; border-radius: 30px; font-size: 11px; font-weight: 600; }
-        .badge-success { background: #d1fae5; color: #065f46; }
-        .badge-danger { background: #fee2e2; color: #991b1b; }
-        .badge-warning { background: #fed7aa; color: #92400e; }
-
-        /* BOTTOM NAVIGATION FLOATING */
-        .bottom-nav {
-            position: fixed;
-            bottom: 16px;
-            left: 50%;
-            transform: translateX(-50%);
-            max-width: 480px;
-            width: 90%;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            display: flex;
-            justify-content: space-around;
-            border-radius: 60px;
-            box-shadow: var(--shadow-lg);
-            z-index: 1000;
-            padding: 8px 16px;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-
-        .nav-item { text-align: center; flex: 1; cursor: pointer; color: var(--gray); transition: all 0.2s; padding: 10px 0; border-radius: 40px; }
-        .nav-item.active { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; }
-        .nav-icon { font-size: 20px; margin-bottom: 2px; }
-        .nav-label { font-size: 10px; font-weight: 600; }
-
-        /* TABS */
-        .tab-content { display: none; animation: fadeIn 0.3s ease; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* PACKAGE TABS */
-        .package-tabs { display: flex; gap: 8px; margin-bottom: 24px; background: var(--light); padding: 6px; border-radius: 60px; width: fit-content; }
-        .package-tab { padding: 10px 28px; cursor: pointer; border-radius: 40px; font-weight: 600; transition: all 0.2s; }
-        .package-tab.active { background: white; color: var(--primary); box-shadow: var(--shadow-sm); }
-
-        /* MODAL */
-        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 1001; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 28px; border-radius: 32px; width: 90%; max-width: 500px; max-height: 85vh; overflow-y: auto; box-shadow: var(--shadow-xl); animation: fadeIn 0.2s ease; }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
-        .modal-header h2 { font-size: 1.4rem; font-weight: 700; }
-        .close-modal { font-size: 28px; cursor: pointer; color: var(--gray); transition: color 0.2s; }
-        .close-modal:hover { color: var(--danger); }
-
-        /* SEARCH & FILTER */
-        .search-box { margin-bottom: 24px; }
-        .search-box input { background: var(--light); border: none; padding: 14px 20px; border-radius: 50px; font-size: 14px; width: 100%; }
-        .search-box input:focus { background: white; border: 1px solid var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
-        .filter-group { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
-        .filter-group select, .filter-group input { flex: 1; min-width: 140px; background: var(--light); border: none; border-radius: 50px; padding: 12px 18px; }
-
-        /* RECEIPT - TIDAK DIUBAH UKURANNYA */
         #receiptContent {
-            position: relative;
-            overflow: visible !important;
-            background: white;
-            padding: 28px 24px !important;
-            border-radius: 24px !important;
-            max-width: 380px;
-            margin: 0 auto;
-            font-family: 'Poppins', 'Courier New', monospace;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            border: 1px dashed #ccc;
+        }
+
+        #receiptContent table td {
+            border-bottom: 1px dotted #ddd;
+        }
+
+        #receiptContent .modal-header h2 {
+            font-size: 14px;
+            text-transform: uppercase;
         }
 
         .watermark {
@@ -320,13 +399,18 @@
 
         #receiptStamp img {
             width: 130px;
-            height: auto;
+            height: 110px;
             transform: rotate(-12deg);
         }
 
         #receiptContent > *:not(.watermark):not(#receiptStamp) {
             position: relative;
             z-index: 2;
+        }
+        
+        #receiptContent tr:has(#receiptPackage),
+        #receiptPackage {
+            display: none;
         }
 
         .footer {
@@ -339,7 +423,9 @@
             margin-top: 20px;
         }
 
-        /* RESPONSIVE */
+        /* ================================================ */
+        /* CSS RESPONSIVE UNTUK HP (MEDIA QUERY)           */
+        /* ================================================ */
         @media (max-width: 640px) {
             .content { padding: 16px; }
             .summary-container { grid-template-columns: repeat(2, 1fr); gap: 12px; }
@@ -374,15 +460,13 @@
     <div class="container">
         <div class="header-container">
             <div class="logo" id="logo">
-         <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9MlltS8Z9gDyRUe09dh6vmIye6mjgzi0a4-94BaOVSeIpa-7Dp7qjns6t_1dSwvuZF4mi0P998TolhFJS2DT9Ge_aXL1qdO9FnbscN5ZgJoDuPHYX4ekJgVwttL7q9ChXExhizmZ9rx44pDB4rdy1EVnADyfZ6q3HZzY2CJ8aEhxLa_zA6z9xPfpKWRo/s16000/text.gif" style="height: 25px; width: 240px;" alt="Logo">
- 
+                <img src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEg9MlltS8Z9gDyRUe09dh6vmIye6mjgzi0a4-94BaOVSeIpa-7Dp7qjns6t_1dSwvuZF4mi0P998TolhFJS2DT9Ge_aXL1qdO9FnbscN5ZgJoDuPHYX4ekJgVwttL7q9ChXExhizmZ9rx44pDB4rdy1EVnADyfZ6q3HZzY2CJ8aEhxLa_zA6z9xPfpKWRo/s16000/text.gif" style="height: 25px; width: 240px;" alt="Logo">
             </div>
-         
             <div class="badge-date" id="currentDate"></div>
         </div>
         
         <div class="content">
-            <!-- Tab Pelanggan -->
+            <!-- TAB PELANGGAN -->
             <div id="pelanggan-tab" class="tab-content active">
                 <div class="search-box">
                     <input type="text" id="searchCustomer" placeholder="🔍 Cari pelanggan..." oninput="filterCustomers()">
@@ -406,7 +490,7 @@
                 </div>
             </div>
             
-            <!-- Tab Transaksi -->
+            <!-- TAB TRANSAKSI -->
             <div id="transaksi-tab" class="tab-content">
                 <div class="filter-group">
                     <input type="month" id="filterMonth" onchange="filterTransactions()">
@@ -431,7 +515,7 @@
                 </div>
             </div>
             
-            <!-- Tab Keuangan -->
+            <!-- TAB KEUANGAN -->
             <div id="keuangan-tab" class="tab-content">
                 <div class="button-group">
                     <button class="btn-primary" onclick="openFinanceForm('income')">💰 + Pemasukan</button>
@@ -450,7 +534,7 @@
                 </div>
             </div>
             
-            <!-- Tab Paket -->
+            <!-- TAB PAKET -->
             <div id="paket-tab" class="tab-content">
                 <div class="package-tabs">
                     <div class="package-tab active" onclick="switchPackageTab('all')">Semua</div>
@@ -477,31 +561,73 @@
                 </div>
             </div>
             
-            <!-- Tab Laporan -->
+            <!-- TAB LAPORAN dengan FITUR FILTER RANGE TANGGAL -->
             <div id="laporan-tab" class="tab-content">
                 <div class="form-group">
                     <label for="reportYear">📅 Tahun:</label>
                     <select id="reportYear" onchange="generateReport()"></select>
                 </div>
                 
+                <!-- FITUR FILTER RANGE TANGGAL -->
+                <div class="filter-group" style="margin-top: 15px; margin-bottom: 15px; display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>📅 Dari Tanggal:</label>
+                        <input type="date" id="filterDateFrom" style="width: 160px;">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>📅 Sampai Tanggal:</label>
+                        <input type="date" id="filterDateTo" style="width: 160px;">
+                    </div>
+                    <button class="btn-primary" onclick="filterReportByDateRange()" style="margin-bottom: 5px;">🔍 Filter Range</button>
+                    <button class="btn-outline" onclick="resetDateFilter()" style="margin-bottom: 5px;">🔄 Reset</button>
+                </div>
+
+                <!-- Kartu Ringkasan Range -->
+                <div class="summary-container" id="rangeSummaryContainer" style="display: none;">
+                    <div class="summary-card"><div class="summary-info"><h3>Total Tagihan (Range)</h3><p id="totalBilledRange">Rp 0</p></div><div class="summary-icon">💰</div></div>
+                    <div class="summary-card"><div class="summary-info"><h3>Total Dibayar (Range)</h3><p id="totalPaidRange">Rp 0</p></div><div class="summary-icon">✅</div></div>
+                    <div class="summary-card"><div class="summary-info"><h3>Total Pemasukan (Range)</h3><p id="totalIncomeRange">Rp 0</p></div><div class="summary-icon">💵</div></div>
+                    <div class="summary-card"><div class="summary-info"><h3>Total Pengeluaran (Range)</h3><p id="totalExpenseRange">Rp 0</p></div><div class="summary-icon">💸</div></div>
+                    <div class="summary-card"><div class="summary-info"><h3>Saldo (Range)</h3><p id="balanceRange">Rp 0</p></div><div class="summary-icon">🏦</div></div>
+                </div>
+
+                <!-- Laporan Tahunan (Ringkasan 10 kartu) -->
                 <div class="summary-container">
-    <div class="summary-card"><div class="summary-info"><h3>Total Tahunan</h3><p id="annual-billed">Rp 0</p></div><div class="summary-icon">📊</div></div>
-    <div class="summary-card"><div class="summary-info"><h3>Total Dibayar</h3><p id="annual-paid">Rp 0</p></div><div class="summary-icon">✅</div></div>
-    <div class="summary-card"><div class="summary-info"><h3>Pelanggan Aktif</h3><p id="active-customers">0</p></div><div class="summary-icon">👥</div></div>
-    <div class="summary-card"><div class="summary-info"><h3>Pelanggan Baru</h3><p id="new-customers">0</p></div><div class="summary-icon">🆕</div></div>
-    <div class="summary-card"><div class="summary-info"><h3>Pelanggan Nonaktif</h3><p id="inactive-customers">0</p></div><div class="summary-icon">🚫</div></div>
-    <div class="summary-card"><div class="summary-info"><h3>Total Pemasukan</h3><p id="total-income">Rp 0</p></div><div class="summary-icon">💵</div></div>
-    <div class="summary-card"><div class="summary-info"><h3>Total Pengeluaran</h3><p id="total-expense">Rp 0</p></div><div class="summary-icon">💸</div></div>
-    <div class="summary-card"><div class="summary-info"><h3>Saldo</h3><p id="balance">Rp 0</p></div><div class="summary-icon">🏦</div></div>
-    <div class="summary-card"><div class="summary-info"><h3>Paket 6 Bulan</h3><p id="annual-package6">0</p></div><div class="summary-icon">📦</div></div>
-    <div class="summary-card"><div class="summary-info"><h3>Paket 12 Bulan</h3><p id="annual-package12">0</p></div><div class="summary-icon">📦</div></div>
-</div>
+                    <div class="summary-card"><div class="summary-info"><h3>Total Tahunan</h3><p id="annual-billed">Rp 0</p></div><div class="summary-icon">📊</div></div>
+                    <div class="summary-card"><div class="summary-info"><h3>Total Dibayar</h3><p id="annual-paid">Rp 0</p></div><div class="summary-icon">✅</div></div>
+                    <div class="summary-card"><div class="summary-info"><h3>Pelanggan Aktif</h3><p id="active-customers">0</p></div><div class="summary-icon">👥</div></div>
+                    <div class="summary-card"><div class="summary-info"><h3>Pelanggan Baru</h3><p id="new-customers">0</p></div><div class="summary-icon">🆕</div></div>
+                    <div class="summary-card"><div class="summary-info"><h3>Pelanggan Nonaktif</h3><p id="inactive-customers">0</p></div><div class="summary-icon">🚫</div></div>
+                    <div class="summary-card"><div class="summary-info"><h3>Total Pemasukan</h3><p id="total-income">Rp 0</p></div><div class="summary-icon">💵</div></div>
+                    <div class="summary-card"><div class="summary-info"><h3>Total Pengeluaran</h3><p id="total-expense">Rp 0</p></div><div class="summary-icon">💸</div></div>
+                    <div class="summary-card"><div class="summary-info"><h3>Saldo</h3><p id="balance">Rp 0</p></div><div class="summary-icon">🏦</div></div>
+                    <div class="summary-card"><div class="summary-info"><h3>Paket 6 Bulan</h3><p id="annual-package6">0</p></div><div class="summary-icon">📦</div></div>
+                    <div class="summary-card"><div class="summary-info"><h3>Paket 12 Bulan</h3><p id="annual-package12">0</p></div><div class="summary-icon">📦</div></div>
+                </div>
                 
                 <h3>📋 Rincian Bulanan</h3>
                 <div class="responsive-table">
                     <table id="reportTable">
                         <thead><tr><th>Bulan</th><th>Tagihan</th><th>Dibayar</th><th>Pemasukan</th><th>Pengeluaran</th><th>Saldo</th></tr></thead>
                         <tbody id="reportList"></tbody>
+                    </table>
+                </div>
+
+                <!-- Tabel Detail Per Tanggal (Hasil Filter Range) -->
+                <h3 id="rangeDetailTitle" style="display: none;">📋 Detail Transaksi Per Tanggal</h3>
+                <div class="responsive-table" id="rangeDetailTable" style="display: none;">
+                    <table id="dateRangeTable">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Tanggal</th>
+                                <th>Jenis</th>
+                                <th>Pelanggan / Kategori</th>
+                                <th>Keterangan</th>
+                                <th>Jumlah</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dateRangeList"></tbody>
                     </table>
                 </div>
             </div>
@@ -512,7 +638,7 @@
         </div>
     </div>
     
-    <!-- Bottom Navigation -->
+    <!-- BOTTOM NAVIGATION -->
     <div class="bottom-nav">
         <div class="nav-item active" onclick="switchTab('pelanggan')"><div class="nav-icon">👤</div><div class="nav-label">Pelanggan</div></div>
         <div class="nav-item" onclick="switchTab('transaksi')"><div class="nav-icon">💰</div><div class="nav-label">Transaksi</div></div>
@@ -521,7 +647,7 @@
         <div class="nav-item" onclick="switchTab('laporan')"><div class="nav-icon">📊</div><div class="nav-label">Laporan</div></div>
     </div>
     
-    <!-- Modal Customer -->
+    <!-- MODAL CUSTOMER -->
     <div id="customerModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h2 id="modalCustomerTitle">Tambah Pelanggan</h2><span class="close-modal" onclick="closeModal('customerModal')">&times;</span></div>
@@ -562,7 +688,7 @@
         </div>
     </div>
     
-    <!-- Modal Payment -->
+    <!-- MODAL PAYMENT -->
     <div id="paymentModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h2>Pembayaran Tagihan</h2><span class="close-modal" onclick="closeModal('paymentModal')">&times;</span></div>
@@ -578,7 +704,7 @@
         </div>
     </div>
     
-    <!-- Modal Detail -->
+    <!-- MODAL DETAIL -->
     <div id="detailModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h2>Detail Pelanggan</h2><span class="close-modal" onclick="closeModal('detailModal')">&times;</span></div>
@@ -592,7 +718,7 @@
         </div>
     </div>
     
-    <!-- Modal Finance -->
+    <!-- MODAL FINANCE -->
     <div id="financeModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h2 id="modalFinanceTitle">Tambah Pemasukan</h2><span class="close-modal" onclick="closeModal('financeModal')">&times;</span></div>
@@ -607,7 +733,7 @@
         </div>
     </div>
     
-    <!-- Modal Backup -->
+    <!-- MODAL BACKUP -->
     <div id="backupModal" class="modal">
         <div class="modal-content" style="text-align:center;">
             <div class="modal-header"><h2>Backup & Restore</h2><span class="close-modal" onclick="closeModal('backupModal')">&times;</span></div>
@@ -616,7 +742,7 @@
         </div>
     </div>
     
-    <!-- Modal Receipt -->
+    <!-- MODAL RECEIPT -->
     <div id="receiptModal" class="modal">
         <div class="modal-content" style="max-width:600px;">
             <div class="modal-header"><h2 id="receiptTitle">Bukti Pembayaran</h2><span class="close-modal" onclick="closeModal('receiptModal')">&times;</span></div>
@@ -654,7 +780,11 @@
                     </div>
                 </div>
             </div>
-            <div class="button-group"><button class="btn-primary" onclick="downloadReceiptImage()">📷 Download Bukti</button><button class="btn-outline" onclick="closeModal('receiptModal')">❌ Tutup</button></div>
+           <div class="button-group">
+    <button class="btn-primary" onclick="downloadReceiptImage()">📷 Unduh PNG</button>
+    <button class="btn-success" onclick="downloadReceiptPDF()">📄 Unduh PDF</button>
+    <button class="btn-outline" onclick="closeModal('receiptModal')">❌ Tutup</button>
+</div>
         </div>
     </div>
 
@@ -1078,7 +1208,7 @@
                         <tr><td><strong>Tagihan</strong></td><td>: ${formatCurrency(customer.finalPrice)}${customer.paket !== 'Paket 6/12' ? '/bulan' : ' (sekali bayar)'}</td></tr>
                         <tr><td><strong>Tgl Daftar</strong></td><td>: ${formatDate(customer.tanggalDaftar)}</td></tr>
                         <tr><td><strong>Status</strong></td><td>: <span class="${customer.status === 'active' ? 'status-active' : 'status-inactive'}">${customer.status === 'active' ? 'Aktif' : 'Nonaktif'}</span></td></tr>
-                    </table>
+                    
                 </div>
             `;
             document.getElementById('customerDetailContent').innerHTML = detailHtml;
@@ -1137,52 +1267,70 @@
         
         function filterCustomers() { renderCustomerList(document.getElementById('searchCustomer').value); }
         
-        // ==================== TRANSACTION FUNCTIONS ====================
-        function renderTransactionList(filterMonth = '', statusFilter = '', customerFilter = '') {
-            const tbody = document.getElementById('transactionList');
-            tbody.innerHTML = '';
-            let filtered = [...transactions];
-            if (!filterMonth) {
-                filterMonth = new Date().toISOString().substring(0, 7);
-                document.getElementById('filterMonth').value = filterMonth;
-            }
-            filtered = filtered.filter(t => t.monthYear === filterMonth);
-            if (statusFilter) filtered = filtered.filter(t => t.status === statusFilter && t.amount >= 1);
-            if (customerFilter) {
-                const term = customerFilter.toLowerCase();
-                filtered = filtered.filter(t => getCustomerName(t.customerId).toLowerCase().includes(term));
-            }
-            
-            const totalPaid = filtered.filter(t => t.status === 'paid' && t.amount >= 1).reduce((s,t) => s + (t.paid || t.amount), 0);
-            const totalUnpaid = filtered.filter(t => t.status === 'pending' && t.amount >= 1).reduce((s,t) => s + t.amount, 0);
-            document.getElementById('totalPaidAmount').textContent = formatCurrency(totalPaid);
-            document.getElementById('totalUnpaidAmount').textContent = formatCurrency(totalUnpaid);
-            
-            if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center">Tidak ada data</td></tr>';
-                return;
-            }
-            
-            filtered.forEach((t, i) => {
-                const row = tbody.insertRow();
-                const customerName = getCustomerName(t.customerId);
-                row.innerHTML = `
-                    <td>${i+1}</td>
-                    <td>${customerName}</td>
-                    <td>${formatMonthYear(t.monthYear)}</td>
-                    <td>${formatCurrency(t.amount)}</td>
-                    <td>${getStatusBadge(t.status)}</td>
-                    <td>
-                        ${t.status === 'pending' && t.amount >= 1 ? 
-                            `<button class="action-btn btn-primary" onclick="openPaymentModal('${t.customerId}', '${t.id}')">💰 Bayar</button>
-                             <button class="action-btn btn-warning" onclick="openReceiptModal('${t.id}', true)">📄 Tagihan</button>` : 
-                            `<button class="action-btn btn-secondary" onclick="viewTransactionDetail('${t.id}')">📋 Detail</button>
-                             <button class="action-btn btn-primary" onclick="openReceiptModal('${t.id}')">📷 Bukti</button>`
-                        }
-                    </td>
-                `;
-            });
+      // ==================== TRANSACTION FUNCTIONS ====================
+function renderTransactionList(filterMonth = '', statusFilter = '', customerFilter = '') {
+    const tbody = document.getElementById('transactionList');
+    tbody.innerHTML = '';
+    let filtered = [...transactions];
+    if (!filterMonth) {
+        filterMonth = new Date().toISOString().substring(0, 7);
+        document.getElementById('filterMonth').value = filterMonth;
+    }
+    filtered = filtered.filter(t => t.monthYear === filterMonth);
+    if (statusFilter) filtered = filtered.filter(t => t.status === statusFilter && t.amount >= 1);
+    if (customerFilter) {
+        const term = customerFilter.toLowerCase();
+        filtered = filtered.filter(t => getCustomerName(t.customerId).toLowerCase().includes(term));
+    }
+    
+    // ========== TAMBAHKAN INI (URUTAN BERDASARKAN PELANGGAN) ==========
+    filtered.sort((a, b) => {
+        const customerA = customers.find(c => c.id === a.customerId);
+        const customerB = customers.find(c => c.id === b.customerId);
+        
+        const dateA = customerA ? new Date(customerA.tanggalDaftar) : new Date(0);
+        const dateB = customerB ? new Date(customerB.tanggalDaftar) : new Date(0);
+        
+        if (dateA.getTime() !== dateB.getTime()) {
+            return dateA.getTime() - dateB.getTime();
         }
+        
+        const nameA = customerA ? customerA.nama : '';
+        const nameB = customerB ? customerB.nama : '';
+        return nameA.localeCompare(nameB);
+    });
+    // ==================================================================
+    
+    const totalPaid = filtered.filter(t => t.status === 'paid' && t.amount >= 1).reduce((s,t) => s + (t.paid || t.amount), 0);
+    const totalUnpaid = filtered.filter(t => t.status === 'pending' && t.amount >= 1).reduce((s,t) => s + t.amount, 0);
+    document.getElementById('totalPaidAmount').textContent = formatCurrency(totalPaid);
+    document.getElementById('totalUnpaidAmount').textContent = formatCurrency(totalUnpaid);
+    
+    if (filtered.length === 0) {
+        tbody.innerHTML = '<td><td colspan="6" class="text-center">Tidak ada数据</td></td>';
+        return;
+    }
+    
+    filtered.forEach((t, i) => {
+        const row = tbody.insertRow();
+        const customerName = getCustomerName(t.customerId);
+        row.innerHTML = `
+            <td>${i+1}</td>
+            <td>${customerName}</td>
+            <td>${formatMonthYear(t.monthYear)}</td>
+            <td>${formatCurrency(t.amount)}</td>
+            <td>${getStatusBadge(t.status)}</td>
+            <td>
+                ${t.status === 'pending' && t.amount >= 1 ? 
+                    `<button class="action-btn btn-primary" onclick="openPaymentModal('${t.customerId}', '${t.id}')">💰 Bayar</button>
+                     <button class="action-btn btn-warning" onclick="openReceiptModal('${t.id}', true)">📄 Tagihan</button>` : 
+                    `<button class="action-btn btn-secondary" onclick="viewTransactionDetail('${t.id}')">📋 Detail</button>
+                     <button class="action-btn btn-primary" onclick="openReceiptModal('${t.id}')">📷 Bukti</button>`
+                }
+            </td>
+        `;
+    });
+}
         
         function getCustomerName(customerId) {
             const customer = customers.find(c => c.id === customerId);
@@ -1270,7 +1418,7 @@
                         <tr><td><strong>Jatuh Tempo</strong></td><td>: ${formatDate(t.dueDate)}</td></tr>
                         <tr><td><strong>Status</strong></td><td>: ${getStatusBadge(t.status)}</td></tr>
                         <tr><td><strong>Keterangan</strong></td><td>: ${t.notes || '-'}</td></tr>
-                    </table>
+                    
                     <div class="button-group"><button class="btn-primary" onclick="openReceiptModal('${t.id}')">📷 Download Bukti</button><button class="btn-outline" onclick="closeModal('detailModal')">❌ Tutup</button></div>
                 </div>
             `;
@@ -1345,7 +1493,7 @@
                 document.getElementById('filterFinanceMonth').value = filterMonth;
             }
             filtered = filtered.filter(f => f.date.startsWith(filterMonth));
-            filtered.sort((a,b) => b.date.localeCompare(a.date));
+            filtered.sort((a,b) => a.date.localeCompare(b.date));
             if (filtered.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="6" class="text-center">Tidak ada data</td></tr>';
                 return;
@@ -1406,7 +1554,7 @@
                 const row = tbody.insertRow();
                 row.className = p.packageDuration === '6' ? 'package6-row' : 'package12-row';
                 row.innerHTML = `
-                    <td>${i+1}</td>
+                    <tr>${i+1}</td>
                     <td>${p.customerName}</td>
                     <td>Paket ${p.packageDuration} Bulan</td>
                     <td>${formatCurrency(p.amount)}</td>
@@ -1437,7 +1585,7 @@
                         <tr><td><strong>Tgl Mulai</strong></td><td>: ${formatDate(pkg.startDate)}</td></tr>
                         <tr><td><strong>Tgl Berakhir</strong></td><td>: ${formatDate(pkg.endDate)}</td></tr>
                         <tr><td><strong>Status</strong></td><td>: <span class="${customer?.status === 'active' ? (pkg.packageDuration === '6' ? 'status-package6' : 'status-package12') : 'status-inactive'}">${customer?.status === 'active' ? (isExpired ? 'Kadaluarsa' : 'Aktif') : 'Nonaktif'}</span></td></tr>
-                    </table>
+                    20
                     <div class="button-group"><button class="btn-primary" onclick="renewPackage('${pkg.id}')">🔄 Perpanjang</button><button class="btn-outline" onclick="closeModal('detailModal')">❌ Tutup</button></div>
                 </div>
             `;
@@ -1471,236 +1619,383 @@
             }
         }
         
-        // ==================== RECEIPT FUNCTIONS ====================
-        function openReceiptModal(transactionId, isInvoice = false) {
-            const transaction = transactions.find(t => t.id === transactionId);
-            if (!transaction) { alert('Transaksi tidak ditemukan'); return; }
-            const customer = customers.find(c => c.id === transaction.customerId);
-            document.getElementById('receiptTrxId').textContent = transaction.id;
-            document.getElementById('receiptDate').textContent = isInvoice ? formatDate(new Date().toISOString().substring(0,10)) : formatDate(transaction.paymentDate);
-            if (isInvoice) {
-                document.getElementById('receiptTitle').textContent = 'TAGIHAN INTERNET';
-                document.getElementById('receiptSubtitle').textContent = 'Tagihan Bulanan Internet';
-                document.getElementById('receiptStatus').textContent = 'BELUM LUNAS';
-                document.getElementById('receiptStatus').className = 'badge badge-danger';
-                document.getElementById('paymentInstructions').style.display = 'block';
-                document.getElementById('dueDateText').textContent = formatDate(transaction.dueDate);
-                document.getElementById('receiptStamp').style.display = 'none';
-            } else {
-                document.getElementById('receiptTitle').textContent = 'Bukti Pembayaran';
-                document.getElementById('receiptSubtitle').textContent = 'Bukti Pembayaran Internet';
-                document.getElementById('receiptStatus').textContent = transaction.status === 'paid' ? 'LUNAS' : 'PENDING';
-                document.getElementById('receiptStatus').className = transaction.status === 'paid' ? 'badge badge-success' : 'badge badge-warning';
-                document.getElementById('paymentInstructions').style.display = 'none';
-                document.getElementById('receiptStamp').style.display = transaction.status === 'paid' ? 'block' : 'none';
-            }
-            if (customer) {
-                document.getElementById('receiptCustomer').textContent = customer.nama;
-                document.getElementById('receiptAddress').textContent = customer.alamat;
-                document.getElementById('receiptPhone').textContent = customer.telepon;
-                document.getElementById('receiptPackage').textContent = customer.paket + ' - ' + formatCurrency(customer.finalPrice) + (customer.paket === 'Paket 6/12' ? ' (sekali bayar)' : '/bulan');
-            } else {
-                document.getElementById('receiptCustomer').textContent = transaction.customerName;
-                document.getElementById('receiptAddress').textContent = '-';
-                document.getElementById('receiptPhone').textContent = '-';
-                document.getElementById('receiptPackage').textContent = '-';
-            }
-            document.getElementById('receiptPeriod').textContent = `${formatMonthYear(transaction.monthYear)}`;
-            document.getElementById('receiptDueDate').textContent = formatDate(transaction.dueDate);
-            document.getElementById('receiptAmount').textContent = formatCurrency(transaction.amount);
-            document.getElementById('receiptNotes').textContent = isInvoice ? 'Tagihan Jasa Layanan Internet' : (transaction.notes || 'Jasa Layanan Internet');
-            window.currentReceiptType = 'transaction';
-            openModal('receiptModal');
+     // ==================== RECEIPT FUNCTIONS ====================
+function openReceiptModal(transactionId, isInvoice = false) {
+    const transaction = transactions.find(t => t.id === transactionId);
+    if (!transaction) { alert('Transaksi tidak ditemukan'); return; }
+    const customer = customers.find(c => c.id === transaction.customerId);
+    
+    // SIMPAN MODE ke global variable
+    window.currentReceiptMode = isInvoice ? 'invoice' : 'receipt';
+    window.currentReceiptTransactionId = transactionId;
+    
+    document.getElementById('receiptTrxId').textContent = transaction.id;
+    document.getElementById('receiptDate').textContent = isInvoice ? formatDate(new Date().toISOString().substring(0,10)) : formatDate(transaction.paymentDate);
+    
+    if (isInvoice) {
+        document.getElementById('receiptTitle').textContent = 'TAGIHAN INTERNET';
+        document.getElementById('receiptSubtitle').textContent = 'Tagihan Bulanan Internet';
+        document.getElementById('receiptStatus').textContent = 'BELUM LUNAS';
+        document.getElementById('receiptStatus').className = 'badge badge-danger';
+        document.getElementById('paymentInstructions').style.display = 'block';
+        document.getElementById('dueDateText').textContent = formatDate(transaction.dueDate);
+        // INVOICE: stempel HARUS disembunyikan
+        document.getElementById('receiptStamp').style.display = 'none';
+    } else {
+        document.getElementById('receiptTitle').textContent = 'Bukti Pembayaran';
+        document.getElementById('receiptSubtitle').textContent = 'Bukti Pembayaran Internet';
+        document.getElementById('receiptStatus').textContent = transaction.status === 'paid' ? 'LUNAS' : 'PENDING';
+        document.getElementById('receiptStatus').className = transaction.status === 'paid' ? 'badge badge-success' : 'badge badge-warning';
+        document.getElementById('paymentInstructions').style.display = 'none';
+        // Receipt: stempel hanya untuk status LUNAS
+        document.getElementById('receiptStamp').style.display = transaction.status === 'paid' ? 'block' : 'none';
+    }
+    
+    if (customer) {
+        document.getElementById('receiptCustomer').textContent = customer.nama;
+        document.getElementById('receiptAddress').textContent = customer.alamat;
+        document.getElementById('receiptPhone').textContent = customer.telepon;
+        document.getElementById('receiptPackage').textContent = customer.paket + ' - ' + formatCurrency(customer.finalPrice) + (customer.paket === 'Paket 6/12' ? ' (sekali bayar)' : '/bulan');
+    } else {
+        document.getElementById('receiptCustomer').textContent = transaction.customerName;
+        document.getElementById('receiptAddress').textContent = '-';
+        document.getElementById('receiptPhone').textContent = '-';
+        document.getElementById('receiptPackage').textContent = '-';
+    }
+    document.getElementById('receiptPeriod').textContent = `${formatMonthYear(transaction.monthYear)}`;
+    document.getElementById('receiptDueDate').textContent = formatDate(transaction.dueDate);
+    document.getElementById('receiptAmount').textContent = formatCurrency(transaction.amount);
+    document.getElementById('receiptNotes').textContent = isInvoice ? 'Tagihan Jasa Layanan Internet' : (transaction.notes || 'Jasa Layanan Internet');
+    window.currentReceiptType = 'transaction';
+    openModal('receiptModal');
+}
+
+function openPackageReceiptModal(packageId) {
+    const pkg = packageCustomers.find(p => p.id === packageId);
+    if (!pkg) { alert('Data paket tidak ditemukan'); return; }
+    const customer = customers.find(c => c.id === pkg.customerId);
+    const receiptId = `PKG-${pkg.id.slice(-8)}`;
+    
+    window.currentReceiptMode = 'package';
+    
+    document.getElementById('receiptTrxId').textContent = receiptId;
+    document.getElementById('receiptDate').textContent = formatDate(new Date().toISOString().substring(0,10));
+    document.getElementById('receiptTitle').textContent = 'BUKTI PEMBAYARAN PAKET';
+    document.getElementById('receiptSubtitle').textContent = 'Pembayaran Paket Internet';
+    const paymentExists = finances.some(f => f.description && f.description.includes(pkg.customerName) && f.description.includes('paket'));
+    const isPaid = paymentExists || (customer && customer.status === 'active');
+    document.getElementById('receiptStatus').textContent = isPaid ? 'LUNAS' : 'BELUM LUNAS';
+    document.getElementById('receiptStatus').className = isPaid ? 'badge badge-success' : 'badge badge-warning';
+    document.getElementById('paymentInstructions').style.display = 'none';
+    document.getElementById('receiptStamp').style.display = isPaid ? 'block' : 'none';
+    if (customer) {
+        document.getElementById('receiptCustomer').textContent = customer.nama;
+        document.getElementById('receiptAddress').textContent = customer.alamat;
+        document.getElementById('receiptPhone').textContent = customer.telepon;
+        document.getElementById('receiptPackage').textContent = customer.paket + ' - ' + (pkg.packageDuration === '6' ? 'Paket 6 Bulan' : 'Paket 12 Bulan');
+    } else {
+        document.getElementById('receiptCustomer').textContent = pkg.customerName;
+        document.getElementById('receiptAddress').textContent = '-';
+        document.getElementById('receiptPhone').textContent = '-';
+        document.getElementById('receiptPackage').textContent = `Paket ${pkg.packageDuration} Bulan`;
+    }
+    document.getElementById('receiptPeriod').textContent = `${formatDate(pkg.startDate)} s/d ${formatDate(pkg.endDate)}`;
+    document.getElementById('receiptDueDate').textContent = formatDate(pkg.endDate);
+    document.getElementById('receiptAmount').textContent = formatCurrency(pkg.amount);
+    document.getElementById('receiptNotes').textContent = `Pembayaran paket ${pkg.packageDuration} bulan untuk layanan internet`;
+    window.currentReceiptType = 'package';
+    openModal('receiptModal');
+}
+
+// ==================== FUNGSI DOWNLOAD BUKTI (DIPERBAIKI) ====================
+function downloadReceiptImage() {
+    const btn = document.querySelector('#receiptModal .btn-primary');
+    const closeBtn = document.querySelector('#receiptModal .close-modal');
+    const tutupBtn = document.querySelector('#receiptModal .btn-outline');
+    
+    if (!btn) return;
+    
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<span class="loading-spinner"></span> Membuat...';
+    btn.disabled = true;
+    
+    if (closeBtn) closeBtn.style.display = 'none';
+    if (tutupBtn) tutupBtn.style.display = 'none';
+    
+    const receipt = document.getElementById('receiptContent');
+    
+    // ========== STEMPEL DENGAN MODE ==========
+    const stamp = document.getElementById('receiptStamp');
+    const originalStampDisplay = stamp ? stamp.style.display : 'block';
+    const originalStampPosition = stamp ? stamp.style.cssText : '';
+    
+    // JANGAN PAKSA STAMPEL TAMPIL! Sesuaikan dengan kondisi sebenarnya
+    // Cek apakah ini mode invoice atau receipt yang belum lunas
+    const isInvoiceMode = (window.currentReceiptMode === 'invoice');
+    const isPaidMode = (document.getElementById('receiptStatus')?.textContent === 'LUNAS');
+    
+    if (stamp) {
+        if (isInvoiceMode || !isPaidMode) {
+            // INVOICE atau BELUM LUNAS: stempel hidden
+            stamp.style.display = 'none';
+        } else {
+            // LUNAS: stempel tampil
+            stamp.style.display = 'block';
+            stamp.style.position = 'absolute';
+            stamp.style.top = '-90px';
+            stamp.style.right = '-35px';
+            stamp.style.opacity = '0.9';
+            stamp.style.transform = 'rotate(-4deg) scale(1.1)';
+            stamp.style.pointerEvents = 'none';
+            stamp.style.zIndex = '15';
         }
-        
-        function openPackageReceiptModal(packageId) {
-            const pkg = packageCustomers.find(p => p.id === packageId);
-            if (!pkg) { alert('Data paket tidak ditemukan'); return; }
-            const customer = customers.find(c => c.id === pkg.customerId);
-            const receiptId = `PKG-${pkg.id.slice(-8)}`;
-            document.getElementById('receiptTrxId').textContent = receiptId;
-            document.getElementById('receiptDate').textContent = formatDate(new Date().toISOString().substring(0,10));
-            document.getElementById('receiptTitle').textContent = 'BUKTI PEMBAYARAN PAKET';
-            document.getElementById('receiptSubtitle').textContent = 'Pembayaran Paket Internet';
-            const paymentExists = finances.some(f => f.description && f.description.includes(pkg.customerName) && f.description.includes('paket'));
-            const isPaid = paymentExists || (customer && customer.status === 'active');
-            document.getElementById('receiptStatus').textContent = isPaid ? 'LUNAS' : 'BELUM LUNAS';
-            document.getElementById('receiptStatus').className = isPaid ? 'badge badge-success' : 'badge badge-warning';
-            document.getElementById('paymentInstructions').style.display = 'none';
-            document.getElementById('receiptStamp').style.display = isPaid ? 'block' : 'none';
-            if (customer) {
-                document.getElementById('receiptCustomer').textContent = customer.nama;
-                document.getElementById('receiptAddress').textContent = customer.alamat;
-                document.getElementById('receiptPhone').textContent = customer.telepon;
-                document.getElementById('receiptPackage').textContent = customer.paket + ' - ' + (pkg.packageDuration === '6' ? 'Paket 6 Bulan' : 'Paket 12 Bulan');
-            } else {
-                document.getElementById('receiptCustomer').textContent = pkg.customerName;
-                document.getElementById('receiptAddress').textContent = '-';
-                document.getElementById('receiptPhone').textContent = '-';
-                document.getElementById('receiptPackage').textContent = `Paket ${pkg.packageDuration} Bulan`;
+    }
+    
+    const paymentInstructions = document.getElementById('paymentInstructions');
+    const originalPaymentInstDisplay = paymentInstructions ? paymentInstructions.style.display : 'none';
+    // Untuk invoice, paymentInstructions tampil, untuk receipt hidden
+    if (paymentInstructions && !isInvoiceMode) {
+        paymentInstructions.style.display = 'none';
+    }
+    
+    const watermark = document.querySelector('#receiptContent .watermark');
+    if (watermark) {
+        watermark.style.opacity = '0.04';
+    }
+    
+    setTimeout(() => {
+        html2canvas(receipt, { 
+            scale: 3.2,
+            backgroundColor: '#ffffff',
+            logging: false,
+            useCORS: true,
+            allowTaint: false,
+            onclone: (clonedDoc, element) => {
+                const clonedStamp = clonedDoc.getElementById('receiptStamp');
+                const clonedIsInvoice = (window.currentReceiptMode === 'invoice');
+                const clonedIsPaid = (clonedDoc.getElementById('receiptStatus')?.textContent === 'LUNAS');
+                
+                if (clonedStamp) {
+                    if (clonedIsInvoice || !clonedIsPaid) {
+                        clonedStamp.style.display = 'none';
+                    } else {
+                        clonedStamp.style.display = 'block';
+                        clonedStamp.style.position = 'absolute';
+                        clonedStamp.style.top = '-90px';
+                        clonedStamp.style.right = '-35px';
+                        clonedStamp.style.opacity = '0.9';
+                        clonedStamp.style.transform = 'rotate(-4deg) scale(1.1)';
+                    }
+                }
+                
+                const clonedWatermark = clonedDoc.querySelector('#receiptContent .watermark');
+                if (clonedWatermark) {
+                    clonedWatermark.style.opacity = '0.04';
+                }
+                
+                const clonedInstructions = clonedDoc.getElementById('paymentInstructions');
+                if (clonedInstructions && !clonedIsInvoice) {
+                    clonedInstructions.style.display = 'none';
+                }
+                
+                const clonedButtons = clonedDoc.querySelectorAll('#receiptContent button');
+                clonedButtons.forEach(btn => btn.remove());
             }
-            document.getElementById('receiptPeriod').textContent = `${formatDate(pkg.startDate)} s/d ${formatDate(pkg.endDate)}`;
-            document.getElementById('receiptDueDate').textContent = formatDate(pkg.endDate);
-            document.getElementById('receiptAmount').textContent = formatCurrency(pkg.amount);
-            document.getElementById('receiptNotes').textContent = `Pembayaran paket ${pkg.packageDuration} bulan untuk layanan internet`;
-            window.currentReceiptType = 'package';
-            openModal('receiptModal');
-        }
-        
-        function getPreviousMonthYear(monthYear) {
-            const [year, month] = monthYear.split('-').map(Number);
-            let prevMonth = month - 1, prevYear = year;
-            if (prevMonth < 1) { prevMonth = 12; prevYear--; }
-            return `${prevYear}-${String(prevMonth).padStart(2, '0')}`;
-        }
-        
-        function downloadReceiptImage() {
-            const btn = document.querySelector('#receiptModal .btn-primary');
-            if (!btn) return;
-            const closeBtn = document.querySelector('#receiptModal .close-modal');
-            const tutupBtn = document.querySelector('#receiptModal .btn-outline');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<span class="loading-spinner"></span> Membuat...';
-            btn.disabled = true;
-            if (closeBtn) closeBtn.style.display = 'none';
-            if (tutupBtn) tutupBtn.style.display = 'none';
-            const receipt = document.getElementById('receiptContent');
-            const clone = receipt.cloneNode(true);
-            clone.style.width = '500px';
-            clone.style.padding = '30px';
-            clone.style.background = 'white';
-            clone.style.borderRadius = '20px';
-            clone.style.fontFamily = "'Poppins', 'Segoe UI', sans-serif";
-            clone.style.boxShadow = 'none';
-            clone.style.margin = '0 auto';
-            clone.style.position = 'relative';
-            clone.style.overflow = 'visible';
-            const cloneButtons = clone.querySelectorAll('button');
-            cloneButtons.forEach(button => button.remove());
-            const watermark = clone.querySelector('.watermark');
-            if (watermark) {
-                watermark.style.cssText = `
-                    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-                    background-image: url('https://i.postimg.cc/kMVBzpx1/Nt-U-watermark.png');
-                    background-size: 80px; background-repeat: repeat; opacity: 0.04;
-                    pointer-events: none; border-radius: 20px; transform: rotate(-15deg) scale(1.3);
-                    z-index: 0;
-                `;
-            }
-            const originalStamp = document.getElementById('receiptStamp');
-            const isPaid = originalStamp && originalStamp.style.display === 'block';
-            const stamp = clone.querySelector('#receiptStamp');
+        }).then(canvas => {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            if (closeBtn) closeBtn.style.display = '';
+            if (tutupBtn) tutupBtn.style.display = '';
+            
             if (stamp) {
-                if (isPaid) {
-                    stamp.style.cssText = `
-                        position: absolute; top: -100px; right: -50px; opacity: 0.9;
-                        transform: rotate(4deg) scale(1.1); pointer-events: none; z-index: 15; display: block;
-                    `;
-                    const stampImg = stamp.querySelector('img');
-                    if (stampImg) {
-                        stampImg.style.cssText = `width: 130px; height: auto; transform: rotate(-12deg); filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));`;
-                    }
-                } else {
-                    stamp.style.display = 'none';
-                }
+                stamp.style.cssText = originalStampPosition;
+                stamp.style.display = originalStampDisplay;
             }
-            const container = document.createElement('div');
-            container.style.position = 'fixed';
-            container.style.left = '-9999px';
-            container.style.top = '0';
-            container.appendChild(clone);
-            document.body.appendChild(container);
-            setTimeout(() => {
-                html2canvas(clone, { 
-                    scale: 2.8, backgroundColor: '#ffffff', logging: false,
-                    useCORS: true, allowTaint: false,
-                    windowWidth: clone.scrollWidth, windowHeight: clone.scrollHeight
-                }).then(canvas => {
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                    if (closeBtn) closeBtn.style.display = '';
-                    if (tutupBtn) tutupBtn.style.display = '';
-                    canvas.toBlob(blob => {
-                        const link = document.createElement('a');
-                        const timestamp = new Date().toISOString().slice(0,19).replace(/:/g, '-');
-                        const prefix = window.currentReceiptType === 'package' ? 'bukti_paket' : 'bukti_pembayaran';
-                        link.download = `${prefix}_${timestamp}.png`;
-                        link.href = URL.createObjectURL(blob);
-                        link.click();
-                        URL.revokeObjectURL(link.href);
-                        document.body.removeChild(container);
-                    }, 'image/png', 1.0);
-                }).catch(err => {
-                    console.error('Error:', err);
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                    if (closeBtn) closeBtn.style.display = '';
-                    if (tutupBtn) tutupBtn.style.display = '';
-                    document.body.removeChild(container);
-                    alert('Gagal membuat gambar: ' + err.message);
-                });
-            }, 200);
-        }
-        
-        // ==================== REPORT FUNCTIONS ====================
-        function generateReport() {
-            const year = document.getElementById('reportYear').value;
-            const monthlyData = {};
-            for (let m = 1; m <= 12; m++) {
-                const key = `${year}-${String(m).padStart(2, '0')}`;
-                monthlyData[key] = { billed: 0, paid: 0, income: 0, expense: 0 };
+            
+            if (paymentInstructions) {
+                paymentInstructions.style.display = originalPaymentInstDisplay;
             }
-            transactions.forEach(t => {
-                if (t.monthYear.startsWith(year) && monthlyData[t.monthYear]) {
-                    monthlyData[t.monthYear].billed += t.amount;
-                    if (t.status === 'paid') monthlyData[t.monthYear].paid += t.paid || t.amount;
+            
+            canvas.toBlob(blob => {
+                const link = document.createElement('a');
+                
+                let customerName = 'pelanggan';
+                const customerElement = document.getElementById('receiptCustomer');
+                if (customerElement && customerElement.textContent && customerElement.textContent !== '-') {
+                    customerName = customerElement.textContent.trim()
+                        .toUpperCase()
+                        .replace(/[^a-zA-Z0-9]/g, '_')
+                        .replace(/_+/g, '_');
+                    if (customerName.length > 30) customerName = customerName.substring(0, 30);
                 }
-            });
-            finances.forEach(f => {
-                if (f.date.startsWith(year)) {
-                    const key = f.date.substring(0,7);
-                    if (monthlyData[key]) {
-                        if (f.type === 'income') monthlyData[key].income += f.amount;
-                        else monthlyData[key].expense += f.amount;
+                
+                let dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+                const dateElement = document.getElementById('receiptDate');
+                if (dateElement && dateElement.textContent) {
+                    const tanggal = dateElement.textContent;
+                    const bulanMap = {
+                        'Januari': '01', 'Februari': '02', 'Maret': '03', 'April': '04',
+                        'Mei': '05', 'Juni': '06', 'Juli': '07', 'Agustus': '08',
+                        'September': '09', 'Oktober': '10', 'November': '11', 'Desember': '12'
+                    };
+                    for (const [bulan, angka] of Object.entries(bulanMap)) {
+                        if (tanggal.includes(bulan)) {
+                            const parts = tanggal.split(' ');
+                            const hari = parts[0].padStart(2, '0');
+                            const tahun = parts[2];
+                            dateStr = `${tahun}${angka}${hari}`;
+                            break;
+                        }
                     }
                 }
-            });
-            const tbody = document.getElementById('reportList');
-            tbody.innerHTML = '';
-            let totalBilled = 0, totalPaid = 0, totalIncome = 0, totalExpense = 0;
-            Object.keys(monthlyData).sort().forEach(key => {
-                const d = monthlyData[key];
-                totalBilled += d.billed;
-                totalPaid += d.paid;
-                totalIncome += d.income;
-                totalExpense += d.expense;
-                const row = tbody.insertRow();
-                row.innerHTML = `
-                    <td>${formatMonthYear(key)}</td>
-                    <td>${formatCurrency(d.billed)}</td>
-                    <td>${formatCurrency(d.paid)}</td>
-                    <td class="income-text">${formatCurrency(d.income)}</td>
-                    <td class="expense-text">${formatCurrency(d.expense)}</td>
-                    <td>${formatCurrency(d.paid + d.income - d.expense)}</td>
-                `;
-            });
-            const activeCount = customers.filter(c => c.status === 'active' && c.paket !== 'Paket 6/12').length;
-            const inactiveCount = customers.filter(c => c.status === 'inactive').length;
-            const newCount = customers.filter(c => c.tanggalDaftar.startsWith(year)).length;
-            const pkg6Count = customers.filter(c => c.status === 'active' && c.paket === 'Paket 6/12' && c.packageDuration === '6').length;
-            const pkg12Count = customers.filter(c => c.status === 'active' && c.paket === 'Paket 6/12' && c.packageDuration === '12').length;
-            document.getElementById('annual-billed').textContent = formatCurrency(totalBilled);
-            document.getElementById('annual-paid').textContent = formatCurrency(totalPaid);
-            document.getElementById('active-customers').textContent = activeCount;
-            document.getElementById('new-customers').textContent = newCount;
-            document.getElementById('inactive-customers').textContent = inactiveCount;
-            document.getElementById('total-income').textContent = formatCurrency(totalIncome);
-            document.getElementById('total-expense').textContent = formatCurrency(totalExpense);
-            document.getElementById('balance').textContent = formatCurrency(totalPaid + totalIncome - totalExpense);
-            document.getElementById('annual-package6').textContent = pkg6Count;
-            document.getElementById('annual-package12').textContent = pkg12Count;
+                
+                // Bedakan nama file untuk invoice vs receipt
+                let prefix = window.currentReceiptType === 'package' ? 'paket' : 'bayar';
+                if (window.currentReceiptMode === 'invoice') {
+                    prefix = 'tagihan';
+                }
+                const filename = `${customerName}_${dateStr}_${prefix}.png`;
+                
+                link.download = filename;
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                URL.revokeObjectURL(link.href);
+                
+            }, 'image/png', 1.0);
+        }).catch(err => {
+            console.error('Error:', err);
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            if (closeBtn) closeBtn.style.display = '';
+            if (tutupBtn) tutupBtn.style.display = '';
+            
+            if (stamp) {
+                stamp.style.cssText = originalStampPosition;
+                stamp.style.display = originalStampDisplay;
+            }
+            if (paymentInstructions) {
+                paymentInstructions.style.display = originalPaymentInstDisplay;
+            }
+            
+            alert('Gagal membuat gambar: ' + err.message);
+        });
+    }, 100);
+}
+
+// ==================== DOWNLOAD BUKTI PDF ====================
+async function downloadReceiptPDF() {
+    const receipt = document.getElementById('receiptContent');
+    const btn = document.querySelector('#receiptModal .btn-success');
+    const closeBtn = document.querySelector('#receiptModal .close-modal');
+    const tutupBtn = document.querySelector('#receiptModal .btn-outline');
+    const downloadImgBtn = document.querySelector('#receiptModal .btn-primary');
+    
+    if (!btn) return;
+    
+    // Sembunyikan tombol sementara
+    if (closeBtn) closeBtn.style.display = 'none';
+    if (tutupBtn) tutupBtn.style.display = 'none';
+    if (downloadImgBtn) downloadImgBtn.style.display = 'none';
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading-spinner"></span> Membuat PDF...';
+    
+    // ========== STEMPEL DENGAN MODE ==========
+    const stamp = document.getElementById('receiptStamp');
+    const originalStampDisplay = stamp ? stamp.style.display : 'block';
+    
+    const isInvoiceMode = (window.currentReceiptMode === 'invoice');
+    const isPaidMode = (document.getElementById('receiptStatus')?.textContent === 'LUNAS');
+    
+    if (stamp) {
+        if (isInvoiceMode || !isPaidMode) {
+            stamp.style.display = 'none';
+        } else {
+            stamp.style.display = 'block';
+        }
+    }
+    
+    const watermark = document.querySelector('#receiptContent .watermark');
+    if (watermark) watermark.style.opacity = '0.04';
+    
+    try {
+        const canvas = await html2canvas(receipt, {
+            scale: 3,
+            backgroundColor: '#ffffff',
+            logging: false,
+            useCORS: true
+        });
+        
+        const imgData = canvas.toDataURL('image/png');
+        const { jsPDF } = window.jspdf;
+        
+        const imgWidth = 210;
+        const pageHeight = 297;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        
+        let pdf = new jsPDF('p', 'mm', 'a4');
+        let position = 0;
+        
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        
+        let heightLeft = imgHeight - pageHeight;
+        while (heightLeft > 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
         }
         
+        let customerName = 'pelanggan';
+        const customerElement = document.getElementById('receiptCustomer');
+        if (customerElement && customerElement.textContent && customerElement.textContent !== '-') {
+            customerName = customerElement.textContent.trim()
+                .toUpperCase()
+                .replace(/[^a-zA-Z0-9]/g, '_')
+                .replace(/_+/g, '_');
+            if (customerName.length > 30) customerName = customerName.substring(0, 30);
+        }
+        
+        let dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+        const dateElement = document.getElementById('receiptDate');
+        if (dateElement && dateElement.textContent) {
+            const tanggal = dateElement.textContent;
+            const bulanMap = {
+                'Januari': '01', 'Februari': '02', 'Maret': '03', 'April': '04',
+                'Mei': '05', 'Juni': '06', 'Juli': '07', 'Agustus': '08',
+                'September': '09', 'Oktober': '10', 'November': '11', 'Desember': '12'
+            };
+            for (const [bulan, angka] of Object.entries(bulanMap)) {
+                if (tanggal.includes(bulan)) {
+                    const parts = tanggal.split(' ');
+                    const hari = parts[0].padStart(2, '0');
+                    const tahun = parts[2];
+                    dateStr = `${tahun}${angka}${hari}`;
+                    break;
+                }
+            }
+        }
+        
+        let prefix = window.currentReceiptType === 'package' ? 'paket' : 'bayar';
+        if (window.currentReceiptMode === 'invoice') {
+            prefix = 'tagihan';
+        }
+        const filename = `${customerName}_${dateStr}_${prefix}.pdf`;
+        
+        pdf.save(filename);
+        
+    } catch (err) {
+        console.error('Error membuat PDF:', err);
+        alert('Gagal membuat PDF: ' + err.message);
+    } finally {
+        if (closeBtn) closeBtn.style.display = '';
+        if (tutupBtn) tutupBtn.style.display = '';
+        if (downloadImgBtn) downloadImgBtn.style.display = '';
+        if (stamp) stamp.style.display = originalStampDisplay;
+        btn.disabled = false;
+        btn.innerHTML = '📄 Download PDF';
+    }
+}
+
         // ==================== BACKUP FUNCTIONS ====================
         function exportData() {
             const data = { customers, transactions, finances, packageCustomers };
